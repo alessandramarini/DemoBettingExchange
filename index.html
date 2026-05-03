@@ -6,12 +6,15 @@
     <meta name="theme-color" content="#111111">
     <title>Zero To Hero | Exchange Pro</title>
 
+    <!-- DNS Prefetch & Preconnect (Caricamento Scheggia Globale) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://flagcdn.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- STILI CRITICI PER PREVENIRE FOUC -->
     <style>
         :root { 
             --bf-yellow: #fab400; 
@@ -22,9 +25,10 @@
             --btn-lay: #f8c9d4;
             --btn-lay-hover: #f1b2be;
             --zth-green: #39ff14;
+            --arg-blue: #74acdf;
         }
         
-        /* ZERO FLASH SETUP */
+        /* ZERO FLASH SETUP & BASE */
         html, body { 
             background-color: #050505; color: #333; margin: 0; padding: 0; 
             height: 100dvh; overflow: hidden; font-family: 'Roboto', sans-serif; 
@@ -35,7 +39,7 @@
             background-image: linear-gradient(to bottom, rgba(10,10,10,0.92), rgba(5,5,5,0.98)), url('https://images.unsplash.com/photo-1605207431102-140e61f43505?auto=format&fit=crop&q=80&w=2000');
             background-size: cover; background-position: center; background-attachment: fixed;
             display: flex; align-items: center; justify-content: center; 
-            opacity: 0; transition: opacity 0.6s ease-out; /* ANTI FLASH TRANSITION */
+            opacity: 0; transition: opacity 0.4s ease-out;
         }
         
         body.ready { opacity: 1; }
@@ -87,7 +91,6 @@
         
         .attack-cone {
             position: absolute; top: 50%; height: 60%; width: 35%;
-            background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, transparent 100%);
             transform: translateY(-50%); z-index: 10; transition: all 0.8s ease; opacity: 0; pointer-events: none;
             clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 65%);
             will-change: opacity, left, transform;
@@ -96,7 +99,7 @@
         .info-badge {
             position: absolute; left: 50%; top: 20%; transform: translate(-50%, 0);
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 30;
-            transition: all 0.5s ease; opacity: 0; background: rgba(0,0,0,0.7); padding: 2px 14px; border-radius: 20px;
+            transition: all 0.5s ease; opacity: 0; background: rgba(0,0,0,0.75); padding: 2px 14px; border-radius: 20px;
             backdrop-filter: blur(2px); border: 1px solid rgba(255,255,255,0.1);
         }
 
@@ -121,15 +124,23 @@
         .card-yellow { background: #ffd600; border: 1px solid #ccaa00; }
         .card-red { background: #d50000; border: 1px solid #aa0000; }
 
-        /* DRAGGABLE CASHOUT PANEL (Spostato a livello root per Libertà Totale) */
+        /* DRAGGABLE CASHOUT PANEL (Z-INDEX ASSOLUTO E TOCCO LIBERO) */
         #position-panel {
-            position: fixed; /* Assoluto rispetto allo schermo intero */
+            position: fixed; 
             will-change: transform, opacity;
-            touch-action: none; /* Fondamentale per il drag su mobile */
-            z-index: 999999; /* Sopra a OGNI cosa */
+            touch-action: none; 
+            z-index: 999999; 
         }
         
         .team-flag { width: 22px; height: 16px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.4); object-fit: cover; }
+        
+        /* MENTOR TEXT CLAMP PER ALTEZZA FISSA */
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -273,7 +284,7 @@
 
             <div id="event-badge" class="info-badge">
                 <span id="event-team" class="text-white font-black text-[12px] tracking-tight leading-tight">Argentina</span>
-                <span id="event-desc" class="text-[#00e676] text-[9px] font-bold uppercase tracking-wider">Attacking</span>
+                <span id="event-desc" class="text-[#00e676] text-[9px] font-bold uppercase tracking-wider mt-0.5">Attacking</span>
             </div>
 
             <div id="goal-alert" class="absolute inset-0 z-40 bg-black/80 flex flex-col items-center justify-center hidden backdrop-blur-sm">
@@ -286,27 +297,28 @@
                 <span class="bg-red-600 text-white font-black text-sm px-6 py-2 rounded-sm shadow-xl tracking-widest uppercase" data-i18n="susp">Sospeso</span>
             </div>
 
-            <!-- OVERLAY AVVIO COMPATTO E PULITO -->
+            <!-- OVERLAY AVVIO COMPATTO -->
             <div id="start-overlay" class="absolute inset-0 z-50 bg-black/85 flex flex-col items-center justify-center backdrop-blur-md p-3 text-center transition-opacity duration-300">
                 <h1 class="text-white text-xl font-black italic mb-1 text-[var(--bf-yellow)]">World Cup Final '22</h1>
-                <p class="text-gray-300 text-[9px] mb-4 max-w-[220px] leading-snug" data-i18n="sim_desc">1 Sec = 1 Sec Reale.<br>Algoritmi e spread in tempo reale.</p>
+                <p class="text-gray-300 text-[9px] mb-4 max-w-[220px] leading-snug" data-i18n="sim_desc">Algoritmi istituzionali e Spread dinamico. 1 Sec = 1 Sec Reale.</p>
                 <button onclick="Sim.start()" class="bg-[var(--zth-green)] text-[#111] font-black px-8 py-2.5 rounded shadow-[0_0_15px_rgba(57,255,20,0.4)] text-[11px] uppercase tracking-widest active:scale-95 transition-transform" data-i18n="start">Avvia Simulazione</button>
             </div>
         </section>
 
-        <!-- MARKET ANALYST (MENTOR) BAR -->
-        <div class="bg-[#111] p-3 flex items-start gap-3 border-b border-[#333] shrink-0 shadow-inner flex-grow md:flex-grow-0">
+        <!-- MARKET ANALYST (MENTOR) BAR - ALTEZZA FISSA -->
+        <div class="bg-[#111] p-3 flex items-start gap-3 border-b border-[#333] shrink-0 shadow-inner h-[76px] overflow-hidden">
             <!-- Icona Professionale Analista Quant -->
             <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_10px_rgba(57,255,20,0.15)]">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[var(--zth-green)]">
-                    <path d="M21 21H3v-2h18v2zM19.5 8.5l-4.5 4.5-4-4L3 17v-4l8-8 4 4 4.5-4.5v4z"/>
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-[var(--zth-green)]">
+                    <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/>
                 </svg>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col w-full">
                 <span class="text-[9px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-0.5">Analista Quant</span>
-                <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-snug" data-i18n="mentor_idle">In attesa del fischio d'inizio. Il mercato sta consolidando i volumi di pre-match.</p>
+                <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-snug line-clamp-3" data-i18n="mentor_idle">In attesa del fischio d'inizio. Consolidamento volumi in corso.</p>
             </div>
         </div>
+        
     </div>
 
     <!-- ========================================== -->
@@ -361,7 +373,7 @@
                 </div>
             </div>
 
-            <!-- ROW ARGENTINA -->
+            <!-- ROW ARGENTINA (ALIGNMENT FIXED) -->
             <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-H">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
                     <img src="https://flagcdn.com/w40/ar.png" class="team-flag shrink-0" alt="AR">
@@ -383,7 +395,7 @@
                 </div>
             </div>
 
-            <!-- ROW FRANCIA -->
+            <!-- ROW FRANCIA (ALIGNMENT FIXED) -->
             <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-A">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
                     <img src="https://flagcdn.com/w40/fr.png" class="team-flag shrink-0" alt="FR">
@@ -405,7 +417,7 @@
                 </div>
             </div>
 
-            <!-- ROW DRAW -->
+            <!-- ROW DRAW (ALIGNMENT FIXED) -->
             <div class="flex items-center justify-between w-full bg-white border-b border-gray-300 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-X">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="#888" class="shrink-0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
@@ -426,6 +438,11 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Desktop Message when no position -->
+            <div id="desktop-pos" class="desktop-only w-full p-4 flex flex-col items-center justify-center mt-4">
+                <p class="text-gray-400 font-mono text-[11px] uppercase tracking-widest text-center" data-i18n="no_pos">Nessuna posizione aperta.<br>Seleziona una quota.</p>
+            </div>
 
         </div>
     </div>
@@ -433,7 +450,7 @@
 
 <script>
 /**
- * Rimuove l'opacità all'avvio per evitare FOUC e attivare il fade-in
+ * Rimuove lo stato iniziale in dissolvenza per zero FOUC
  */
 document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(() => {
@@ -443,41 +460,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * ============================================================================
- * 🌐 i18n MULTILINGUAL ENGINE (IT, EN, ES, PT) & MENTOR AI
+ * 🌐 i18n MULTILINGUAL ENGINE (IT, EN, ES, PT) & MENTOR AI QUANT
  * ============================================================================
  */
 const I18N_DICT = {
     it: {
         avail: "Cassa", matched: "Abbinate", back: "Punta", lay: "Banca",
-        draw: "Pareggio", start: "Avvia Simulazione", sim_desc: "1 Secondo = 1 Sec Reale.<br>Algoritmi e spread in tempo reale.",
+        draw: "Pareggio", start: "Avvia Simulazione", sim_desc: "1 Sec = 1 Sec Reale.<br>Algoritmi e spread in tempo reale.",
         mo: "Esito Finale", ou: "Under/Over 2.5", market_most_played: "Più Giocati",
         cashout: "Cash Out", susp: "Sospeso", pos_open: "Posizione Aperta", 
-        pnl: "Live PNL", no_pos: "Nessuna esposizione sul mercato.<br>Attendi occasione d'ingresso.",
-        mentor_idle: "Match in equilibrio. Il Time Decay erode lentamente la quota del pareggio. Spread ristretti sui segni 1 e 2.",
-        mentor_h: "Spike volumetrico sull'1! L'algoritmo rileva un aumento degli Expected Goals (xG). I Market Maker abbassano il Back dell'Argentina.",
-        mentor_a: "Ripartenza Francia in the box! Liquidità ritirata dal banco, spread in allargamento. Alta volatilità in corso.",
-        mentor_card_y: "Ammonizione per {player}. Il modello matematico inserisce il 'Red Card Risk Premium': micro-tick al rialzo sulla quota della sua squadra.",
-        mentor_pen: "RIGORE ASSEGNATO! Panic selling. I volumi in Back sul tiratore stanno svuotando l'order book in frazioni di secondo.",
-        mentor_goal: "GOAL! Mercato in Sospensione (Suspended). Cancellazione massiva degli ordini. Ricalcolo del Fair Value in base a tempo e punteggio.",
-        mentor_swing: "PAREGGIO! Swing di mercato estremo. La quota della X crolla vertiginosamente. Repricing drammatico sulle vittorie.",
-        mentor_co_win: "Hedge completato (Green Book). L'Exchange trattiene il 5% di commissione (€{val}) ESCLUSIVAMENTE sull'utile netto. Matematica perfetta.",
-        mentor_co_loss: "Hedge completato (Red Book). Perdita secca registrata. L'Exchange NON trattiene alcuna commissione sulle posizioni in perdita."
+        pnl: "Live PNL", no_pos: "Nessuna esposizione sul mercato.<br>Attendi l'occasione d'ingresso.",
+        mentor_idle: "Mercato stabile. Il Time Decay erode i margini sulla X. I volumi sulle vittorie confermano lo status quo.",
+        mentor_h: "Aumento degli Expected Goals (xG) per l'Argentina. I Market Maker restringono lo spread, Punta in drop.",
+        mentor_a: "Incursione Francia in area. Liquidità rimossa dal banco, spread in allargamento. Possibile spike imminente.",
+        mentor_card_y: "Ammonizione per {player}. L'algoritmo quota il 'Red Card Risk Premium' correggendo leggermente i prezzi.",
+        mentor_pen: "RIGORE! Panic selling sui book. Volumi massicci in Back sul tiratore, il book si sta svuotando.",
+        mentor_goal: "EVENTO! Mercato Sospeso. Cancellazione ordini non abbinati. Ricalcolo del Fair Value in corso...",
+        mentor_swing: "REPRICING DRAMMATICO! Swing di mercato violento. La liquidità si sta spostando massivamente.",
+        mentor_co_win: "Hedge completato. Profitto bloccato. L'Exchange deduce il 5% di fee (€{val}) ESCLUSIVAMENTE sul netto.",
+        mentor_co_loss: "Loss accettata, posizione chiusa in rosso. Ricorda: l'Exchange NON trattiene commissioni sulle perdite."
     },
     en: {
         avail: "Bankroll", matched: "Matched", back: "Back", lay: "Lay",
-        draw: "Draw", start: "Start Simulation", sim_desc: "1 Second = 1 Real Sec.<br>Real-time algorithms and spread.",
+        draw: "Draw", start: "Start Simulation", sim_desc: "1 Sec = 1 Real Sec.<br>Real-time algorithms and spread.",
         mo: "Match Odds", ou: "Over/Under 2.5", market_most_played: "Popular",
         cashout: "Cash Out", susp: "Suspended", pos_open: "Open Position", 
         pnl: "Live PNL", no_pos: "No market exposure.<br>Wait for entry trigger.",
-        mentor_idle: "Balanced match. Time decay slowly eroding the Draw odds. Tight spreads on 1 and 2.",
-        mentor_h: "Volume spike on 1! Algorithm detects xG increase. Market makers dropping Argentina's Back odds.",
-        mentor_a: "France counter-attack in the box! Liquidity withdrawn, spread widening. High volatility.",
-        mentor_card_y: "Yellow card for {player}. 'Red Card Risk Premium' applied: slight upward micro-tick on their team's odds.",
-        mentor_pen: "PENALTY GIVEN! Panic selling. Back volumes on the kicker are emptying the order book.",
-        mentor_goal: "GOAL! Market Suspended. Massive order cancellation. Fair Value recalculation based on time and score.",
-        mentor_swing: "EQUALIZER! Extreme market swing. Draw odds collapsing. Dramatic repricing on both teams.",
-        mentor_co_win: "Hedge completed (Green Book). The Exchange takes a 5% commission (€{val}) EXCLUSIVELY on net profit. Perfect math.",
-        mentor_co_loss: "Hedge completed (Red Book). Clean loss. The Exchange takes ZERO commissions on losing positions."
+        mentor_idle: "Stable market. Time decay eroding Draw margins. Volumes confirm current status quo.",
+        mentor_h: "xG increase for Argentina. Market Makers tightening the spread, Back odds dropping.",
+        mentor_a: "France in the box. Liquidity pulled, spread widening. Possible imminent spike.",
+        mentor_card_y: "Yellow card for {player}. Algorithm pricing in the 'Red Card Risk Premium'.",
+        mentor_pen: "PENALTY! Panic selling. Massive Back volumes on the kicker emptying the order book.",
+        mentor_goal: "EVENT! Market Suspended. Unmatched orders cancelled. Fair Value recalculation in progress...",
+        mentor_swing: "DRAMATIC REPRICING! Violent market swing. Liquidity shifting massively.",
+        mentor_co_win: "Hedge completed. Profit locked. The Exchange deducts a 5% fee (€{val}) EXCLUSIVELY on net profit.",
+        mentor_co_loss: "Loss accepted, closed in red. Reminder: The Exchange takes ZERO commission on losing trades."
     },
     es: {
         avail: "Fondo", matched: "Igualado", back: "A favor", lay: "En contra",
@@ -485,15 +502,15 @@ const I18N_DICT = {
         mo: "Cuotas de partido", ou: "Más/Menos 2.5", market_most_played: "Populares",
         cashout: "Cash Out", susp: "Suspendido", pos_open: "Posición Abierta", 
         pnl: "PNL en vivo", no_pos: "Sin exposición en el mercado.<br>Espera oportunidad.",
-        mentor_idle: "Partido equilibrado. Time Decay erosionando lentamente el empate. Spreads ajustados.",
-        mentor_h: "¡Pico de volumen en 1! Algoritmo detecta aumento en xG. Market makers bajan la cuota a favor de Argentina.",
-        mentor_a: "¡Contraataque de Francia! Liquidez retirada, spread ampliándose. Alta volatilidad.",
-        mentor_card_y: "Amarilla para {player}. 'Red Card Risk Premium' aplicado: micro-tick al alza en la cuota de su equipo.",
-        mentor_pen: "¡PENALTI! Venta de pánico. Los volúmenes a favor del tirador vacían el libro de órdenes.",
-        mentor_goal: "¡GOL! Mercado Suspendido. Cancelación masiva de órdenes. Recalculando Valor Razonable.",
-        mentor_swing: "¡EMPATE! Swing extremo. Cuota de la X se desploma. Reprecio dramático en las victorias.",
-        mentor_co_win: "Cobertura completada (Libro Verde). El Exchange retiene 5% de comisión (€{val}) EXCLUSIVAMENTE sobre la ganancia neta.",
-        mentor_co_loss: "Cobertura completada (Libro Rojo). Pérdida neta. El Exchange NO retiene comisiones en posiciones perdedoras."
+        mentor_idle: "Mercado estable. El Time Decay erosiona los márgenes del empate. Volúmenes confirman el status quo.",
+        mentor_h: "Aumento de xG para Argentina. Los Market Makers ajustan el spread, cuota A favor cayendo.",
+        mentor_a: "Francia en el área. Liquidez retirada, spread ampliándose. Posible pico inminente.",
+        mentor_card_y: "Amarilla para {player}. Algoritmo cotizando el 'Red Card Risk Premium'.",
+        mentor_pen: "¡PENALTI! Ventas de pánico. Volúmenes masivos A favor del tirador vacían el libro de órdenes.",
+        mentor_goal: "¡EVENTO! Mercado Suspendido. Cancelación de órdenes no igualadas. Recalculando Valor Razonable...",
+        mentor_swing: "¡REPRECIO DRAMÁTICO! Swing violento del mercado. La liquidez se mueve masivamente.",
+        mentor_co_win: "Cobertura completada. Beneficio asegurado. El Exchange deduce 5% de comisión (€{val}) EXCLUSIVAMENTE sobre el neto.",
+        mentor_co_loss: "Pérdida aceptada, cerrada en rojo. Recuerda: El Exchange NO retiene comisiones en pérdidas."
     },
     pt: {
         avail: "Saldo", matched: "Correspondido", back: "A favor", lay: "Contra",
@@ -501,21 +518,21 @@ const I18N_DICT = {
         mo: "Probabilidades", ou: "Mais/Menos 2.5", market_most_played: "Populares",
         cashout: "Cash Out", susp: "Suspenso", pos_open: "Posição Aberta", 
         pnl: "Live PNL", no_pos: "Nenhuma exposição no mercado.<br>Aguarde oportunidade.",
-        mentor_idle: "Partida equilibrada. Time Decay corroendo lentamente o empate. Spreads apertados.",
-        mentor_h: "Pico de volume no 1! Algoritmo detecta aumento em xG. Market Makers baixam o Back da Argentina.",
-        mentor_a: "Contra-ataque da França! Liquidez retirada, spread aumentando. Alta volatilidade.",
-        mentor_card_y: "Cartão amarelo para {player}. Risco de expulsão inserido: micro-tick de alta na odd da equipe.",
-        mentor_pen: "PÊNALTI! Pânico de venda. Volumes a favor do batedor esvaziam o livro de ordens.",
-        mentor_goal: "GOLO! Mercado Suspenso. Cancelamento massivo de ordens. Recálculo do Valor Justo.",
-        mentor_swing: "EMPATE! Swing de mercado extremo. Odd do empate desaba. Reprecificação dramática nas vitórias.",
-        mentor_co_win: "Hedge concluído (Livro Verde). A Bolsa cobra 5% de comissão (€{val}) APENAS sobre o lucro líquido.",
-        mentor_co_loss: "Hedge concluído (Livro Vermelho). Perda registada. A Bolsa NÃO cobra comissões sobre perdas."
+        mentor_idle: "Mercado estável. O Time Decay corrói as margens do Empate. Volumes confirmam o status quo.",
+        mentor_h: "Aumento de xG para a Argentina. Market Makers reduzem o spread, Back em queda.",
+        mentor_a: "França na área. Liquidez retirada, spread aumentando. Possível pico iminente.",
+        mentor_card_y: "Cartão amarelo para {player}. Algoritmo cotando o 'Red Card Risk Premium'.",
+        mentor_pen: "PÊNALTI! Pânico de venda. Volumes massivos no Back esvaziam o livro de ordens.",
+        mentor_goal: "EVENTO! Mercado Suspenso. Cancelamento de ordens não correspondidas. Recálculo do Valor Justo...",
+        mentor_swing: "REPRECIFICAÇÃO DRAMÁTICA! Swing de mercado violento. Liquidez mudando massivamente.",
+        mentor_co_win: "Hedge concluído. Lucro garantido. A Bolsa deduz 5% de comissão (€{val}) EXCLUSIVAMENTE sobre o lucro líquido.",
+        mentor_co_loss: "Perda aceite, fechada no vermelho. Lembre-se: A Bolsa NÃO retém comissões sobre perdas."
     }
 };
 
 /**
  * ============================================================================
- * 🚀 DOM CACHING & DRAGGABLE WIDGET (FULL SURFACE, GLOBAL POINTER EVENTS)
+ * 🚀 DOM CACHING & DRAGGABLE WIDGET (GLOBALE)
  * ============================================================================
  */
 const DOM = {
@@ -533,14 +550,14 @@ const Drag = {
         const panel = document.getElementById('position-panel');
         if(!panel) return;
         
-        // Listener su TUTTA L'AREA del pannello
+        // Eventi Pointer su TUTTA LA SUPERFICIE
         panel.addEventListener("pointerdown", (e) => this.start(e), {passive: false});
         document.addEventListener("pointerup", (e) => this.end(e), {passive: false});
         document.addEventListener("pointermove", (e) => this.move(e), {passive: false});
     },
     
     start(e) {
-        // Blocca il drag solo ed esclusivamente se premi il bottone giallo Cash Out
+        // Ignora il drag se stiamo cliccando il bottone del Cash Out per sicurezza
         if (e.target.tagName.toLowerCase() === 'button' || e.target.closest('button')) return;
 
         this.initialX = e.clientX - this.xOffset;
@@ -581,6 +598,7 @@ const App = {
     lang: 'it',
     
     init() {
+        // Cache Popolation
         ['H', 'X', 'A'].forEach(k => {
             DOM.odds[`${k}-b`] = document.getElementById(`odd-${k}-b`);
             DOM.odds[`${k}-l`] = document.getElementById(`odd-${k}-l`);
@@ -641,7 +659,7 @@ const App = {
 
 /**
  * ============================================================================
- * 🧠 CORE ENGINE STORICO 1:1 REALE (ZERO ALLUCINAZIONI)
+ * 🧠 CORE ENGINE STORICO 1:1 CON MENTOR PACING
  * ============================================================================
  */
 let State = {
@@ -652,8 +670,9 @@ let State = {
     vol: { H: [15400, 8400], X: [12300, 9500], A: [14200, 8900] },
     pos: null, mState: 'idle',
     cards: { H: {y:0, r:0}, A: {y:0, r:0} },
+    mentorLockUntil: 0, // Evita spam di messaggi del mentor
     
-    // Timeline storica esatta della finale
+    // Linea temporale esatta Mondiale 2022
     events: [
         { time: 1380, type: 'goal', team: 'H', scorer: 'Messi (Pen)', triggered: false }, // 23'
         { time: 2160, type: 'goal', team: 'H', scorer: 'Di Maria', triggered: false }, // 36'
@@ -673,7 +692,6 @@ const Sim = {
         State.active = true;
         document.getElementById('start-overlay').style.display = 'none';
         
-        // Ripristina la palla al centro se la simulazione parte da zero
         const b = document.getElementById('ball');
         if (b) { b.style.left = '50%'; b.style.top = '50%'; }
 
@@ -684,7 +702,7 @@ const Sim = {
 
     fastForward() {
         if(!State.active) return;
-        State.sec = 4750; // Salta a poco prima dell'uno-due francese
+        State.sec = 4750; // Salta a poco prima del rigore
         State.score = [2,0];
         State.cards.H.y = 1; State.cards.A.y = 1;
         State.events.forEach(e => { if(e.time < State.sec) e.triggered = true; });
@@ -705,7 +723,7 @@ const Sim = {
         
         if(!State.susp) {
             this.calcOdds();
-            if (State.sec % 3 === 0) this.animRadar();
+            if (State.sec % 4 === 0) this.animRadar(); // Movimento fluido ma non frenetico
             this.renderUI();
         }
     },
@@ -721,7 +739,7 @@ const Sim = {
         const ev = State.events.find(e => e.time === State.sec && !e.triggered);
         if (ev) {
             ev.triggered = true;
-            if (ev.mentor) this.mentor(ev.mentor);
+            if (ev.mentor) this.mentor(ev.mentor, {}, true);
             if (ev.type === 'goal') this.goal(ev.team, ev.scorer, ev.mentor);
             if (ev.type === 'card') this.card(ev.team, ev.color, ev.player);
             if (ev.type === 'attack') this.forceAttack(ev.team, ev.desc);
@@ -775,11 +793,11 @@ const Sim = {
 
         if(team === 'H') {
             c.style.opacity = '1'; c.style.left = '60%'; c.style.transform = 'translateY(-50%) rotate(0deg)';
-            c.style.background = 'linear-gradient(90deg, rgba(255,255,255,0.3) 0%, transparent 100%)';
-            badge.style.opacity = '1'; tName.innerText = 'Argentina'; tDesc.innerText = desc; tDesc.style.color = '#fff';
+            c.style.background = 'linear-gradient(90deg, rgba(116,172,223,0.35) 0%, transparent 100%)';
+            badge.style.opacity = '1'; tName.innerText = 'Argentina'; tDesc.innerText = desc; tDesc.style.color = 'var(--arg-blue)';
         } else {
             c.style.opacity = '1'; c.style.left = '0%'; c.style.transform = 'translateY(-50%) rotate(180deg)';
-            c.style.background = 'linear-gradient(90deg, rgba(44,177,232,0.3) 0%, transparent 100%)';
+            c.style.background = 'linear-gradient(90deg, rgba(44,177,232,0.35) 0%, transparent 100%)';
             badge.style.opacity = '1'; tName.innerText = 'Francia'; tDesc.innerText = desc; tDesc.style.color = '#2cb1e8';
         }
     },
@@ -800,17 +818,19 @@ const Sim = {
             State.mState = 'h-attack'; this.mentor('mentor_h');
             nx = 75 + Math.random()*15; ny = 20 + Math.random()*60;
             c.style.opacity = '1'; c.style.left = '60%'; c.style.transform = 'translateY(-50%) rotate(0deg)';
-            badge.style.opacity = '1'; tName.innerText = 'Argentina'; tDesc.innerText = 'Attacking'; tDesc.style.color = '#fff';
+            c.style.background = 'linear-gradient(90deg, rgba(116,172,223,0.35) 0%, transparent 100%)';
+            badge.style.opacity = '1'; tName.innerText = 'Argentina'; tDesc.innerText = 'Attacking'; tDesc.style.color = 'var(--arg-blue)';
         } else if (r < 0.50) {
             State.mState = 'a-attack'; this.mentor('mentor_a');
             nx = 10 + Math.random()*15; ny = 20 + Math.random()*60;
             c.style.opacity = '1'; c.style.left = '0%'; c.style.transform = 'translateY(-50%) rotate(180deg)';
+            c.style.background = 'linear-gradient(90deg, rgba(44,177,232,0.35) 0%, transparent 100%)';
             badge.style.opacity = '1'; tName.innerText = 'Francia'; tDesc.innerText = 'Attacking'; tDesc.style.color = '#2cb1e8';
         } else {
             State.mState = 'idle'; this.mentor('mentor_idle');
             nx = 40 + Math.random()*20; ny = 30 + Math.random()*40;
             c.style.opacity = '0';
-            badge.style.opacity = '1'; tName.innerText = nx > 50 ? 'Argentina' : 'Francia'; tDesc.innerText = 'Ball Safe'; tDesc.style.color = '#ccc';
+            badge.style.opacity = '1'; tName.innerText = nx > 50 ? 'Argentina' : 'Francia'; tDesc.innerText = 'Ball Safe'; tDesc.style.color = '#00e676';
         }
 
         b.style.left = `${nx}%`; b.style.top = `${ny}%`;
@@ -828,32 +848,33 @@ const Sim = {
         DOM.scoreH.innerText = State.score[0];
         DOM.scoreA.innerText = State.score[1];
         
-        if(!customMentor) this.mentor('mentor_goal');
+        if(!customMentor) this.mentor('mentor_goal', {}, true);
         Trade.renderState(); 
         this.renderTimeline();
 
+        // Ricalcolo del Fair Value per 6 secondi reali
         setTimeout(() => {
             State.susp = false;
             document.getElementById('goal-alert').style.display = 'none';
             document.getElementById('suspended').style.display = 'none';
             document.getElementById('ball').style.left = '50%'; document.getElementById('ball').style.top = '50%';
             Trade.renderState();
-        }, 5000); // 5 sec pausa per ricalcolo
+        }, 6000); 
     },
 
     card(team, color, player) {
         if(color === 'yellow') State.cards[team].y++;
         if(color === 'red') State.cards[team].r++;
-        this.mentor('mentor_card_y', { player: player });
+        this.mentor('mentor_card_y', { player: player }, true);
         this.renderCards();
         this.renderTimeline();
     },
 
     calcOdds() {
-        let rem = 1 - Math.min((State.sec / 5400), 0.99); // Max decay 99% per non farle crollare a 1.00 secco
+        let rem = 1 - Math.min((State.sec / 5400), 0.99);
         let tH, tX, tA;
 
-        // MATEMATICA E QUOTE DELLA FINALE STORICA (SWING VIOLENTO)
+        // MODELLO MATEMATICO ESATTO E REPRICING 
         if (State.score[0] === 0 && State.score[1] === 0) {
             tX = 1.01 + (3.05 - 1.01) * Math.pow(rem, 1.5);
             tH = 2.78 + (1-rem)*5; tA = 2.82 + (1-rem)*5;
@@ -870,7 +891,7 @@ const Sim = {
         } else if (State.score[0] === 2 && State.score[1] === 2) {
             tX = 1.80 + (1-rem)*1.5; 
             tH = 3.50 + (1-rem)*5; 
-            tA = 2.80 + (1-rem)*3; // Incredibile, la Francia prende il momentum
+            tA = 2.80 + (1-rem)*3;
         } else {
             tH = 2.0; tX = 2.0; tA = 2.0;
         }
@@ -916,22 +937,27 @@ const Sim = {
         });
     },
 
-    mentor(key, vars = {}) {
+    mentor(key, vars = {}, force = false) {
+        // Se non è forzato e il cooldown è attivo, ignora l'aggiornamento
+        if (!force && State.sec < State.mentorLockUntil) return;
+
         let txt = App.t(key);
         for (const [k, v] of Object.entries(vars)) {
             txt = txt.replace(`{${k}}`, v);
         }
         if (DOM.mentorTxt) DOM.mentorTxt.innerText = txt;
+        
+        // Imposta il cooldown: 15s per eventi forza (es. Gol/Card), 8s per aggiornamenti standard
+        State.mentorLockUntil = State.sec + (force ? 15 : 8);
     }
 };
 
 /**
  * ============================================================================
- * 💰 TRADING & HEDGING (MATE ESATTA E COMMISSIONI)
+ * 💰 TRADING & HEDGING (MATE ESATTA E COMMISSIONI SUL NETTO)
  * ============================================================================
  */
 const Trade = {
-    // Standardizzazione tick perfetti Exchange Mondiale
     roundTick(p) {
         if(p <= 1.01) return 1.01; if(p < 2) return Math.round(p*100)/100; if(p < 3) return Math.round(p*50)/50;
         if(p < 4) return Math.round(p*20)/20; if(p < 6) return Math.round(p*10)/10; if(p < 10) return Math.round(p*5)/5;
@@ -998,11 +1024,11 @@ const Trade = {
         
         let current = State.pos.t === 'back' ? cL : cB;
         
-        // PNL LORDO E NETTO ESATTO
         let pnl = State.pos.t === 'back' ? 
             State.pos.s * (State.pos.e / current - 1) : 
             State.pos.s * (1 - State.pos.e / current);
         
+        // 5% Solo sul profitto netto
         let net = pnl > 0 ? pnl * 0.95 : pnl;
         
         let str = `${net >= 0 ? '+' : '-'}€${Math.abs(net).toFixed(2)}`;
@@ -1024,13 +1050,12 @@ const Trade = {
         let comm = 0;
         let net = pnl;
         
-        // Commissione trattenuta SOLO SE c'è un Utile Netto > 0
         if (pnl > 0) {
             comm = pnl * 0.05;
             net = pnl - comm;
-            Sim.mentor('mentor_co_win', { val: comm.toFixed(2) });
+            Sim.mentor('mentor_co_win', { val: comm.toFixed(2) }, true);
         } else {
-            Sim.mentor('mentor_co_loss');
+            Sim.mentor('mentor_co_loss', {}, true);
         }
         
         State.bal += (State.pos.l + net);
@@ -1038,6 +1063,11 @@ const Trade = {
         
         DOM.posPanel.classList.remove('opacity-100', 'pointer-events-auto');
         DOM.posPanel.classList.add('opacity-0', 'pointer-events-none');
+        
+        let dskPnl = document.getElementById('desktop-pos');
+        if(dskPnl && getComputedStyle(dskPnl).display !== 'none') {
+            dskPnl.innerHTML = `<p class="text-gray-500 font-mono text-xs uppercase tracking-widest text-center" data-i18n="no_pos">${App.t('no_pos')}</p>`;
+        }
         
         this.renderState();
         this.updateHeader();
@@ -1062,10 +1092,10 @@ const Trade = {
         const updateCoBtn = (coBtn) => {
             if(coBtn) {
                 if(State.susp || State.sec >= 5700) {
-                    coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-6 py-2.5 rounded-sm text-[11px] uppercase tracking-widest cursor-not-allowed";
+                    coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest cursor-not-allowed";
                     coBtn.innerText = App.t('susp');
                 } else {
-                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-6 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer";
+                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer";
                     coBtn.innerText = App.t('cashout');
                 }
             }
