@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#fab400">
+    <title>Room AI | Betfair Style Simulator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root { 
+            --bf-yellow: #fab400; 
+            --bf-blue: #2cb1e8; 
+            --bf-pink: #faa9ba; 
+            --bg-dark: #0a0a0a;
+            --panel-bg: #1e1e1e;
+            --border: #2a2a2a;
+        }
+        
+        * { -webkit-font-smoothing: antialiased; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background: #f1f1f1; color: #333; margin: 0; overflow-x: hidden; }
+        
+        /* PITCH RADAR STYLE */
+        #pitch-container {
+            position: relative; width: 100%; aspect-ratio: 2.1/1; 
+            background: #2e7d32;
+            background-image: 
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+                repeating-linear-gradient(90deg, transparent, transparent 10%, rgba(0,0,0,0.05) 10%, rgba(0,0,0,0.05) 20%);
+            border-bottom: 3px solid #1b5e20; overflow: hidden;
+        }
+        .pitch-line { position: absolute; background: rgba(255,255,255,0.5); pointer-events: none; }
+        
+        /* INFOGRAFICA EVENTI */
+        .event-badge {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(44, 177, 232, 0.9); color: white;
+            padding: 4px 12px; border-radius: 4px; font-weight: 800; font-size: 11px;
+            text-transform: uppercase; z-index: 30; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; align-items: center; min-width: 120px;
+        }
+        .attack-cone {
+            position: absolute; top: 50%; width: 40%; height: 60%;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+            transform: translateY(-50%); pointer-events: none; z-index: 10; transition: all 0.5s ease;
+            clip-path: polygon(0 0, 100% 30%, 100% 70%, 0 100%);
+        }
+
+        .ball { 
+            position: absolute; width: 10px; height: 10px; background: #fff; 
+            border-radius: 50%; z-index: 25; box-shadow: 0 0 10px #fff; 
+            transform: translate(-50%, -50%); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* EXCHANGE UI */
+        .market-row { @apply flex items-center border-b border-gray-200 bg-white hover:bg-gray-50 transition-colors; }
+        .btn-odd { @apply flex-1 py-2 flex flex-col items-center justify-center transition-all active:scale-95; }
+        .odd-val { @apply font-black text-sm sm:text-base leading-none; }
+        .odd-vol { @apply text-[8px] font-bold opacity-60 mt-1 uppercase; }
+
+        /* MENTOR AI */
+        .mentor-box { border-left: 4px solid var(--bf-blue); background: #e3f2fd; }
+
+        .dark body { background: var(--bg-dark); color: #ccc; }
+        .dark .market-row { background: #1a1a1a; border-color: #222; }
+    </style>
+</head>
+<body class="max-w-4xl mx-auto shadow-2xl min-h-screen flex flex-col">
+
+    <!-- TOP HEADER BETFAIR STYLE -->
+    <header class="bg-[#222] text-white p-2 flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-2">
+            <span class="bg-[#fab400] text-black font-black px-2 py-0.5 rounded text-[10px]">EXCHANGE</span>
+            <div class="text-[10px] font-bold uppercase tracking-tighter">Obolon v Kudrivka</div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="flex flex-col items-end">
+                <span id="bankroll" class="font-mono font-bold text-xs text-[#00e676]">€ 100.00</span>
+            </div>
+            <select id="lang" class="bg-transparent text-[10px] font-bold border-none outline-none">
+                <option value="it">IT</option>
+                <option value="en">EN</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- LIVE SCORE STRIP -->
+    <div class="bg-black text-white px-3 py-1.5 flex justify-between items-center text-[11px] font-bold border-b border-white/10">
+        <div class="flex items-center gap-2">
+            <span class="text-[#00e676] animate-pulse">LIVE</span>
+            <span id="match-timer" class="opacity-60 font-mono">00:00</span>
+        </div>
+        <div class="flex items-center gap-4 tracking-tighter uppercase">
+            <span>Obolon</span>
+            <span id="score" class="bg-[#333] px-2 py-0.5 rounded text-bf-yellow">0 - 0</span>
+            <span>Kudrivka</span>
+        </div>
+    </div>
+
+    <!-- PITCH RADAR -->
+    <section id="pitch-container" class="shrink-0">
+        <div class="pitch-line" style="left: 50%; height: 100%; width: 1px;"></div>
+        <div class="center-circle"></div>
+        <div class="penalty-area-left" style="position: absolute; left: 0; top: 20%; width: 15%; height: 60%; border: 1.5px solid rgba(255,255,255,0.2); border-left:0;"></div>
+        <div class="penalty-area-right" style="position: absolute; right: 0; top: 20%; width: 15%; height: 60%; border: 1.5px solid rgba(255,255,255,0.2); border-right:0;"></div>
+        
+        <div id="attack-cone" class="attack-cone opacity-0"></div>
+        <div id="ball" class="ball" style="left: 50%; top: 50%;"></div>
+
+        <div id="event-info" class="event-badge hidden">
+            <span id="event-team" class="text-[8px] opacity-80">Obolon</span>
+            <span id="event-type">Attacking</span>
+        </div>
+
+        <div id="goal-alert" class="absolute inset-0 z-40 bg-black/60 flex-col items-center justify-center hidden">
+            <span class="text-4xl font-black text-white italic drop-shadow-lg">GOOL!</span>
+        </div>
+
+        <!-- OVERLAY INIZIALE -->
+        <div id="start-overlay" class="absolute inset-0 z-50 bg-black/80 flex items-center justify-center">
+            <button onclick="Engine.start()" class="bg-[#fab400] text-black font-black px-10 py-3 rounded shadow-xl text-xs uppercase tracking-widest active:scale-95 transition-transform">Inizia Simulazione</button>
+        </div>
+    </section>
+
+    <!-- MENTOR BAR -->
+    <div class="mentor-box m-2 p-2 rounded flex items-center gap-2 shrink-0">
+        <span class="text-lg">👩‍🏫</span>
+        <p id="mentor-txt" class="text-[10px] sm:text-xs font-semibold italic text-gray-700 leading-tight">Il mercato è in attesa del fischio d'inizio.</p>
+    </div>
+
+    <!-- MAIN CONTROL PANEL -->
+    <main class="flex-grow flex flex-col bg-white overflow-hidden">
+        
+        <!-- RISK MGMT -->
+        <div class="p-2 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+            <div class="flex flex-col">
+                <span class="text-[8px] font-black uppercase text-gray-400">Rischio %</span>
+                <div class="flex gap-1 mt-1">
+                    <button onclick="Trade.setRisk(1)" id="r-1" class="px-3 py-1 border rounded text-[10px] font-bold">1%</button>
+                    <button onclick="Trade.setRisk(2)" id="r-2" class="px-3 py-1 border border-bf-blue text-bf-blue rounded text-[10px] font-bold">2%</button>
+                    <button onclick="Trade.setRisk(5)" id="r-5" class="px-3 py-1 border rounded text-[10px] font-bold">5%</button>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <div class="flex flex-col items-end">
+                    <span class="text-[8px] font-black text-gray-400 uppercase">Stake</span>
+                    <span id="val-stk" class="font-mono font-bold text-xs">€ 2.00</span>
+                </div>
+                <div class="flex flex-col items-end">
+                    <span class="text-[8px] font-black text-gray-400 uppercase">Liability</span>
+                    <span id="val-liab" class="font-mono font-bold text-xs text-red-500">€ 0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- MARKET ODDS 1X2 -->
+        <div class="flex-grow overflow-y-auto">
+            <div class="bg-gray-800 text-white p-2 text-[9px] font-black uppercase flex justify-between items-center">
+                <span>Esito Finale</span>
+                <div class="flex w-[140px] text-center">
+                    <div class="flex-1">Punta</div>
+                    <div class="flex-1">Banca</div>
+                </div>
+            </div>
+
+            <!-- RIGA 1 -->
+            <div class="market-row" id="row-H">
+                <div class="flex-grow p-2">
+                    <div class="font-bold text-xs">Obolon-Brovar Kiev</div>
+                    <div class="text-[8px] text-gray-400 font-bold uppercase">Matched: € 1.2K</div>
+                </div>
+                <div class="flex w-[140px] gap-1 p-1">
+                    <button onclick="Trade.place('H', 'back')" class="btn-bet bg-[#2cb1e8]">
+                        <span id="odd-H-b" class="odd-val">2.50</span>
+                        <span class="odd-vol">€ 142</span>
+                    </button>
+                    <button onclick="Trade.place('H', 'lay')" class="btn-bet bg-[#faa9ba]">
+                        <span id="odd-H-l" class="odd-val">2.54</span>
+                        <span class="odd-vol">€ 88</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGA X -->
+            <div class="market-row" id="row-X">
+                <div class="flex-grow p-2">
+                    <div class="font-bold text-xs">Pareggio</div>
+                    <div class="text-[8px] text-gray-400 font-bold uppercase">Matched: € 4.5K</div>
+                </div>
+                <div class="flex w-[140px] gap-1 p-1">
+                    <button onclick="Trade.place('X', 'back')" class="btn-bet bg-[#2cb1e8]">
+                        <span id="odd-X-b" class="odd-val">3.20</span>
+                        <span class="odd-vol">€ 540</span>
+                    </button>
+                    <button onclick="Trade.place('X', 'lay')" class="btn-bet bg-[#faa9ba]">
+                        <span id="odd-X-l" class="odd-val">3.25</span>
+                        <span class="odd-vol">€ 210</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGA 2 -->
+            <div class="market-row" id="row-A">
+                <div class="flex-grow p-2">
+                    <div class="font-bold text-xs">FK Kudrivka</div>
+                    <div class="text-[8px] text-gray-400 font-bold uppercase">Matched: € 850</div>
+                </div>
+                <div class="flex w-[140px] gap-1 p-1">
+                    <button onclick="Trade.place('A', 'back')" class="btn-bet bg-[#2cb1e8]">
+                        <span id="odd-A-b" class="odd-val">2.80</span>
+                        <span class="odd-vol">€ 95</span>
+                    </button>
+                    <button onclick="Trade.place('A', 'lay')" class="btn-bet bg-[#faa9ba]">
+                        <span id="odd-A-l" class="odd-val">2.86</span>
+                        <span class="odd-vol">€ 130</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- POSITION & CASH OUT PANEL -->
+            <div id="position-panel" class="hidden p-3 bg-gray-50 border-t border-gray-200 animate-in slide-in-from-bottom">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="flex items-center gap-2">
+                        <span id="pos-label" class="bg-black text-white text-[9px] font-black px-2 py-0.5 rounded">PUNTA X</span>
+                        <span id="pos-info" class="text-[11px] font-mono font-bold">@ 3.20 | Stk €2.00</span>
+                    </div>
+                    <span class="text-[9px] font-black text-gray-400 uppercase">Hedged Position</span>
+                </div>
+                <div class="flex items-center justify-between bg-white border border-gray-200 p-2 rounded shadow-sm">
+                    <div class="flex flex-col leading-none">
+                        <span class="text-[8px] text-gray-400 font-black uppercase">Live PNL</span>
+                        <span id="pnl-val" class="text-xl font-black text-black">€ 0.00</span>
+                    </div>
+                    <button onclick="Trade.cashOut()" id="btn-cashout" class="bg-[#ffbb00] hover:bg-[#e6a800] text-black font-black px-8 py-3 rounded text-xs uppercase tracking-widest shadow-md transition-all active:scale-95">Cash Out</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MINI CHART -->
+        <div class="h-16 w-full p-1 bg-white border-t border-gray-200 shrink-0">
+            <canvas id="chart"></canvas>
+        </div>
+    </main>
+
+<script>
+/**
+ * ============================================================================
+ * 🧠 MOTOR SIMULAZIONE 1X2 - PRO VERSION
+ * ============================================================================
+ */
+const Dictionary = {
+    it: { attacking: "Attacco", ballSafe: "Palla Sicura", danger: "Pericolo!", startMatch: "Avvia Match", bankroll: "Cassa", liab: "Liability", mentorIdle: "Match in equilibrio. Analizzo il possesso palla...", mentorH: "Pressione Home! Il mercato anticipa un possibile vantaggio.", mentorA: "Kudrivka in area! Copriti se hai posizioni aperte sul pareggio.", mentorGoal: "GOL! Mercato sospeso. Analisi prezzi post-evento.", mentorDecay: "Time Decay in accelerazione. Ottimo per chi ha puntato la X." },
+    en: { attacking: "Attacking", ballSafe: "Ball Safe", danger: "Danger!", startMatch: "Start Match", bankroll: "Bankroll", liab: "Liability", mentorIdle: "Balanced match. Analyzing ball possession...", mentorH: "Home pressure! Market anticipating a lead.", mentorA: "Kudrivka in the box! Hedge if you have Draw positions.", mentorGoal: "GOAL! Market suspended. Post-event analysis.", mentorDecay: "Time Decay accelerating. Golden for Draw backers." }
+};
+
+let State = {
+    active: false, lang: 'it', bal: 100.0, risk: 0.02,
+    sec: 0, score: [0,0], susp: false,
+    odds: { H: 2.50, X: 3.20, A: 2.80 },
+    hist: { H:[], X:[], A:[] },
+    pos: null, 
+    matchState: 'idle' // 'idle', 'h-attack', 'a-attack'
+};
+
+const Engine = {
+    start() {
+        State.active = true;
+        document.getElementById('start-overlay').style.display = 'none';
+        this.initChart();
+        setInterval(() => this.tick(), 1000);
+        setInterval(() => this.animateRadar(), 2000);
+    },
+
+    tick() {
+        if(State.susp) return;
+        State.sec++;
+        this.updateTime();
+        this.updateOdds();
+        this.renderUI();
+    },
+
+    animateRadar() {
+        if(!State.active || State.susp) return;
+        const ball = document.getElementById('ball');
+        const cone = document.getElementById('attack-cone');
+        const badge = document.getElementById('event-info');
+        
+        let dice = Math.random();
+        if(dice < 0.2) { // Home Attack
+            this.setRadar('h-attack', 85, 40 + Math.random()*20);
+        } else if(dice < 0.4) { // Away Attack
+            this.setRadar('a-attack', 15, 40 + Math.random()*20);
+        } else { // Neutral
+            this.setRadar('idle', 40 + Math.random()*20, 30 + Math.random()*40);
+        }
+    },
+
+    setRadar(state, bx, by) {
+        State.matchState = state;
+        const ball = document.getElementById('ball');
+        const cone = document.getElementById('attack-cone');
+        const badge = document.getElementById('event-info');
+        const teamLbl = document.getElementById('event-team');
+        const typeLbl = document.getElementById('event-type');
+
+        ball.style.left = bx + '%';
+        ball.style.top = by + '%';
+
+        if(state === 'idle') {
+            cone.style.opacity = '0';
+            badge.style.display = 'none';
+            this.mentor(Dictionary[State.lang].mentorIdle);
+        } else {
+            cone.style.opacity = '1';
+            badge.style.display = 'flex';
+            if(state === 'h-attack') {
+                cone.style.left = '60%'; cone.style.transform = 'translateY(-50%) rotate(0deg)';
+                teamLbl.innerText = 'Obolon'; typeLbl.innerText = Dictionary[State.lang].attacking;
+                this.mentor(Dictionary[State.lang].mentorH);
+            } else {
+                cone.style.left = '0%'; cone.style.transform = 'translateY(-50%) rotate(180deg)';
+                teamLbl.innerText = 'Kudrivka'; typeLbl.innerText = Dictionary[State.lang].attacking;
+                this.mentor(Dictionary[State.lang].mentorA);
+            }
+            
+            // Random Goal Chance during attack
+            if(Math.random() > 0.95) this.goal(state === 'h-attack' ? 'H' : 'A');
+        }
+    },
+
+    goal(team) {
+        State.susp = true;
+        if(team === 'H') State.score[0]++; else State.score[1]++;
+        
+        document.getElementById('goal-alert').style.display = 'flex';
+        this.mentor(Dictionary[State.lang].mentorGoal);
+        
+        setTimeout(() => {
+            document.getElementById('goal-alert').style.display = 'none';
+            State.susp = false;
+            this.setRadar('idle', 50, 50);
+        }, 3000);
+    },
+
+    updateOdds() {
+        let diff = State.score[0] - State.score[1];
+        let rem = 1 - (State.sec / 5400);
+
+        let tH = 2.5, tX = 3.2, tA = 2.8;
+        if(diff === 0) {
+            tX = 1.01 + (3.2 - 1.01) * Math.pow(rem, 1.8);
+            tH = 2.5 + (15 * (1-rem)); tA = 2.8 + (15 * (1-rem));
+        } else if(diff > 0) {
+            tH = 1.01 + (2.5 - 1.01) * Math.pow(rem, 2);
+            tX = 4.0 + (10 * (1-rem)); tA = 20.0 + (150 * (1-rem));
+        } else {
+            tA = 1.01 + (2.8 - 1.01) * Math.pow(rem, 2);
+            tX = 4.0 + (10 * (1-rem)); tH = 20.0 + (150 * (1-rem));
+        }
+
+        // Match pressure impact
+        if(State.matchState === 'h-attack') tH -= 0.15;
+        if(State.matchState === 'a-attack') tA -= 0.15;
+
+        State.odds.H = this.drift(State.odds.H, tH);
+        State.odds.X = this.drift(State.odds.X, tX);
+        State.odds.A = this.drift(State.odds.A, tA);
+        
+        Trade.updatePosition();
+    },
+
+    drift(c, t) { return Math.max(1.01, c + (t - c) * 0.1 + (Math.random() - 0.5) * 0.02); },
+
+    updateTime() {
+        let m = Math.floor(State.sec/60).toString().padStart(2,'0');
+        let s = (State.sec%60).toString().padStart(2,'0');
+        document.getElementById('match-timer').innerText = `${m}:${s}`;
+    },
+
+    renderUI() {
+        document.getElementById('score').innerText = `${State.score[0]} - ${State.score[1]}`;
+        const keys = ['H','X','A'];
+        keys.forEach(k => {
+            document.getElementById(`odd-${k}-b`).innerText = State.odds[k].toFixed(2);
+            document.getElementById(`odd-${k}-l`).innerText = (State.odds[k] + 0.05).toFixed(2);
+        });
+
+        // Update Chart
+        State.hist[State.sel === undefined ? 'X' : State.sel].push(State.odds.X); // simplified
+        if(State.hist.X.length > 50) State.hist.X.shift();
+        if(window.myChart) {
+            window.myChart.data.datasets[0].data = State.hist.X;
+            window.myChart.update('none');
+        }
+    },
+
+    mentor(m) { document.getElementById('mentor-txt').innerText = m; },
+
+    initChart() {
+        const ctx = document.getElementById('chart').getContext('2d');
+        window.myChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: Array(50).fill(''), datasets: [{ data: [], borderColor: '#2cb1e8', borderWidth: 2, pointRadius: 0, tension: 0.3 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
+        });
+    }
+};
+
+/**
+ * ============================================================================
+ * 💰 TRADE CONTROLLER
+ * ============================================================================
+ */
+const Trade = {
+    setRisk(v) {
+        State.risk = v / 100;
+        [1,2,5].forEach(i => {
+            const btn = document.getElementById(`r-${i}`);
+            btn.className = (v === i) ? "px-3 py-1 border border-bf-blue text-bf-blue rounded text-[10px] font-bold" : "px-3 py-1 border rounded text-[10px] font-bold";
+        });
+        this.updateStats();
+    },
+
+    updateExposure() {
+        let stake = State.bal * State.risk;
+        document.getElementById('val-stk').innerText = `€ ${stake.toFixed(2)}`;
+        // simplified liability
+        let liab = stake * (State.odds.X - 1); // fittizio per demo
+        document.getElementById('val-liab').innerText = `€ ${liab.toFixed(2)}`;
+    },
+
+    updateStats() {
+        document.getElementById('bankroll').innerText = `€ ${State.bal.toFixed(2)}`;
+        this.updateExposure();
+    },
+
+    place(sel, side) {
+        if(!State.active || State.susp || State.pos) return;
+        let odd = side === 'back' ? State.odds[sel] : State.odds[sel] + 0.05;
+        let stake = State.bal * State.risk;
+        let liability = side === 'lay' ? stake * (odd - 1) : stake;
+
+        if(State.bal < liability) return;
+        State.bal -= liability;
+        
+        State.pos = { sel, t: side, e: odd, s: stake, liab: liability };
+        document.getElementById('position-panel').classList.remove('hidden');
+        document.getElementById('pos-label').innerText = `${side.toUpperCase()} ${sel}`;
+        document.getElementById('pos-info').innerText = `@ ${odd.toFixed(2)} | Stk €${stake.toFixed(2)}`;
+        this.updateStats();
+    },
+
+    updatePosition() {
+        if(!State.pos) return;
+        let current = State.odds[State.pos.sel];
+        if(State.pos.t === 'lay') current += 0.05;
+
+        // Hedge formula
+        let pnl = (State.pos.t === 'back') ? 
+            State.pos.s * (State.pos.e / current - 1) : 
+            State.pos.s * (1 - State.pos.e / current);
+
+        let net = pnl > 0 ? pnl * 0.95 : pnl;
+        const el = document.getElementById('pnl-val');
+        el.innerText = `${net >= 0 ? '+' : '-'}€${Math.abs(net).toFixed(2)}`;
+        el.className = `text-xl font-black ${net >= 0 ? 'text-[#00e676]' : 'text-red-500'}`;
+    },
+
+    cashOut() {
+        if(!State.pos || State.susp) return;
+        let current = State.odds[State.pos.sel];
+        let pnl = (State.pos.t === 'back') ? 
+            State.pos.s * (State.pos.e / current - 1) : 
+            State.pos.s * (1 - State.pos.e / current);
+
+        let net = pnl > 0 ? pnl * 0.95 : pnl;
+        State.bal += (State.pos.liab + net);
+        State.pos = null;
+        document.getElementById('position-panel').classList.add('hidden');
+        this.updateStats();
+    }
+};
+
+window.onload = () => {
+    Trade.setRisk(2);
+    document.getElementById('lang').addEventListener('change', (e) => { State.lang = e.target.value; });
+};
+</script>
+</body>
+</html>
