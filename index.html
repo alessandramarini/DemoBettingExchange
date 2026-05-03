@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#fab400">
-    <title>Zero To Hero | Exchange Terminal</title>
+    <meta name="theme-color" content="#111111">
+    <title>Zero To Hero | Exchange Pro</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,31 +21,43 @@
             --btn-back-hover: #a0cdeb;
             --btn-lay: #f8c9d4;
             --btn-lay-hover: #f1b2be;
+            --zth-green: #39ff14;
         }
         
-        * { -webkit-font-smoothing: antialiased; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Roboto', sans-serif; }
-        body { background: #111; color: #333; margin: 0; display: flex; align-items: center; justify-content: center; height: 100dvh; overflow: hidden; }
+        /* ZERO FLASH SETUP */
+        html, body { 
+            background-color: #050505; color: #333; margin: 0; padding: 0; 
+            height: 100dvh; overflow: hidden; font-family: 'Roboto', sans-serif; 
+            -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; 
+        }
+
+        body { 
+            background-image: linear-gradient(to bottom, rgba(10,10,10,0.92), rgba(5,5,5,0.98)), url('https://images.unsplash.com/photo-1605207431102-140e61f43505?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            display: flex; align-items: center; justify-content: center; 
+            opacity: 0; transition: opacity 0.6s ease-out; /* ANTI FLASH TRANSITION */
+        }
+        
+        body.ready { opacity: 1; }
         
         /* ADAPTIVE PRO LAYOUT */
         #app-container { 
             width: 100%; height: 100%; background: #f2f2f2; 
             display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
         }
         
         @media (min-width: 800px) {
             body { padding: 1.5rem; }
-            #app-container { 
-                flex-direction: row; max-width: 1200px; height: 100%; max-height: 850px; 
-                border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-            }
-            #left-pane { width: 45%; border-right: 1px solid #ddd; height: 100%; display: flex; flex-direction: column; background: #222; }
-            #right-pane { width: 55%; height: 100%; display: flex; flex-direction: column; background: #f2f2f2; position: relative;}
+            #app-container { flex-direction: row; max-width: 1200px; height: 100%; max-height: 850px; border-radius: 12px; }
+            #left-pane { width: 45%; border-right: 1px solid #111; height: 100%; display: flex; flex-direction: column; background: #222; z-index: 10;}
+            #right-pane { width: 55%; height: 100%; display: flex; flex-direction: column; background: #f2f2f2; position: relative; z-index: 10;}
             .mobile-only { display: none !important; }
         }
         
         @media (max-width: 799px) {
-            #left-pane { display: flex; flex-direction: column; flex-shrink: 0; background: #222; }
-            #right-pane { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; position: relative; background: #f2f2f2;}
+            #left-pane { display: flex; flex-direction: column; flex-shrink: 0; background: #222; z-index: 10;}
+            #right-pane { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; position: relative; background: #f2f2f2; z-index: 10;}
             .desktop-only { display: none !important; }
         }
 
@@ -64,7 +76,7 @@
         .pitch-area-left { position: absolute; top: 20%; left: 0; width: 15%; height: 60%; border: 1.5px solid rgba(255,255,255,0.5); border-left: 0; }
         .pitch-area-right { position: absolute; top: 20%; right: 0; width: 15%; height: 60%; border: 1.5px solid rgba(255,255,255,0.5); border-right: 0; }
 
-        /* RADAR ANIMATIONS (GPU Accelerated) */
+        /* RADAR ANIMATIONS */
         .ball { 
             position: absolute; width: 12px; height: 12px; background: #fff; 
             border-radius: 50%; z-index: 25; box-shadow: 0 2px 5px rgba(0,0,0,0.5); 
@@ -84,7 +96,8 @@
         .info-badge {
             position: absolute; left: 50%; top: 20%; transform: translate(-50%, 0);
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 30;
-            transition: all 0.5s ease; opacity: 0; background: rgba(0,0,0,0.5); padding: 2px 12px; border-radius: 20px;
+            transition: all 0.5s ease; opacity: 0; background: rgba(0,0,0,0.7); padding: 2px 14px; border-radius: 20px;
+            backdrop-filter: blur(2px); border: 1px solid rgba(255,255,255,0.1);
         }
 
         /* MARKET UI COMPONENTS */
@@ -108,15 +121,45 @@
         .card-yellow { background: #ffd600; border: 1px solid #ccaa00; }
         .card-red { background: #d50000; border: 1px solid #aa0000; }
 
-        /* DRAGGABLE CASHOUT PANEL */
+        /* DRAGGABLE CASHOUT PANEL (Spostato a livello root per Libertà Totale) */
         #position-panel {
+            position: fixed; /* Assoluto rispetto allo schermo intero */
             will-change: transform, opacity;
-            /* Using touch-action: none is critical for pointer events to handle drag smoothly on mobile */
-            touch-action: none; 
+            touch-action: none; /* Fondamentale per il drag su mobile */
+            z-index: 999999; /* Sopra a OGNI cosa */
         }
+        
+        .team-flag { width: 22px; height: 16px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.4); object-fit: cover; }
     </style>
 </head>
 <body>
+
+<!-- WIDGET CASHOUT FLUTTUANTE GLOBALE -->
+<div id="position-panel" class="w-[280px] bg-white border border-gray-300 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.7)] flex-col transition-opacity duration-200 opacity-0 pointer-events-none cursor-move select-none" style="transform: translate(-50%, -50%); display: flex; left: 50%; top: 50%;">
+    <!-- VISUAL HEADER (Superficie di Drag) -->
+    <div class="bg-gray-100 p-2.5 border-b border-gray-200 rounded-t-lg flex justify-between items-center pointer-events-none">
+        <div class="flex items-center gap-2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#888"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
+            <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest" data-i18n="pos_open">Posizione Aperta</span>
+        </div>
+    </div>
+    
+    <!-- BODY -->
+    <div class="p-3.5 flex flex-col gap-3">
+        <div class="flex justify-between items-center pb-2 border-b border-gray-100 pointer-events-none">
+            <span id="pos-label" class="text-[#111] text-[10px] font-black px-2 py-0.5 rounded-sm shadow-sm">PUNTA</span>
+            <span id="pos-info" class="text-[12px] font-mono font-bold text-gray-700">@ 0.00 | Stk €0.00</span>
+        </div>
+        <div class="flex items-center justify-between pt-1">
+            <div class="flex flex-col leading-none pointer-events-none">
+                <span class="text-[10px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
+                <span id="pnl-val" class="text-[22px] font-black text-[#111] leading-none">€ 0.00</span>
+            </div>
+            <!-- BUTTON: Stops Drag propagation via JS -->
+            <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-3 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer" data-i18n="cashout">Cash Out</button>
+        </div>
+    </div>
+</div>
 
 <div id="app-container">
 
@@ -126,20 +169,33 @@
     <div id="left-pane">
         
         <!-- HEADER TOP "ZERO TO HERO" -->
-        <header class="bg-[#111] flex justify-between items-center px-3 py-1.5 shrink-0 shadow-sm z-20 h-[48px] border-b border-[#333]">
+        <header class="bg-[#0f0f0f] flex justify-between items-center px-3 py-1.5 shrink-0 shadow-sm z-20 h-[48px] border-b border-[#222]">
             <div class="flex items-center gap-2 text-white">
-                <div class="w-7 h-7 bg-green-500 rounded-full flex items-center justify-center border-2 border-[#111] shadow-[0_0_8px_rgba(0,230,118,0.5)]">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-                </div>
+                <!-- LOGO ZERO TO HERO SVG -->
+                <svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0 drop-shadow-md">
+                    <circle cx="50" cy="50" r="48" fill="#000" />
+                    <!-- Anello Argentato Spazzolato -->
+                    <circle cx="50" cy="50" r="43" fill="none" stroke="url(#silver)" stroke-width="6" />
+                    <!-- Foglia/Slash Verde Fluo -->
+                    <path d="M 32 72 Q 50 40 72 28 Q 55 55 32 72 Z" fill="var(--zth-green)" />
+                    <defs>
+                        <linearGradient id="silver" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#b0b0b0" />
+                            <stop offset="30%" stop-color="#ffffff" />
+                            <stop offset="70%" stop-color="#dddddd" />
+                            <stop offset="100%" stop-color="#707070" />
+                        </linearGradient>
+                    </defs>
+                </svg>
                 <div class="flex flex-col">
-                    <span class="font-black text-[15px] tracking-tight leading-none text-white">ZERO TO HERO</span>
+                    <span class="font-black text-[15px] tracking-tight leading-none text-white font-sans">ZERO TO HERO</span>
                     <span class="text-[9px] font-bold leading-none uppercase mt-0.5 text-[var(--bf-yellow)]">Academy</span>
                 </div>
             </div>
             
             <div class="flex items-center gap-2">
                 <!-- i18n Selector -->
-                <div class="bg-[#222] rounded flex items-center border border-[#444] px-1">
+                <div class="bg-[#1a1a1a] rounded flex items-center border border-[#333] px-1">
                     <select id="lang-selector" class="bg-transparent text-white text-[10px] font-bold outline-none border-none cursor-pointer py-1">
                         <option value="it">🇮🇹 IT</option>
                         <option value="en">🇬🇧 EN</option>
@@ -147,7 +203,7 @@
                         <option value="pt">🇵🇹 PT</option>
                     </select>
                 </div>
-                <div class="bg-[#222] text-white px-2 py-0.5 rounded flex flex-col items-end shadow-sm leading-tight border border-[#444]">
+                <div class="bg-[#1a1a1a] text-white px-2 py-0.5 rounded flex flex-col items-end shadow-sm leading-tight border border-[#333]">
                     <span class="text-[7px] text-gray-400 uppercase" data-i18n="avail">Cassa</span>
                     <span id="bankroll-mobile" class="font-bold text-[11px] text-[#00e676]">€ 100.00</span>
                 </div>
@@ -156,7 +212,7 @@
 
         <!-- LIVE SCORE STRIP -->
         <div class="bg-[#1a1a1a] flex flex-col shrink-0 z-10 relative">
-            <div class="text-white px-4 py-2 flex items-center border-b border-[#333]">
+            <div class="text-white px-3 py-2 flex items-center border-b border-[#2a2a2a]">
                 <div class="flex flex-col items-center justify-center min-w-[36px] mr-2">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10-7h2v5h-2zM8 11h2v5H8zm8-4h2v5h-2z"/></svg>
                     <span class="text-white text-[8px] font-black uppercase tracking-widest mt-0.5" data-i18n="live">Live</span>
@@ -164,21 +220,27 @@
                 
                 <div class="flex flex-col items-end">
                     <span class="text-[#00e676] font-mono text-[15px] font-bold w-12 text-center" id="match-timer">00:00</span>
-                    <span onclick="Sim.fastForward()" class="text-[9px] text-[#fab400] bg-[#333] px-1 rounded cursor-pointer mt-0.5 whitespace-nowrap active:bg-[#555]">⏩ 80'</span>
+                    <span onclick="Sim.fastForward()" class="text-[9px] text-[#fab400] bg-[#333] px-1 rounded cursor-pointer mt-0.5 whitespace-nowrap active:bg-[#555] shadow-sm">⏩ 80'</span>
                 </div>
                 
-                <div class="flex flex-col gap-1 items-center text-[#00e676] font-mono text-[15px] font-bold leading-none ml-4 bg-[#222] px-2 py-1.5 rounded shadow-inner border border-[#444]">
+                <div class="flex flex-col gap-1 items-center text-[#00e676] font-mono text-[16px] font-bold leading-none ml-4 bg-[#111] px-2 py-1.5 rounded shadow-inner border border-[#333]">
                     <span id="score-h">0</span>
                     <span id="score-a">0</span>
                 </div>
                 
-                <div class="flex flex-col gap-1 text-[13px] font-bold tracking-tight leading-none ml-4 flex-grow overflow-hidden">
+                <div class="flex flex-col gap-1.5 text-[14px] font-bold tracking-tight leading-none ml-4 flex-grow overflow-hidden">
                     <div class="flex items-center justify-between">
-                        <span class="text-white truncate">Argentina</span>
+                        <div class="flex items-center gap-2">
+                            <img src="https://flagcdn.com/w40/ar.png" class="team-flag" alt="AR">
+                            <span class="text-white truncate">Argentina</span>
+                        </div>
                         <div id="cards-h" class="flex shrink-0"></div>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-white truncate">Francia</span>
+                        <div class="flex items-center gap-2">
+                            <img src="https://flagcdn.com/w40/fr.png" class="team-flag" alt="FR">
+                            <span class="text-white truncate">Francia</span>
+                        </div>
                         <div id="cards-a" class="flex shrink-0"></div>
                     </div>
                 </div>
@@ -206,42 +268,44 @@
             </div>
             
             <div id="attack-cone" class="attack-cone"></div>
-            <div id="ball" class="ball"></div>
+            <!-- Palla inizialmente al centro -->
+            <div id="ball" class="ball" style="left: 50%; top: 50%;"></div>
 
             <div id="event-badge" class="info-badge">
                 <span id="event-team" class="text-white font-black text-[12px] tracking-tight leading-tight">Argentina</span>
                 <span id="event-desc" class="text-[#00e676] text-[9px] font-bold uppercase tracking-wider">Attacking</span>
             </div>
 
-            <div id="goal-alert" class="absolute inset-0 z-40 bg-black/75 flex flex-col items-center justify-center hidden backdrop-blur-sm">
+            <div id="goal-alert" class="absolute inset-0 z-40 bg-black/80 flex flex-col items-center justify-center hidden backdrop-blur-sm">
                 <span class="text-5xl sm:text-6xl animate-bounce mb-2">⚽</span>
                 <h2 id="scorer-name" class="text-2xl sm:text-3xl font-black text-white italic drop-shadow-xl">Messi</h2>
                 <h2 class="text-4xl sm:text-6xl font-black text-white italic drop-shadow-xl" style="text-shadow: 0 0 20px #00e676;">GOAL!</h2>
             </div>
 
-            <div id="suspended" class="absolute inset-0 z-40 bg-black/60 hidden flex-col items-center justify-center backdrop-blur-sm">
+            <div id="suspended" class="absolute inset-0 z-40 bg-black/70 hidden flex-col items-center justify-center backdrop-blur-sm">
                 <span class="bg-red-600 text-white font-black text-sm px-6 py-2 rounded-sm shadow-xl tracking-widest uppercase" data-i18n="susp">Sospeso</span>
             </div>
 
-            <!-- OVERLAY AVVIO -->
-            <div id="start-overlay" class="absolute inset-0 z-50 bg-black/85 flex flex-col items-center justify-center backdrop-blur-md p-3 text-center">
+            <!-- OVERLAY AVVIO COMPATTO E PULITO -->
+            <div id="start-overlay" class="absolute inset-0 z-50 bg-black/85 flex flex-col items-center justify-center backdrop-blur-md p-3 text-center transition-opacity duration-300">
                 <h1 class="text-white text-xl font-black italic mb-1 text-[var(--bf-yellow)]">World Cup Final '22</h1>
-                <p class="text-gray-300 text-[9px] mb-4 max-w-[220px] leading-snug" data-i18n="sim_desc">1 Sec = 1 Sec Reale.<br>Quote dinamiche in Real-Time.</p>
-                <button onclick="Sim.start()" class="bg-[#fab400] text-[#111] font-black px-8 py-2.5 rounded shadow-[0_0_15px_rgba(250,180,0,0.5)] text-[11px] uppercase tracking-widest active:scale-95 transition-transform" data-i18n="start">Avvia Simulazione</button>
+                <p class="text-gray-300 text-[9px] mb-4 max-w-[220px] leading-snug" data-i18n="sim_desc">1 Sec = 1 Sec Reale.<br>Algoritmi e spread in tempo reale.</p>
+                <button onclick="Sim.start()" class="bg-[var(--zth-green)] text-[#111] font-black px-8 py-2.5 rounded shadow-[0_0_15px_rgba(57,255,20,0.4)] text-[11px] uppercase tracking-widest active:scale-95 transition-transform" data-i18n="start">Avvia Simulazione</button>
             </div>
         </section>
 
-        <!-- MENTOR AI BAR -->
-        <div class="bg-[#1a1a1a] p-2.5 flex items-start gap-2 border-b border-[#333] shrink-0">
-            <div class="w-6 h-6 rounded-full bg-[#00e676] flex items-center justify-center shrink-0 mt-0.5">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="#111"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <!-- MARKET ANALYST (MENTOR) BAR -->
+        <div class="bg-[#111] p-3 flex items-start gap-3 border-b border-[#333] shrink-0 shadow-inner flex-grow md:flex-grow-0">
+            <!-- Icona Professionale Analista Quant -->
+            <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_10px_rgba(57,255,20,0.15)]">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[var(--zth-green)]">
+                    <path d="M21 21H3v-2h18v2zM19.5 8.5l-4.5 4.5-4-4L3 17v-4l8-8 4 4 4.5-4.5v4z"/>
+                </svg>
             </div>
-            <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-tight italic" data-i18n="mentor_idle">In attesa del fischio d'inizio.</p>
-        </div>
-        
-        <!-- Desktop Position Panel Injector -->
-        <div id="desktop-pos" class="desktop-only flex-grow bg-[#222] p-4 flex flex-col items-center justify-center border-t border-[#111]">
-            <p class="text-gray-500 font-mono text-[11px] uppercase tracking-widest text-center" data-i18n="no_pos">Nessuna posizione aperta.<br>Seleziona una quota.</p>
+            <div class="flex flex-col">
+                <span class="text-[9px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-0.5">Analista Quant</span>
+                <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-snug" data-i18n="mentor_idle">In attesa del fischio d'inizio. Il mercato sta consolidando i volumi di pre-match.</p>
+            </div>
         </div>
     </div>
 
@@ -286,21 +350,21 @@
                 </div>
             </div>
 
-            <!-- HEADER COLONNE CON LARGHEZZA FISSA -->
-            <div class="bg-white flex items-center justify-between pl-4 pr-4 py-1.5 text-[11px] font-bold text-[#333] border-b border-gray-200 shadow-sm">
+            <!-- HEADER COLONNE FIXED -->
+            <div class="bg-white flex items-center justify-between pl-4 pr-4 py-1.5 text-[11px] font-bold text-[#333] border-b border-gray-200 shadow-sm relative z-0">
                 <div class="truncate flex-grow">
                     <span><span data-i18n="matched">Abbinate</span>: <span id="vol-tot" class="font-normal text-gray-500">€0</span></span>
                 </div>
-                <div class="flex gap-1 shrink-0">
+                <div class="flex gap-1.5 shrink-0">
                     <div class="w-[70px] sm:w-[75px] text-center text-[#222]" data-i18n="back">Punta</div>
                     <div class="w-[70px] sm:w-[75px] text-center text-[#222]" data-i18n="lay">Banca</div>
                 </div>
             </div>
 
-            <!-- ROW ARGENTINA (ALIGNMENT FIXED) -->
+            <!-- ROW ARGENTINA -->
             <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-H">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#666" class="shrink-0"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+                    <img src="https://flagcdn.com/w40/ar.png" class="team-flag shrink-0" alt="AR">
                     <span class="text-[14px] font-bold text-[#222] tracking-tight truncate">Argentina</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
@@ -319,10 +383,10 @@
                 </div>
             </div>
 
-            <!-- ROW FRANCIA (ALIGNMENT FIXED) -->
+            <!-- ROW FRANCIA -->
             <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-A">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#666" class="shrink-0"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+                    <img src="https://flagcdn.com/w40/fr.png" class="team-flag shrink-0" alt="FR">
                     <span class="text-[14px] font-bold text-[#222] tracking-tight truncate">Francia</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
@@ -341,10 +405,10 @@
                 </div>
             </div>
 
-            <!-- ROW DRAW (ALIGNMENT FIXED) -->
+            <!-- ROW DRAW -->
             <div class="flex items-center justify-between w-full bg-white border-b border-gray-300 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-X">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#666" class="shrink-0"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#888" class="shrink-0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
                     <span class="text-[14px] font-bold text-[#222] tracking-tight truncate" data-i18n="draw">Pareggio</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
@@ -363,100 +427,95 @@
                 </div>
             </div>
 
-            <!-- DRAGGABLE CASHOUT PANEL (Optimized Position) -->
-            <div id="position-panel" class="absolute left-1/2 top-1/2 w-[260px] bg-white border border-gray-300 rounded-lg shadow-[0_15px_40px_rgba(0,0,0,0.5)] flex-col z-[100] transition-opacity duration-200 opacity-0 pointer-events-none" style="transform: translate(-50%, -50%); display: flex;">
-                
-                <!-- DRAG HANDLE -->
-                <div id="drag-handle" class="bg-gray-100 p-2 border-b border-gray-200 rounded-t-lg flex justify-between items-center cursor-move select-none active:bg-gray-200 transition-colors">
-                    <div class="flex items-center gap-2 pointer-events-none">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#888"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
-                        <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest" data-i18n="pos_open">Posizione Aperta</span>
-                    </div>
-                </div>
-                
-                <div class="p-3 flex flex-col gap-2">
-                    <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                        <span id="pos-label" class="text-[#111] text-[10px] font-black px-2 py-0.5 rounded-sm shadow-sm">PUNTA</span>
-                        <span id="pos-info" class="text-[12px] font-mono font-bold text-gray-700">@ 0.00 | Stk €0.00</span>
-                    </div>
-                    <div class="flex items-center justify-between pt-1">
-                        <div class="flex flex-col leading-none">
-                            <span class="text-[9px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
-                            <span id="pnl-val" class="text-[20px] font-black text-[#111] leading-none">€ 0.00</span>
-                        </div>
-                        <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[#fab400] hover:bg-[#e0a000] text-[#111] font-black px-4 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform" data-i18n="cashout">Cash Out</button>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
 
 <script>
 /**
+ * Rimuove l'opacità all'avvio per evitare FOUC e attivare il fade-in
+ */
+document.addEventListener("DOMContentLoaded", () => {
+    requestAnimationFrame(() => {
+        document.body.classList.add('ready');
+    });
+});
+
+/**
  * ============================================================================
- * 🌐 i18n MULTILINGUAL ENGINE 
+ * 🌐 i18n MULTILINGUAL ENGINE (IT, EN, ES, PT) & MENTOR AI
  * ============================================================================
  */
 const I18N_DICT = {
     it: {
         avail: "Cassa", matched: "Abbinate", back: "Punta", lay: "Banca",
-        draw: "Pareggio", start: "Avvia Simulazione", sim_desc: "1 Secondo = 1 Sec Reale.<br>Quote e volumi dinamici.",
+        draw: "Pareggio", start: "Avvia Simulazione", sim_desc: "1 Secondo = 1 Sec Reale.<br>Algoritmi e spread in tempo reale.",
         mo: "Esito Finale", ou: "Under/Over 2.5", market_most_played: "Più Giocati",
         cashout: "Cash Out", susp: "Sospeso", pos_open: "Posizione Aperta", 
-        pnl: "Live PNL", no_pos: "Nessuna posizione aperta.<br>Seleziona una quota.",
-        mentor_idle: "Fase di studio. Mercato stabile.",
-        mentor_h: "Pressione Argentina! Punta 1 in calo.",
-        mentor_a: "Pressione Francia! Punta 2 in calo.",
-        mentor_goal: "GOAL! Mercato in ricalcolo...",
-        mentor_co_win: "Cash Out in profitto! L'Exchange trattiene il 5% di commissione ({val}€) solo sull'utile netto.",
-        mentor_co_loss: "Cash Out chiuso in rosso. L'Exchange NON trattiene commissioni sulle perdite."
+        pnl: "Live PNL", no_pos: "Nessuna esposizione sul mercato.<br>Attendi occasione d'ingresso.",
+        mentor_idle: "Match in equilibrio. Il Time Decay erode lentamente la quota del pareggio. Spread ristretti sui segni 1 e 2.",
+        mentor_h: "Spike volumetrico sull'1! L'algoritmo rileva un aumento degli Expected Goals (xG). I Market Maker abbassano il Back dell'Argentina.",
+        mentor_a: "Ripartenza Francia in the box! Liquidità ritirata dal banco, spread in allargamento. Alta volatilità in corso.",
+        mentor_card_y: "Ammonizione per {player}. Il modello matematico inserisce il 'Red Card Risk Premium': micro-tick al rialzo sulla quota della sua squadra.",
+        mentor_pen: "RIGORE ASSEGNATO! Panic selling. I volumi in Back sul tiratore stanno svuotando l'order book in frazioni di secondo.",
+        mentor_goal: "GOAL! Mercato in Sospensione (Suspended). Cancellazione massiva degli ordini. Ricalcolo del Fair Value in base a tempo e punteggio.",
+        mentor_swing: "PAREGGIO! Swing di mercato estremo. La quota della X crolla vertiginosamente. Repricing drammatico sulle vittorie.",
+        mentor_co_win: "Hedge completato (Green Book). L'Exchange trattiene il 5% di commissione (€{val}) ESCLUSIVAMENTE sull'utile netto. Matematica perfetta.",
+        mentor_co_loss: "Hedge completato (Red Book). Perdita secca registrata. L'Exchange NON trattiene alcuna commissione sulle posizioni in perdita."
     },
     en: {
         avail: "Bankroll", matched: "Matched", back: "Back", lay: "Lay",
-        draw: "Draw", start: "Start Simulation", sim_desc: "1 Second = 1 Real Sec.<br>Dynamic odds and volumes.",
+        draw: "Draw", start: "Start Simulation", sim_desc: "1 Second = 1 Real Sec.<br>Real-time algorithms and spread.",
         mo: "Match Odds", ou: "Over/Under 2.5", market_most_played: "Popular",
         cashout: "Cash Out", susp: "Suspended", pos_open: "Open Position", 
-        pnl: "Live PNL", no_pos: "No open positions.<br>Select an odd.",
-        mentor_idle: "Neutral phase. Market is stable.",
-        mentor_h: "Argentina pressing! Back 1 dropping.",
-        mentor_a: "France counter! Back 2 dropping.",
-        mentor_goal: "GOAL! Market resetting...",
-        mentor_co_win: "Cash Out in profit! The Exchange takes a 5% commission ({val}€) ONLY on net profits.",
-        mentor_co_loss: "Cash Out closed in red. The Exchange takes NO commission on losses."
+        pnl: "Live PNL", no_pos: "No market exposure.<br>Wait for entry trigger.",
+        mentor_idle: "Balanced match. Time decay slowly eroding the Draw odds. Tight spreads on 1 and 2.",
+        mentor_h: "Volume spike on 1! Algorithm detects xG increase. Market makers dropping Argentina's Back odds.",
+        mentor_a: "France counter-attack in the box! Liquidity withdrawn, spread widening. High volatility.",
+        mentor_card_y: "Yellow card for {player}. 'Red Card Risk Premium' applied: slight upward micro-tick on their team's odds.",
+        mentor_pen: "PENALTY GIVEN! Panic selling. Back volumes on the kicker are emptying the order book.",
+        mentor_goal: "GOAL! Market Suspended. Massive order cancellation. Fair Value recalculation based on time and score.",
+        mentor_swing: "EQUALIZER! Extreme market swing. Draw odds collapsing. Dramatic repricing on both teams.",
+        mentor_co_win: "Hedge completed (Green Book). The Exchange takes a 5% commission (€{val}) EXCLUSIVELY on net profit. Perfect math.",
+        mentor_co_loss: "Hedge completed (Red Book). Clean loss. The Exchange takes ZERO commissions on losing positions."
     },
     es: {
         avail: "Fondo", matched: "Igualado", back: "A favor", lay: "En contra",
-        draw: "Empate", start: "Iniciar Simulación", sim_desc: "1 Seg = 1 Seg Real.<br>Cuotas y volúmenes dinámicos.",
+        draw: "Empate", start: "Iniciar Simulación", sim_desc: "1 Seg = 1 Seg Real.<br>Algoritmos y spread en vivo.",
         mo: "Cuotas de partido", ou: "Más/Menos 2.5", market_most_played: "Populares",
         cashout: "Cash Out", susp: "Suspendido", pos_open: "Posición Abierta", 
-        pnl: "PNL en vivo", no_pos: "No hay posiciones abiertas.<br>Seleccione una cuota.",
-        mentor_idle: "Fase de estudio. Mercado estable.",
-        mentor_h: "¡Presión de Argentina! Cuota 1 bajando.",
-        mentor_a: "¡Presión de Francia! Cuota 2 bajando.",
-        mentor_goal: "¡GOL! Mercado recalculando...",
-        mentor_co_win: "¡Cash Out con beneficio! El Exchange retiene un 5% de comisión ({val}€) SOLO sobre ganancias netas.",
-        mentor_co_loss: "Cash Out cerrado en rojo. El Exchange NO retiene comisiones sobre pérdidas."
+        pnl: "PNL en vivo", no_pos: "Sin exposición en el mercado.<br>Espera oportunidad.",
+        mentor_idle: "Partido equilibrado. Time Decay erosionando lentamente el empate. Spreads ajustados.",
+        mentor_h: "¡Pico de volumen en 1! Algoritmo detecta aumento en xG. Market makers bajan la cuota a favor de Argentina.",
+        mentor_a: "¡Contraataque de Francia! Liquidez retirada, spread ampliándose. Alta volatilidad.",
+        mentor_card_y: "Amarilla para {player}. 'Red Card Risk Premium' aplicado: micro-tick al alza en la cuota de su equipo.",
+        mentor_pen: "¡PENALTI! Venta de pánico. Los volúmenes a favor del tirador vacían el libro de órdenes.",
+        mentor_goal: "¡GOL! Mercado Suspendido. Cancelación masiva de órdenes. Recalculando Valor Razonable.",
+        mentor_swing: "¡EMPATE! Swing extremo. Cuota de la X se desploma. Reprecio dramático en las victorias.",
+        mentor_co_win: "Cobertura completada (Libro Verde). El Exchange retiene 5% de comisión (€{val}) EXCLUSIVAMENTE sobre la ganancia neta.",
+        mentor_co_loss: "Cobertura completada (Libro Rojo). Pérdida neta. El Exchange NO retiene comisiones en posiciones perdedoras."
     },
     pt: {
         avail: "Saldo", matched: "Correspondido", back: "A favor", lay: "Contra",
-        draw: "Empate", start: "Iniciar Simulação", sim_desc: "1 Seg = 1 Seg Real.<br>Odds e volumes dinâmicos.",
+        draw: "Empate", start: "Iniciar Simulação", sim_desc: "1 Seg = 1 Seg Real.<br>Algoritmos e spread ao vivo.",
         mo: "Probabilidades", ou: "Mais/Menos 2.5", market_most_played: "Populares",
         cashout: "Cash Out", susp: "Suspenso", pos_open: "Posição Aberta", 
-        pnl: "Live PNL", no_pos: "Nenhuma posição aberta.<br>Selecione uma odd.",
-        mentor_idle: "Fase de estudo. Mercado estável.",
-        mentor_h: "Pressão da Argentina! Back 1 caindo.",
-        mentor_a: "Ataque da França! Back 2 caindo.",
-        mentor_goal: "GOLO! Mercado recalculando...",
-        mentor_co_win: "Cash Out com lucro! A Bolsa cobra 5% de comissão ({val}€) APENAS sobre os lucros líquidos.",
-        mentor_co_loss: "Cash Out fechado no vermelho. A Bolsa NÃO cobra comissões sobre perdas."
+        pnl: "Live PNL", no_pos: "Nenhuma exposição no mercado.<br>Aguarde oportunidade.",
+        mentor_idle: "Partida equilibrada. Time Decay corroendo lentamente o empate. Spreads apertados.",
+        mentor_h: "Pico de volume no 1! Algoritmo detecta aumento em xG. Market Makers baixam o Back da Argentina.",
+        mentor_a: "Contra-ataque da França! Liquidez retirada, spread aumentando. Alta volatilidade.",
+        mentor_card_y: "Cartão amarelo para {player}. Risco de expulsão inserido: micro-tick de alta na odd da equipe.",
+        mentor_pen: "PÊNALTI! Pânico de venda. Volumes a favor do batedor esvaziam o livro de ordens.",
+        mentor_goal: "GOLO! Mercado Suspenso. Cancelamento massivo de ordens. Recálculo do Valor Justo.",
+        mentor_swing: "EMPATE! Swing de mercado extremo. Odd do empate desaba. Reprecificação dramática nas vitórias.",
+        mentor_co_win: "Hedge concluído (Livro Verde). A Bolsa cobra 5% de comissão (€{val}) APENAS sobre o lucro líquido.",
+        mentor_co_loss: "Hedge concluído (Livro Vermelho). Perda registada. A Bolsa NÃO cobra comissões sobre perdas."
     }
 };
 
 /**
  * ============================================================================
- * 🚀 DOM CACHING & DRAGGABLE WIDGET (Pointer Events Optimizati)
+ * 🚀 DOM CACHING & DRAGGABLE WIDGET (FULL SURFACE, GLOBAL POINTER EVENTS)
  * ============================================================================
  */
 const DOM = {
@@ -471,21 +530,25 @@ const Drag = {
     active: false, initialX: 0, initialY: 0, xOffset: 0, yOffset: 0,
     
     init() {
-        const handle = document.getElementById('drag-handle');
-        if(!handle) return;
+        const panel = document.getElementById('position-panel');
+        if(!panel) return;
         
-        handle.addEventListener("pointerdown", (e) => this.start(e), {passive: false});
+        // Listener su TUTTA L'AREA del pannello
+        panel.addEventListener("pointerdown", (e) => this.start(e), {passive: false});
         document.addEventListener("pointerup", (e) => this.end(e), {passive: false});
         document.addEventListener("pointermove", (e) => this.move(e), {passive: false});
     },
     
     start(e) {
+        // Blocca il drag solo ed esclusivamente se premi il bottone giallo Cash Out
+        if (e.target.tagName.toLowerCase() === 'button' || e.target.closest('button')) return;
+
         this.initialX = e.clientX - this.xOffset;
         this.initialY = e.clientY - this.yOffset;
         
-        if (e.target.closest('#drag-handle')) {
+        if (e.target.closest('#position-panel')) {
             this.active = true;
-            document.getElementById('drag-handle').setPointerCapture(e.pointerId);
+            DOM.posPanel.setPointerCapture(e.pointerId);
         }
     },
     
@@ -518,7 +581,6 @@ const App = {
     lang: 'it',
     
     init() {
-        // Build Cache
         ['H', 'X', 'A'].forEach(k => {
             DOM.odds[`${k}-b`] = document.getElementById(`odd-${k}-b`);
             DOM.odds[`${k}-l`] = document.getElementById(`odd-${k}-l`);
@@ -548,7 +610,7 @@ const App = {
             this.updateI18n();
         });
         
-        let saved = JSON.parse(localStorage.getItem('qa_pro_v6'));
+        let saved = JSON.parse(localStorage.getItem('qa_pro_v9'));
         if(saved) { State.bal = saved.bal; State.risk = saved.risk; }
         
         this.updateI18n();
@@ -579,7 +641,7 @@ const App = {
 
 /**
  * ============================================================================
- * 🧠 CORE ENGINE STORICO 1:1
+ * 🧠 CORE ENGINE STORICO 1:1 REALE (ZERO ALLUCINAZIONI)
  * ============================================================================
  */
 let State = {
@@ -591,15 +653,16 @@ let State = {
     pos: null, mState: 'idle',
     cards: { H: {y:0, r:0}, A: {y:0, r:0} },
     
+    // Timeline storica esatta della finale
     events: [
         { time: 1380, type: 'goal', team: 'H', scorer: 'Messi (Pen)', triggered: false }, // 23'
         { time: 2160, type: 'goal', team: 'H', scorer: 'Di Maria', triggered: false }, // 36'
         { time: 2820, type: 'card', color: 'yellow', team: 'H', player: 'E. Fernandez', triggered: false }, // 45+7'
         { time: 3300, type: 'card', color: 'yellow', team: 'A', player: 'Rabiot', triggered: false }, // 55'
-        { time: 4760, type: 'attack', team: 'A', desc: 'Rigore Francia!', triggered: false }, // 79'20"
+        { time: 4760, type: 'attack', team: 'A', desc: 'Rigore Francia!', triggered: false, mentor: 'mentor_pen' }, // 79'20"
         { time: 4800, type: 'goal', team: 'A', scorer: 'Mbappé (Pen)', triggered: false }, // 80'
         { time: 4845, type: 'attack', team: 'A', desc: 'Azione Pericolosa!', triggered: false }, // 80'45"
-        { time: 4860, type: 'goal', team: 'A', scorer: 'Mbappé', triggered: false }, // 81'
+        { time: 4860, type: 'goal', team: 'A', scorer: 'Mbappé', triggered: false, mentor: 'mentor_swing' }, // 81'
         { time: 5220, type: 'card', color: 'yellow', team: 'A', player: 'Thuram', triggered: false }, // 87'
         { time: 5300, type: 'card', color: 'yellow', team: 'H', player: 'Acuña', triggered: false } // 88'
     ]
@@ -609,6 +672,11 @@ const Sim = {
     start() {
         State.active = true;
         document.getElementById('start-overlay').style.display = 'none';
+        
+        // Ripristina la palla al centro se la simulazione parte da zero
+        const b = document.getElementById('ball');
+        if (b) { b.style.left = '50%'; b.style.top = '50%'; }
+
         this.renderTimeline();
         this.renderCards();
         setInterval(() => this.tick(), 1000); 
@@ -616,7 +684,7 @@ const Sim = {
 
     fastForward() {
         if(!State.active) return;
-        State.sec = 4780; // Salta a poco prima del rigore
+        State.sec = 4750; // Salta a poco prima dell'uno-due francese
         State.score = [2,0];
         State.cards.H.y = 1; State.cards.A.y = 1;
         State.events.forEach(e => { if(e.time < State.sec) e.triggered = true; });
@@ -653,8 +721,9 @@ const Sim = {
         const ev = State.events.find(e => e.time === State.sec && !e.triggered);
         if (ev) {
             ev.triggered = true;
-            if (ev.type === 'goal') this.goal(ev.team, ev.scorer);
-            if (ev.type === 'card') this.card(ev.team, ev.color);
+            if (ev.mentor) this.mentor(ev.mentor);
+            if (ev.type === 'goal') this.goal(ev.team, ev.scorer, ev.mentor);
+            if (ev.type === 'card') this.card(ev.team, ev.color, ev.player);
             if (ev.type === 'attack') this.forceAttack(ev.team, ev.desc);
         }
     },
@@ -716,7 +785,7 @@ const Sim = {
     },
 
     animRadar() {
-        if(!State.active || State.susp || State.events.some(e => e.time === State.sec)) return;
+        if(!State.active || State.susp || State.events.some(e => Math.abs(e.time - State.sec) < 5)) return;
 
         const b = document.getElementById('ball');
         const c = document.getElementById('attack-cone');
@@ -747,7 +816,7 @@ const Sim = {
         b.style.left = `${nx}%`; b.style.top = `${ny}%`;
     },
 
-    goal(team, scorer) {
+    goal(team, scorer, customMentor) {
         State.susp = true;
         if(team === 'H') State.score[0]++; else State.score[1]++;
         
@@ -759,7 +828,7 @@ const Sim = {
         DOM.scoreH.innerText = State.score[0];
         DOM.scoreA.innerText = State.score[1];
         
-        this.mentor('mentor_goal');
+        if(!customMentor) this.mentor('mentor_goal');
         Trade.renderState(); 
         this.renderTimeline();
 
@@ -769,20 +838,22 @@ const Sim = {
             document.getElementById('suspended').style.display = 'none';
             document.getElementById('ball').style.left = '50%'; document.getElementById('ball').style.top = '50%';
             Trade.renderState();
-        }, 5000); 
+        }, 5000); // 5 sec pausa per ricalcolo
     },
 
-    card(team, color) {
+    card(team, color, player) {
         if(color === 'yellow') State.cards[team].y++;
         if(color === 'red') State.cards[team].r++;
+        this.mentor('mentor_card_y', { player: player });
         this.renderCards();
         this.renderTimeline();
     },
 
     calcOdds() {
-        let rem = 1 - Math.min((State.sec / 5400), 0.99);
+        let rem = 1 - Math.min((State.sec / 5400), 0.99); // Max decay 99% per non farle crollare a 1.00 secco
         let tH, tX, tA;
 
+        // MATEMATICA E QUOTE DELLA FINALE STORICA (SWING VIOLENTO)
         if (State.score[0] === 0 && State.score[1] === 0) {
             tX = 1.01 + (3.05 - 1.01) * Math.pow(rem, 1.5);
             tH = 2.78 + (1-rem)*5; tA = 2.82 + (1-rem)*5;
@@ -793,11 +864,13 @@ const Sim = {
             tH = 1.01 + (1.08 - 1.01) * Math.pow(rem, 2);
             tX = 15.0 + (1-rem)*50; tA = 80.0 + (1-rem)*200;
         } else if (State.score[0] === 2 && State.score[1] === 1) {
-            tH = 1.01 + (1.30 - 1.01) * (rem / 0.15); 
-            tX = 4.00 + (1-rem)*4; tA = 12.0 + (1-rem)*10;
+            tH = 1.25 + (1-rem)*1.5; 
+            tX = 5.50 + (1-rem)*10; 
+            tA = 12.0 + (1-rem)*20;
         } else if (State.score[0] === 2 && State.score[1] === 2) {
-            tX = 1.01 + (1.40 - 1.01) * (rem / 0.15); 
-            tH = 5.0 + (1-rem)*10; tA = 5.0 + (1-rem)*10;
+            tX = 1.80 + (1-rem)*1.5; 
+            tH = 3.50 + (1-rem)*5; 
+            tA = 2.80 + (1-rem)*3; // Incredibile, la Francia prende il momentum
         } else {
             tH = 2.0; tX = 2.0; tA = 2.0;
         }
@@ -854,10 +927,11 @@ const Sim = {
 
 /**
  * ============================================================================
- * 💰 TRADING & HEDGING (MATE ESATTA & CASH OUT)
+ * 💰 TRADING & HEDGING (MATE ESATTA E COMMISSIONI)
  * ============================================================================
  */
 const Trade = {
+    // Standardizzazione tick perfetti Exchange Mondiale
     roundTick(p) {
         if(p <= 1.01) return 1.01; if(p < 2) return Math.round(p*100)/100; if(p < 3) return Math.round(p*50)/50;
         if(p < 4) return Math.round(p*20)/20; if(p < 6) return Math.round(p*10)/10; if(p < 10) return Math.round(p*5)/5;
@@ -875,8 +949,8 @@ const Trade = {
         State.risk = v/100;
         [1,2,5].forEach(i => {
             let el = document.getElementById(`r-${i}`);
-            if(i===v) el.className = "px-4 py-1 bg-[var(--bf-yellow)] border border-[var(--bf-yellow)] rounded text-[13px] font-black text-[#111] shadow-sm transition-colors";
-            else el.className = "px-4 py-1 bg-white border border-gray-300 rounded text-[13px] font-bold text-gray-500 shadow-sm transition-colors";
+            if(i===v) el.className = "px-4 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors";
+            else el.className = "px-4 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors";
         });
         this.updateHeader();
     },
@@ -901,7 +975,7 @@ const Trade = {
         State.bal -= l;
         State.pos = { sel, t: type, e: o, s: s, l: l };
         
-        Drag.reset(); // Centra sempre il pannello alla riapertura
+        Drag.reset(); 
         DOM.posPanel.classList.remove('opacity-0', 'pointer-events-none');
         DOM.posPanel.classList.add('opacity-100', 'pointer-events-auto');
         
@@ -922,14 +996,13 @@ const Trade = {
         let cB = this.roundTick(rawB);
         let cL = this.roundTick(rawB + this.getTickStep(rawB));
         
-        // Logica Uscita Esatta:
         let current = State.pos.t === 'back' ? cL : cB;
         
+        // PNL LORDO E NETTO ESATTO
         let pnl = State.pos.t === 'back' ? 
             State.pos.s * (State.pos.e / current - 1) : 
             State.pos.s * (1 - State.pos.e / current);
         
-        // Commissioni SOLO sul profitto (Exchange Rule)
         let net = pnl > 0 ? pnl * 0.95 : pnl;
         
         let str = `${net >= 0 ? '+' : '-'}€${Math.abs(net).toFixed(2)}`;
@@ -950,6 +1023,8 @@ const Trade = {
         
         let comm = 0;
         let net = pnl;
+        
+        // Commissione trattenuta SOLO SE c'è un Utile Netto > 0
         if (pnl > 0) {
             comm = pnl * 0.05;
             net = pnl - comm;
@@ -966,7 +1041,7 @@ const Trade = {
         
         this.renderState();
         this.updateHeader();
-        localStorage.setItem('qa_pro_v6', JSON.stringify({bal: State.bal, risk: State.risk}));
+        localStorage.setItem('qa_pro_v9', JSON.stringify({bal: State.bal, risk: State.risk}));
     },
 
     renderState() {
@@ -990,7 +1065,7 @@ const Trade = {
                     coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-6 py-2.5 rounded-sm text-[11px] uppercase tracking-widest cursor-not-allowed";
                     coBtn.innerText = App.t('susp');
                 } else {
-                    coBtn.disabled = false; coBtn.className = "bg-[#fab400] hover:bg-[#e0a000] text-[#111] font-black px-6 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform";
+                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-6 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer";
                     coBtn.innerText = App.t('cashout');
                 }
             }
