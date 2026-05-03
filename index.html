@@ -18,10 +18,10 @@
             --bf-yellow: #fab400; 
             --bf-dark: #111111;
             --pitch-green: #2d6b22;
-            --btn-back: #bde0f5;
-            --btn-back-hover: #a0cdeb;
-            --btn-lay: #f8c9d4;
-            --btn-lay-hover: #f1b2be;
+            --btn-back: #72BBEB;       /* Betfair Back Blue */
+            --btn-back-hover: #5DA5D6;
+            --btn-lay: #F29BB4;        /* Betfair Lay Pink */
+            --btn-lay-hover: #E386A1;
             --zth-green: #39ff14;
             --arg-blue: #74acdf;
         }
@@ -122,14 +122,14 @@
         .tab-item { display: inline-block; padding: 10px 14px; font-size: 13px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; cursor: pointer; }
         .tab-active { color: #111; font-weight: 700; border-bottom-color: var(--bf-yellow); }
 
-        .bf-btn-back { background-color: var(--btn-back); transition: background-color 0.1s; }
+        .bf-btn-back { background-color: var(--btn-back); transition: background-color 0.1s; border-radius: 2px; }
         .bf-btn-back:active { background-color: var(--btn-back-hover); }
-        .bf-btn-lay { background-color: var(--btn-lay); transition: background-color 0.1s; }
+        .bf-btn-lay { background-color: var(--btn-lay); transition: background-color 0.1s; border-radius: 2px; }
         .bf-btn-lay:active { background-color: var(--btn-lay-hover); }
         
-        .btn-odd-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 46px; border-radius: 2px; }
+        .btn-odd-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 46px; }
         .odd-price { font-size: 17px; font-weight: 900; line-height: 1.1; color: #111; }
-        .odd-vol { font-size: 11px; font-weight: 400; color: #555; margin-top: 2px; line-height: 1; }
+        .odd-vol { font-size: 11px; font-weight: 400; color: #444; margin-top: 2px; line-height: 1; }
 
         .card-icon { width: 8px; height: 12px; border-radius: 1px; display: inline-block; margin-left: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         .card-yellow { background: #ffd600; border: 1px solid #ccaa00; }
@@ -158,25 +158,29 @@
 <body>
 
 <!-- WIDGET CASHOUT FLUTTUANTE GLOBALE -->
-<div id="position-panel" class="w-[280px] bg-white border border-gray-300 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.7)] flex-col transition-opacity duration-200 opacity-0 pointer-events-none cursor-move select-none" style="transform: translate(-50%, -50%); display: flex; left: 50%; top: 50%;">
+<div id="position-panel" class="w-[300px] bg-white border border-gray-300 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.7)] flex-col transition-opacity duration-200 opacity-0 pointer-events-none cursor-move select-none" style="transform: translate(-50%, -50%); display: flex; left: 50%; top: 50%;">
     <div class="bg-gray-100 p-2.5 border-b border-gray-200 rounded-t-lg flex justify-between items-center pointer-events-none">
         <div class="flex items-center gap-2">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#888"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
             <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest" data-i18n="pos_open">Posizione Aperta</span>
         </div>
+        <span id="pos-odds" class="text-[12px] font-black text-gray-800 bg-gray-200 px-2 py-0.5 rounded-sm">@ 0.00</span>
     </div>
     
     <div class="p-3.5 flex flex-col gap-3">
         <div class="flex justify-between items-center pb-2 border-b border-gray-100 pointer-events-none">
-            <span id="pos-label" class="text-[#111] text-[10px] font-black px-2 py-0.5 rounded-sm shadow-sm">PUNTA</span>
-            <span id="pos-info" class="text-[12px] font-mono font-bold text-gray-700">@ 0.00 | Stk €0.00</span>
+            <span id="pos-label" class="text-[#111] text-[11px] font-black px-2 py-1 rounded-sm shadow-sm">PUNTA</span>
+            <div class="flex flex-col items-end">
+                <span id="pos-stake" class="text-[11px] font-mono font-bold text-gray-700">Stake: €0.00</span>
+                <span id="pos-liab" class="text-[11px] font-mono font-bold text-red-500">Resp: €0.00</span>
+            </div>
         </div>
         <div class="flex items-center justify-between pt-1">
             <div class="flex flex-col leading-none pointer-events-none">
                 <span class="text-[10px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
                 <span id="pnl-val" class="text-[22px] font-black text-[#111] leading-none">€ 0.00</span>
             </div>
-            <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-3 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer" data-i18n="cashout">Cash Out</button>
+            <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-3 rounded-sm text-[12px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer" data-i18n="cashout">Cash Out</button>
         </div>
     </div>
 </div>
@@ -309,13 +313,6 @@
             <div id="suspended" class="absolute inset-0 z-40 bg-black/70 hidden flex-col items-center justify-center backdrop-blur-sm">
                 <span class="bg-red-600 text-white font-black text-sm px-6 py-2 rounded-sm shadow-xl tracking-widest uppercase" data-i18n="susp">Sospeso</span>
             </div>
-
-            <!-- OVERLAY AVVIO COMPATTO -->
-            <div id="start-overlay" class="absolute inset-0 z-50 bg-black/85 flex flex-col items-center justify-center backdrop-blur-md p-3 text-center transition-opacity duration-300">
-                <h1 class="text-white text-xl font-black italic mb-1 text-[var(--bf-yellow)]">World Cup Final '22</h1>
-                <p class="text-gray-300 text-[10px] mb-4 max-w-[240px] leading-snug">Zero Allucinazioni. 1 Sec = 1 Sec Reale.<br>Algoritmi, Liability e Spread in tempo reale.</p>
-                <button onclick="Sim.start()" class="bg-[var(--zth-green)] text-[#111] font-black px-8 py-2.5 rounded shadow-[0_0_15px_rgba(57,255,20,0.4)] text-[11px] uppercase tracking-widest active:scale-95 transition-transform" data-i18n="start">Avvia Simulazione</button>
-            </div>
         </section>
 
         <!-- MARKET ANALYST (MENTOR) BAR - ALTEZZA FISSA BLINDATA -->
@@ -327,7 +324,7 @@
             </div>
             <div class="flex flex-col w-full">
                 <span class="text-[9px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-0.5">Analista Quant</span>
-                <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-snug line-clamp-3" data-i18n="mentor_idle">In attesa del fischio d'inizio. Consolidamento volumi in corso sulla Exchange.</p>
+                <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-snug line-clamp-3" data-i18n="mentor_idle">Analisi mercato in corso. Volumi stabilizzati.</p>
             </div>
         </div>
         
@@ -339,29 +336,26 @@
     <div id="right-pane">
         
         <!-- RISK MGMT HEADER CON LIABILITY -->
-        <div class="bg-white flex justify-between items-center px-4 py-2 border-b border-gray-200 shrink-0">
-            <div class="flex gap-1.5">
-                <button onclick="Trade.setRisk(1)" id="r-1" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors">1%</button>
-                <button onclick="Trade.setRisk(2)" id="r-2" class="px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors">2%</button>
-                <button onclick="Trade.setRisk(5)" id="r-5" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors">5%</button>
+        <div class="bg-white flex justify-between items-center px-4 py-2 border-b border-gray-200 shrink-0 shadow-sm z-10">
+            <div class="flex gap-1.5 items-center">
+                <span class="text-[9px] font-black text-gray-400 uppercase mr-1" data-i18n="stake_lbl">Stake Base:</span>
+                <button onclick="Trade.setStake(2)" id="stk-2" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors">€2</button>
+                <button onclick="Trade.setStake(10)" id="stk-10" class="px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors">€10</button>
+                <button onclick="Trade.setStake(25)" id="stk-25" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors">€25</button>
             </div>
             <div class="flex gap-3">
                 <div class="flex flex-col items-end leading-tight desktop-only">
                     <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="avail">Cassa</span>
                     <span id="bankroll-desktop" class="font-mono font-bold text-[12px] text-[#00e676]">€ 100.00</span>
                 </div>
-                <div class="flex flex-col items-end leading-tight pr-2 border-r border-gray-200">
-                    <span class="text-[7px] font-black text-gray-400 uppercase">Stake</span>
-                    <span id="val-stk" class="font-mono font-black text-[13px] text-gray-800">€ 2.00</span>
-                </div>
-                <div class="flex flex-col items-end leading-tight">
-                    <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="liability">Resp.</span>
-                    <span id="val-liab" class="font-mono font-black text-[13px] text-red-500">€ 0.00</span>
+                <div class="flex flex-col items-end leading-tight pl-3 border-l border-gray-200">
+                    <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="liability">Esposizione (Rischio)</span>
+                    <span id="val-liab" class="font-mono font-black text-[13px] text-gray-400">€ 0.00</span>
                 </div>
             </div>
         </div>
 
-        <div class="market-tabs shadow-sm">
+        <div class="market-tabs shadow-sm relative z-0">
             <div class="tab-item" data-i18n="market_most_played">Più giocati</div>
             <div class="tab-item tab-active" data-i18n="mo">Esito Finale</div>
             <div class="tab-item" data-i18n="ou">Under/Over 2.5</div>
@@ -384,8 +378,8 @@
                     <span><span data-i18n="matched">Abbinate</span>: <span id="vol-tot" class="font-normal text-gray-500">€0</span></span>
                 </div>
                 <div class="flex gap-1.5 shrink-0">
-                    <div class="w-[70px] sm:w-[75px] text-center text-[#222]" data-i18n="back">Punta</div>
-                    <div class="w-[70px] sm:w-[75px] text-center text-[#222]" data-i18n="lay">Banca</div>
+                    <div class="w-[70px] sm:w-[75px] text-center text-blue-800 bg-[#e4f1f9] rounded-sm py-0.5" data-i18n="back">Punta</div>
+                    <div class="w-[70px] sm:w-[75px] text-center text-pink-800 bg-[#fdebf0] rounded-sm py-0.5" data-i18n="lay">Banca</div>
                 </div>
             </div>
 
@@ -461,45 +455,47 @@
 
 <script>
 /**
- * Zero FOUC Initialization
+ * Zero FOUC Initialization & AUTO START Match
  */
 document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(() => {
         document.body.classList.add('ready');
+        App.init(); 
     });
 });
 
 /**
  * ============================================================================
- * 🌐 i18n MULTILINGUAL ENGINE (IT, EN, ES, PT) & MENTOR AI QUANT
+ * 🌐 i18n MULTILINGUAL ENGINE & STANDARD STAKING MENTOR
  * ============================================================================
  */
 const I18N_DICT = {
     it: {
-        avail: "Cassa", matched: "Abbinate", back: "Punta", lay: "Banca", liability: "Resp.",
-        draw: "Pareggio", start: "Avvia Simulazione", sim_desc: "1 Secondo = 1 Sec Reale.<br>Algoritmi e spread in tempo reale.",
+        avail: "Cassa", matched: "Abbinate", back: "Punta", lay: "Banca", liability: "Esposizione (Rischio)", stake_lbl: "Stake Base:",
+        draw: "Pareggio", start: "Avvia Simulazione",
         mo: "Esito Finale", ou: "Under/Over 2.5", market_most_played: "Più Giocati",
         cashout: "Cash Out", susp: "Sospeso", pos_open: "Posizione Aperta", 
         pnl: "Live PNL", no_pos: "Nessuna esposizione sul mercato.<br>Attendi l'occasione d'ingresso.",
         mentor_idle: "Mercato stabile. Il Time Decay erode i margini sulla X. I volumi sulle vittorie confermano lo status quo.",
-        mentor_h: "Aumento degli Expected Goals (xG) per l'Argentina. I Market Maker restringono lo spread, Punta in drop progressivo.",
+        mentor_h: "Aumento degli Expected Goals (xG) per l'Argentina. I Market Maker restringono lo spread, Punta in drop.",
         mentor_a: "Incursione Francia in area. Liquidità rimossa dal banco per mitigare il rischio, spread in allargamento.",
         mentor_card_y: "Ammonizione. L'algoritmo prezza il 'Red Card Risk Premium' correggendo la probabilità implicita al rialzo.",
         mentor_pen: "RIGORE! Panic selling sui book. Volumi massicci in Back sul tiratore, svuotamento dell'order book in corso.",
-        mentor_goal: "GOAL! Mercato Sospeso. Cancellazione ordini non abbinati. Ricalcolo del Fair Value di Poisson in corso...",
+        mentor_goal: "GOAL! Mercato Sospeso. Cancellazione ordini non abbinati. Ricalcolo del Fair Value di Poisson...",
         mentor_swing: "REPRICING ESTREMO! Swing di mercato violento. La liquidità si sta spostando per assorbire il nuovo scenario.",
-        mentor_co_win: "Hedge completato (Green Book). L'Exchange deduce il 5% di fee (€{val}) ESCLUSIVAMENTE sull'utile netto generato.",
+        mentor_co_win: "Hedge completato (Green Book). L'Exchange deduce il 5% di fee ESCLUSIVAMENTE sull'utile netto.",
         mentor_co_loss: "Loss accettata (Red Book). Posizione chiusa. L'Exchange NON trattiene alcuna commissione sulle perdite.",
-        mentor_risk: "Money Management: Stake impostato al {pct}% (€{stk}). In modalità Banca (Lay), la tua Responsabilità calcolata sarà: Stake × (Quota - 1).",
-        mentor_bet_back: "Punta abbinato a {odd}. Responsabilità limitata allo Stake netto (€{liab}). Rischio calcolato.",
-        mentor_bet_lay: "Banca abbinato a {odd}. La tua Responsabilità (Liability) reale sottratta dal saldo è di €{liab}.",
-        tut_1: "Lezioni Base: PUNTA (Back) significa scommettere A FAVORE. BANCA (Lay) significa scommettere CONTRO. Es: Bancando l'1 vinci se esce X o 2.",
-        tut_2: "Gestione del Rischio: La LIABILITY (Responsabilità) è il capitale a rischio quando Banchi. Formula: Stake × (Quota - 1).",
-        tut_3: "Strategia 'LAY THE DRAW': Banchiamo la X. Al primo gol, la quota del Pareggio si alza, garantendoci un Cash Out in profitto."
+        mentor_risk: "Money Management: Stake fisso impostato a €{stk}.<br>Ricorda: se Banchi (Lay), la tua Liability (Rischio) è data da: Stake × (Quota - 1).",
+        mentor_no_funds: "Operazione annullata. Cassa insufficiente per coprire la Responsabilità (Liability) di €{liab}.",
+        mentor_bet_back: "Hai Puntato a quota {odd}.<br>Stake e Rischio coincidono: €{liab}. Profitto potenziale se vinci: €{prof}.",
+        mentor_bet_lay: "Hai Bancato a quota {odd}. Fai tu da banco!<br>Stake: €{stk}. Responsabilità (Rischio bloccato): €{liab}.",
+        tut_1: "1/3 | LEZIONI BASE: 'Punta' (Back) significa scommettere A FAVORE. 'Banca' (Lay) significa scommettere CONTRO (fai tu da bookmaker).",
+        tut_2: "2/3 | STAKE E LIABILITY: Se Punti, rischi il tuo Stake. Se Banchi, la tua Responsabilità (il rischio reale prelevato dalla cassa) si moltiplica per la quota.",
+        tut_3: "3/3 | STRATEGIA: Banchiamo il Pareggio (Lay The Draw). Al primo goal, la quota della X si alzerà, garantendoci un Cash Out in profitto matematico."
     },
     en: {
-        avail: "Bankroll", matched: "Matched", back: "Back", lay: "Lay", liability: "Liab.",
-        draw: "Draw", start: "Start Simulation", sim_desc: "1 Second = 1 Real Sec.<br>Real-time algorithms and spread.",
+        avail: "Bankroll", matched: "Matched", back: "Back", lay: "Lay", liability: "Liability (Risk)", stake_lbl: "Base Stake:",
+        draw: "Draw", start: "Start Simulation",
         mo: "Match Odds", ou: "Over/Under 2.5", market_most_played: "Popular",
         cashout: "Cash Out", susp: "Suspended", pos_open: "Open Position", 
         pnl: "Live PNL", no_pos: "No market exposure.<br>Wait for entry trigger.",
@@ -510,18 +506,19 @@ const I18N_DICT = {
         mentor_pen: "PENALTY! Panic selling. Massive Back volumes on the kicker emptying the order book.",
         mentor_goal: "GOAL! Market Suspended. Unmatched orders cancelled. Poisson Fair Value recalculation...",
         mentor_swing: "DRAMATIC REPRICING! Violent market swing. Liquidity shifting massively to absorb new scenario.",
-        mentor_co_win: "Hedge completed (Green Book). The Exchange deducts a 5% fee (€{val}) EXCLUSIVELY on net profit.",
+        mentor_co_win: "Hedge completed (Green Book). The Exchange deducts a 5% fee EXCLUSIVELY on net profit.",
         mentor_co_loss: "Loss accepted (Red Book). Clean loss. The Exchange takes ZERO commission on losing trades.",
-        mentor_risk: "Money Management: Stake at {pct}% (€{stk}). When Laying, your Liability will be: Stake × (Odds - 1).",
-        mentor_bet_back: "Back matched at {odd}. Liability limited to net Stake (€{liab}). Risk calculated.",
-        mentor_bet_lay: "Lay matched at {odd}. Your true Liability locked from balance is €{liab}.",
-        tut_1: "Basics: BACK means betting an outcome will happen. LAY means betting AGAINST it. E.g. Laying the Draw wins if either team wins.",
-        tut_2: "Risk Mgmt: LIABILITY is your true risk when Laying. Formula: Stake × (Odds - 1). Never expose more than your bankroll can handle.",
-        tut_3: "Strategy 'LAY THE DRAW': We Lay the Draw. When a goal is scored, Draw odds spike, allowing an immediate profitable Cash Out."
+        mentor_risk: "Money Management: Fixed Stake set to €{stk}.<br>Remember: when you Lay, your Liability (Risk) is calculated as: Stake × (Odds - 1).",
+        mentor_no_funds: "Trade rejected. Insufficient Bankroll to cover the Liability of €{liab}.",
+        mentor_bet_back: "Backed at odds {odd}.<br>Stake and Liability are equal: €{liab}. Potential Profit: €{prof}.",
+        mentor_bet_lay: "Layed at odds {odd}. You are the bookmaker!<br>Stake: €{stk}. Liability (Locked Risk): €{liab}.",
+        tut_1: "1/3 | BASICS: 'Back' means betting FOR an outcome. 'Lay' means betting AGAINST it (you act as the bookmaker).",
+        tut_2: "2/3 | STAKE VS LIABILITY: When backing, your risk is your Stake. When Laying, your Liability (the actual risk locked from balance) multiplies by the odds.",
+        tut_3: "3/3 | STRATEGY: 'Lay The Draw'. When the first goal is scored, Draw odds will spike, allowing a guaranteed profitable Cash Out."
     },
     es: {
-        avail: "Fondo", matched: "Igualado", back: "A favor", lay: "En contra", liability: "Resp.",
-        draw: "Empate", start: "Iniciar Simulación", sim_desc: "1 Seg = 1 Seg Real.<br>Algoritmos y spread en vivo.",
+        avail: "Fondo", matched: "Igualado", back: "A favor", lay: "En contra", liability: "Exposición (Riesgo)", stake_lbl: "Stake Base:",
+        draw: "Empate", start: "Iniciar Simulación", 
         mo: "Cuotas de partido", ou: "Más/Menos 2.5", market_most_played: "Populares",
         cashout: "Cash Out", susp: "Suspendido", pos_open: "Posición Abierta", 
         pnl: "PNL en vivo", no_pos: "Sin exposición en el mercado.<br>Espera oportunidad.",
@@ -532,18 +529,19 @@ const I18N_DICT = {
         mentor_pen: "¡PENALTI! Venta de pánico. Volúmenes masivos A favor del tirador vacían el libro de órdenes.",
         mentor_goal: "¡GOL! Mercado Suspendido. Cancelación de órdenes. Recalculando Valor Razonable...",
         mentor_swing: "¡REPRECIO EXTREMO! Swing violento del mercado. La liquidez se mueve masivamente.",
-        mentor_co_win: "Cobertura completada (Libro Verde). El Exchange deduce 5% de comisión (€{val}) EXCLUSIVAMENTE sobre el neto.",
+        mentor_co_win: "Cobertura completada (Libro Verde). El Exchange deduce 5% de comisión EXCLUSIVAMENTE sobre el neto.",
         mentor_co_loss: "Pérdida aceptada (Libro Rojo). El Exchange NO retiene comisiones en pérdidas.",
-        mentor_risk: "Gestión de Riesgo: Stake al {pct}% (€{stk}). Al ir En Contra (Lay), tu Responsabilidad será: Stake × (Cuota - 1).",
-        mentor_bet_back: "A favor igualado a {odd}. Responsabilidad limitada al Stake neto (€{liab}).",
-        mentor_bet_lay: "En contra igualado a {odd}. Tu Responsabilidad real bloqueada es €{liab}.",
-        tut_1: "Conceptos: A FAVOR (Back) apuestas a que algo ocurre. EN CONTRA (Lay) apuestas a que NO ocurre. Ej: Ir En Contra del Empate gana si hay un ganador.",
-        tut_2: "Riesgo: La RESPONSABILIDAD es tu riesgo real al ir En Contra. Fórmula: Stake × (Cuota - 1). Controla siempre tu capital.",
-        tut_3: "Estrategia 'LAY THE DRAW': Vamos En Contra del Empate. Al primer gol, la cuota de la X se dispara, permitiendo un Cash Out con beneficio."
+        mentor_risk: "Gestión de Riesgo: Stake fijo establecido en €{stk}.<br>Recuerda: al ir En Contra (Lay), tu Responsabilidad (Riesgo) es: Stake × (Cuota - 1).",
+        mentor_no_funds: "Operación rechazada. Saldo insuficiente para cubrir la Responsabilidad de €{liab}.",
+        mentor_bet_back: "A favor igualado a cuota {odd}.<br>Stake y Riesgo coinciden: €{liab}. Beneficio potencial: €{prof}.",
+        mentor_bet_lay: "En contra igualado a cuota {odd}. ¡Tú eres la casa!<br>Stake: €{stk}. Responsabilidad (Riesgo Bloqueado): €{liab}.",
+        tut_1: "1/3 | BÁSICOS: 'A favor' (Back) es apostar QUE SÍ ocurre. 'En contra' (Lay) es apostar QUE NO ocurre (tú eres la casa).",
+        tut_2: "2/3 | STAKE Y RIESGO: Al ir A Favor, tu riesgo es tu Stake. Al ir En Contra, tu Responsabilidad (riesgo real retenido) se multiplica por la cuota.",
+        tut_3: "3/3 | ESTRATEGIA: 'Lay The Draw'. Al primer gol, la cuota del Empate sube, permitiendo un Cash Out con beneficios."
     },
     pt: {
-        avail: "Saldo", matched: "Correspondido", back: "A favor", lay: "Contra", liability: "Resp.",
-        draw: "Empate", start: "Iniciar Simulação", sim_desc: "1 Seg = 1 Seg Real.<br>Algoritmos e spread ao vivo.",
+        avail: "Saldo", matched: "Corresp.", back: "A favor", lay: "Contra", liability: "Responsabilidade", stake_lbl: "Stake Base:",
+        draw: "Empate", start: "Iniciar Simulação", 
         mo: "Probabilidades", ou: "Mais/Menos 2.5", market_most_played: "Populares",
         cashout: "Cash Out", susp: "Suspenso", pos_open: "Posição Aberta", 
         pnl: "Live PNL", no_pos: "Nenhuma exposição no mercado.<br>Aguarde oportunidade.",
@@ -554,14 +552,15 @@ const I18N_DICT = {
         mentor_pen: "PÊNALTI! Pânico de venda. Volumes massivos no Back esvaziam o livro de ordens.",
         mentor_goal: "GOLO! Mercado Suspenso. Cancelamento de ordens não correspondidas. Recálculo do Valor Justo...",
         mentor_swing: "REPRECIFICAÇÃO EXTREMA! Swing de mercado violento. Liquidez mudando massivamente.",
-        mentor_co_win: "Hedge concluído (Green Book). A Bolsa deduz 5% de comissão (€{val}) APENAS sobre o lucro líquido.",
+        mentor_co_win: "Hedge concluído (Green Book). A Bolsa deduz 5% de comissão APENAS sobre o lucro líquido.",
         mentor_co_loss: "Perda aceite (Red Book). A Bolsa NÃO cobra comissões sobre perdas.",
-        mentor_risk: "Gestão de Risco: Stake em {pct}% (€{stk}). Em modo Contra (Lay), a Responsabilidade será: Stake × (Odd - 1).",
-        mentor_bet_back: "A favor correspondido a {odd}. Risco limitado ao Stake líquido (€{liab}).",
-        mentor_bet_lay: "Contra correspondido a {odd}. A sua Responsabilidade real deduzida do saldo é €{liab}.",
-        tut_1: "Básico: A FAVOR (Back) aposta que algo acontece. CONTRA (Lay) aposta que NÃO acontece. Ex: Lay ao Empate ganha se houver um vencedor.",
-        tut_2: "Risco: A RESPONSABILIDADE (Liability) é o seu risco real no Lay. Fórmula: Stake × (Odd - 1). Controle sempre a sua banca.",
-        tut_3: "Estratégia 'LAY THE DRAW': Fazemos Lay ao Empate. Ao primeiro golo, a odd do Empate dispara, permitindo um Cash Out lucrativo."
+        mentor_risk: "Gestão de Risco: Stake fixa em €{stk}.<br>Lembra-te: ao fazer Lay, a tua Responsabilidade (Risco) é calculada como: Stake × (Odd - 1).",
+        mentor_no_funds: "Aposta rejeitada. Saldo insuficiente para cobrir a Responsabilidade de €{liab}.",
+        mentor_bet_back: "A favor correspondido a odd {odd}.<br>Stake e Risco são iguais: €{liab}. Lucro potencial: €{prof}.",
+        mentor_bet_lay: "Contra correspondido a odd {odd}. Tu és a casa de apostas!<br>Stake: €{stk}. Responsabilidade (Risco bloqueado): €{liab}.",
+        tut_1: "1/3 | BÁSICO: 'A favor' aposta QUE SIM. 'Contra' (Lay) aposta QUE NÃO (tu assumes o papel da casa de apostas).",
+        tut_2: "2/3 | STAKE VS RESPONSABILIDADE: No Back, o risco é a tua Stake. No Lay, a Responsabilidade (o risco real bloqueado do teu saldo) multiplica-se pela odd.",
+        tut_3: "3/3 | ESTRATÉGIA: 'Lay The Draw' (Contra o Empate). Ao primeiro golo, a odd do Empate sobe, permitindo um Cash Out com lucro garantido."
     }
 };
 
@@ -574,7 +573,7 @@ const DOM = {
     odds: {}, vols: {}, btns: {},
     timer: null, scoreH: null, scoreA: null, volTot: null,
     tl1: null, tl2: null, tlEv: null, mentorTxt: null,
-    balMob: null, balDsk: null, valStk: null, valLiab: null,
+    balMob: null, balDsk: null, valLiab: null,
     pnlMob: null, posPanel: null
 };
 
@@ -640,7 +639,6 @@ const App = {
         DOM.mentorTxt = document.getElementById('mentor-txt');
         DOM.balMob = document.getElementById('bankroll-mobile');
         DOM.balDsk = document.getElementById('bankroll-desktop');
-        DOM.valStk = document.getElementById('val-stk');
         DOM.valLiab = document.getElementById('val-liab');
         DOM.pnlMob = document.getElementById('pnl-val'); 
         DOM.posPanel = document.getElementById('position-panel');
@@ -652,13 +650,16 @@ const App = {
             this.updateI18n();
         });
         
-        let saved = JSON.parse(localStorage.getItem('qa_pro_v19'));
-        if(saved) { State.bal = saved.bal; State.risk = saved.risk; }
+        let saved = JSON.parse(localStorage.getItem('qa_pro_v20')); // Update version to refresh invalid state
+        if(saved && saved.stake) { State.bal = saved.bal; State.stake = saved.stake; }
         
         this.updateI18n();
-        Trade.setRisk(State.risk * 100);
+        Trade.setStake(State.stake);
         Sim.updateTime();
         Sim.renderUI();
+        
+        // Avvio Immediato
+        setTimeout(() => { Sim.start(); }, 500);
     },
 
     updateI18n() {
@@ -666,8 +667,7 @@ const App = {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (dict[key]) {
-                if(el.tagName === 'P' && el.innerHTML.includes('<br>')) el.innerHTML = dict[key];
-                else el.innerText = dict[key];
+                el.innerHTML = dict[key];
             }
         });
         
@@ -691,7 +691,7 @@ let matchInterval = null;
 let State = {
     active: false, susp: false, 
     sec: 0, 
-    score: [0,0], bal: 100.0, risk: 0.02,
+    score: [0,0], bal: 100.0, stake: 10, // Fixed STAKE mode standard for Exchanges
     odds: { H: 2.78, X: 3.05, A: 2.82 }, 
     vol: { H: [15400, 8400], X: [12300, 9500], A: [14200, 8900] },
     pos: null, mState: 'idle',
@@ -699,10 +699,11 @@ let State = {
     mentorLockUntil: 0, 
     mentorPriority: 0,
     
+    // Spaziature temporali allungate per consentire una comoda lettura dei concetti didattici
     events: [
-        { time: 2, type: 'info', mentor: 'tut_1', priority: 8, triggered: false }, // Info Punta/Banca
-        { time: 10, type: 'info', mentor: 'tut_2', priority: 8, triggered: false }, // Info Liability
-        { time: 18, type: 'info', mentor: 'tut_3', priority: 8, triggered: false }, // Info Lay the Draw
+        { time: 2, type: 'info', mentor: 'tut_1', priority: 8, triggered: false }, 
+        { time: 25, type: 'info', mentor: 'tut_2', priority: 8, triggered: false }, 
+        { time: 50, type: 'info', mentor: 'tut_3', priority: 8, triggered: false }, 
         { time: 1380, type: 'goal', team: 'H', scorer: 'Messi (Pen)', triggered: false, priority: 10 }, 
         { time: 2160, type: 'goal', team: 'H', scorer: 'Di Maria', triggered: false, priority: 10 }, 
         { time: 2820, type: 'card', color: 'yellow', team: 'H', player: 'E. Fernandez', triggered: false, priority: 8 }, 
@@ -720,7 +721,6 @@ const Sim = {
     start() {
         if(State.active) return;
         State.active = true;
-        document.getElementById('start-overlay').style.display = 'none';
         const b = document.getElementById('ball');
         if (b) { b.style.left = '50%'; b.style.top = '50%'; }
 
@@ -963,8 +963,8 @@ const Sim = {
     },
 
     /**
-     * MENTOR AI CON SISTEMA A PRIORITÀ (Zero Allucinazioni)
-     * @param {number} priority - 1 (Idle) a 10 (Goal/Penalty)
+     * MENTOR AI CON SISTEMA A PRIORITÀ (Tempi Allungati per Didattica)
+     * @param {number} priority - 1 (Idle) a 10 (Goal/Penalty/Errori)
      */
     mentor(key, vars = {}, force = false, priority = 1) {
         if (State.sec >= State.mentorLockUntil) {
@@ -977,11 +977,12 @@ const Sim = {
         for (const [k, v] of Object.entries(vars)) {
             txt = txt.replace(`{${k}}`, v);
         }
-        if (DOM.mentorTxt) DOM.mentorTxt.innerText = txt;
+        if (DOM.mentorTxt) DOM.mentorTxt.innerHTML = txt; // Usato innerHTML per gestire i <br> aggiunti
         
-        let lockTime = 8;
-        if (priority >= 5) lockTime = 12; 
-        if (priority >= 8) lockTime = 15;
+        // Tempi di blocco del Mentor dilatati
+        let lockTime = 15;
+        if (priority >= 5) lockTime = 20; 
+        if (priority >= 8) lockTime = 25;
 
         State.mentorLockUntil = State.sec + lockTime;
         State.mentorPriority = priority;
@@ -990,7 +991,7 @@ const Sim = {
 
 /**
  * ============================================================================
- * 💰 TRADING & HEDGING (MATE ESATTA E GESTIONE LIABILITY)
+ * 💰 TRADING & HEDGING (STANDARD STAKING EXCHANGE)
  * ============================================================================
  */
 const Trade = {
@@ -1007,17 +1008,17 @@ const Trade = {
         if(p < 30) return 1; if(p < 50) return 2; if(p < 100) return 5; return 10;
     },
     
-    setRisk(v) {
-        State.risk = v/100;
-        [1,2,5].forEach(i => {
-            let el = document.getElementById(`r-${i}`);
-            if(i===v) el.className = "px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors";
-            else el.className = "px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors";
+    setStake(v) {
+        State.stake = v;
+        [2,10,25].forEach(i => {
+            let el = document.getElementById(`stk-${i}`);
+            if(el) {
+                if(i===v) el.className = "px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors";
+                else el.className = "px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors";
+            }
         });
         
-        let stk = (State.bal * State.risk).toFixed(2);
-        // Mentor Priority 6 per superare l'Idle ma essere sovrastato dai Gol
-        if(State.active) Sim.mentor('mentor_risk', { pct: v, stk: stk }, true, 6);
+        if(State.active) Sim.mentor('mentor_risk', { stk: v.toFixed(2) }, true, 6);
         this.updateHeader();
     },
 
@@ -1025,10 +1026,18 @@ const Trade = {
         let balStr = `€ ${State.bal.toFixed(2)}`;
         DOM.balMob.innerText = balStr;
         DOM.balDsk.innerText = balStr;
-        DOM.valStk.innerText = `€ ${(State.bal * State.risk).toFixed(2)}`;
         
         let l = State.pos ? State.pos.l : 0;
         DOM.valLiab.innerText = `€ ${l.toFixed(2)}`;
+        
+        // Colora la liability di rosso se si è esposti
+        if (l > 0) {
+            DOM.valLiab.classList.remove('text-gray-400');
+            DOM.valLiab.classList.add('text-red-500');
+        } else {
+            DOM.valLiab.classList.remove('text-red-500');
+            DOM.valLiab.classList.add('text-gray-400');
+        }
     },
 
     trade(sel, type) {
@@ -1037,12 +1046,19 @@ const Trade = {
         let rawB = State.odds[sel];
         let o = type === 'back' ? this.roundTick(rawB) : this.roundTick(rawB + this.getTickStep(rawB));
         
-        let s = State.bal * State.risk;
-        // FORMULA LIABILITY ESATTA
-        let l = type === 'lay' ? s * (o-1) : s;
+        // STANDARD STAKING CALCULATION
+        let s = State.stake; 
+        
+        // MATEMATICA DI BORSA VERA
+        // Punta (Back): Rischio reale (Liability) = Stake. Vinci: Stake * (Quota - 1)
+        // Banca (Lay): Rischio reale (Liability) = Stake * (Quota - 1). Vinci: Stake
+        let l = type === 'lay' ? s * (o - 1) : s;
 
-        // Se la responsabilità supera la cassa, operazione negata
-        if(State.bal < l) return;
+        // Validazione Fondi Verosimile
+        if(State.bal < l) {
+            Sim.mentor('mentor_no_funds', { liab: l.toFixed(2) }, true, 10);
+            return;
+        }
         
         State.bal -= l;
         State.pos = { sel, t: type, e: o, s: s, l: l };
@@ -1053,13 +1069,18 @@ const Trade = {
         
         App.updateI18n(); 
         
-        document.getElementById('pos-label').className = `text-[#111] text-[10px] font-black px-2.5 py-1 rounded-sm shadow-sm ${type==='back'?'bg-[var(--btn-back)]':'bg-[var(--btn-lay)]'}`;
+        document.getElementById('pos-label').className = `text-[#111] text-[11px] font-black px-2.5 py-1 rounded-sm shadow-sm ${type==='back'?'bg-[var(--btn-back)]':'bg-[var(--btn-lay)]'}`;
         const formatOdd = (n) => parseFloat(n.toFixed(2)).toString();
-        document.getElementById('pos-info').innerText = `@ ${formatOdd(o)} | Stk €${s.toFixed(2)}`;
         
-        // Mentor Priority 5 (Apertura Trade)
+        // UI Chiara e Divisa nel Widget
+        document.getElementById('pos-odds').innerText = `@ ${formatOdd(o)}`;
+        document.getElementById('pos-stake').innerText = `Stake: €${s.toFixed(2)}`;
+        document.getElementById('pos-liab').innerText = `Resp: €${l.toFixed(2)}`;
+        
+        // Profitto potenziale
+        let potProf = type === 'back' ? s * (o - 1) : s;
         let mentorKey = type === 'back' ? 'mentor_bet_back' : 'mentor_bet_lay';
-        Sim.mentor(mentorKey, { odd: formatOdd(o), liab: l.toFixed(2) }, true, 5);
+        Sim.mentor(mentorKey, { odd: formatOdd(o), stk: s.toFixed(2), liab: l.toFixed(2), prof: potProf.toFixed(2) }, true, 5);
 
         this.renderState();
         this.updateHeader();
@@ -1072,19 +1093,24 @@ const Trade = {
         let cB = this.roundTick(rawB);
         let cL = this.roundTick(rawB + this.getTickStep(rawB));
         
+        // Per chiudere un Back devo fare un Lay (alle quote Lay attuali). Viceversa per il Lay.
         let current = State.pos.t === 'back' ? cL : cB;
         
+        // HEDGING STANDARD: Distribuzione perfetta del profitto/perdita su tutti gli esiti
         let pnl = State.pos.t === 'back' ? 
             State.pos.s * (State.pos.e / current - 1) : 
             State.pos.s * (1 - State.pos.e / current);
         
-        // 5% Solo sul profitto netto
+        // L'Exchange deduce il 5% SOLO dal profitto netto positivo
         let net = pnl > 0 ? pnl * 0.95 : pnl;
         
         let str = `${net >= 0 ? '+' : '-'}€${Math.abs(net).toFixed(2)}`;
-        let cls = `font-black leading-none ${net > 0 ? 'text-[#00e676]' : (net < 0 ? 'text-red-500' : 'text-[#111]')}`;
+        let cls = `font-black leading-none tracking-tight ${net > 0 ? 'text-[#00e676]' : (net < 0 ? 'text-red-500' : 'text-[#111]')}`;
 
-        if (DOM.pnlMob) { DOM.pnlMob.innerText = str; DOM.pnlMob.className = 'text-[22px] ' + cls; }
+        if (DOM.pnlMob) { 
+            DOM.pnlMob.innerText = str; 
+            DOM.pnlMob.className = 'text-[24px] ' + cls; 
+        }
     },
 
     cashOut() {
@@ -1108,6 +1134,7 @@ const Trade = {
             Sim.mentor('mentor_co_loss', {}, true, 9);
         }
         
+        // Ripristino e applicazione saldo
         State.bal += (State.pos.l + net);
         State.pos = null;
         
@@ -1116,7 +1143,7 @@ const Trade = {
         
         this.renderState();
         this.updateHeader();
-        localStorage.setItem('qa_pro_v19', JSON.stringify({bal: State.bal, risk: State.risk}));
+        localStorage.setItem('qa_pro_v20', JSON.stringify({bal: State.bal, stake: State.stake}));
     },
 
     renderState() {
@@ -1140,7 +1167,7 @@ const Trade = {
                     coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest cursor-not-allowed";
                     coBtn.innerText = App.t('susp');
                 } else {
-                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer";
+                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-2.5 rounded-sm text-[12px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer";
                     coBtn.innerText = App.t('cashout');
                 }
             }
