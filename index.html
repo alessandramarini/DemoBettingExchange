@@ -466,7 +466,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * ============================================================================
- * 🌐 i18n MULTILINGUAL ENGINE & STANDARD STAKING MENTOR
+ * 🌐 i18n MULTILINGUAL ENGINE (CON EVENTI LUSAIL E MENTOR CHIARO SUI CONTI)
  * ============================================================================
  */
 const I18N_DICT = {
@@ -483,15 +483,25 @@ const I18N_DICT = {
         mentor_pen: "RIGORE! Panic selling sui book. Volumi massicci in Back sul tiratore, svuotamento dell'order book in corso.",
         mentor_goal: "GOAL! Mercato Sospeso. Cancellazione ordini non abbinati. Ricalcolo del Fair Value di Poisson...",
         mentor_swing: "REPRICING ESTREMO! Swing di mercato violento. La liquidità si sta spostando per assorbire il nuovo scenario.",
-        mentor_co_win: "Hedge completato (Green Book). L'Exchange deduce il 5% di fee ESCLUSIVAMENTE sull'utile netto.",
-        mentor_co_loss: "Loss accettata (Red Book). Posizione chiusa. L'Exchange NON trattiene alcuna commissione sulle perdite.",
+        // CHIAREZZA MATEMATICA NEL CASHOUT
+        mentor_co_win: "Hedge completato (Green Book).<br>Responsabilità sbloccata: +€{liab}.<br>PNL netto aggiunto alla cassa (+5% fee dedotta): +€{net}.",
+        mentor_co_loss: "Hedge completato (Red Book).<br>Responsabilità sbloccata: +€{liab}.<br>PNL netto scalato (zero fee): €{net}.",
+        
         mentor_risk: "Money Management: Stake fisso impostato a €{stk}.<br>Ricorda: se Banchi (Lay), la tua Liability (Rischio) è data da: Stake × (Quota - 1).",
         mentor_no_funds: "Operazione annullata. Cassa insufficiente per coprire la Responsabilità (Liability) di €{liab}.",
-        mentor_bet_back: "Hai Puntato a quota {odd}.<br>Stake e Rischio coincidono: €{liab}. Profitto potenziale se vinci: €{prof}.",
-        mentor_bet_lay: "Hai Bancato a quota {odd}. Fai tu da banco!<br>Stake: €{stk}. Responsabilità (Rischio bloccato): €{liab}.",
+        mentor_bet_back: "Hai Puntato a quota {odd}.<br>Stake e Rischio coincidonoo: €{liab}. Profitto potenziale se vinci: €{prof}.",
+        mentor_bet_lay: "Hai Bancato a quota {odd}. Fai tu da banco!<br>Stake: €{stk}. Responsabilità bloccata (il tuo vero rischio): €{liab}.",
         tut_1: "1/3 | LEZIONI BASE: 'Punta' (Back) significa scommettere A FAVORE. 'Banca' (Lay) significa scommettere CONTRO (fai tu da bookmaker).",
         tut_2: "2/3 | STAKE E LIABILITY: Se Punti, rischi il tuo Stake. Se Banchi, la tua Responsabilità (il rischio reale prelevato dalla cassa) si moltiplica per la quota.",
-        tut_3: "3/3 | STRATEGIA: Banchiamo il Pareggio (Lay The Draw). Al primo goal, la quota della X si alzerà, garantendoci un Cash Out in profitto matematico."
+        tut_3: "3/3 | STRATEGIA: Banchiamo il Pareggio (Lay The Draw). Al primo goal, la quota della X si alzerà, garantendoci un Cash Out in profitto matematico.",
+        // LUSAIL OVERRIDE STRINGS
+        mentor_23: "Shock di liquidità. Rigore Messi (1-0). Quota ARG crolla a 1.50. Il mercato prezza lo 0.00 xG della Francia.",
+        mentor_35: "Transizione perfetta su errore di rimessa. Di Maria (2-0). Quota ARG @1.12. Massive Lay sull'esito X, spread in allargamento.",
+        mentor_54: "Anomalia: Errore rinvio E. Martínez. Reset del Possession Value algoritmico. Rischio non prezzato dai modelli.",
+        mentor_80: "CIGNO NERO (Rigore Mbappé). I bot basati su Poisson vanno in cortocircuito. Il differenziale energetico distrugge il Time Decay.",
+        mentor_81: "CRASH DI MERCATO! 2-2 in 97 secondi. Panic Selling sull'Argentina. Draw collassa da 36.00 a 1.56. Vuoto di liquidità nell'Order Book.",
+        mentor_ah: "Fine 90'. Dissonanza cognitiva: L'Asian Handicap ARG -0.25 genera una 'Half-Loss' nonostante l'inerzia, capitali intrappolati.",
+        mentor_gb: "Caos Golden Boot: Tripletta Mbappé. Quota da 48.00 a 1.01. Trasferimento asimmetrico di ricchezza devastante per le posizioni su Messi."
     },
     en: {
         avail: "Bankroll", matched: "Matched", back: "Back", lay: "Lay", liability: "Liability (Risk)", stake_lbl: "Base Stake:",
@@ -506,15 +516,22 @@ const I18N_DICT = {
         mentor_pen: "PENALTY! Panic selling. Massive Back volumes on the kicker emptying the order book.",
         mentor_goal: "GOAL! Market Suspended. Unmatched orders cancelled. Poisson Fair Value recalculation...",
         mentor_swing: "DRAMATIC REPRICING! Violent market swing. Liquidity shifting massively to absorb new scenario.",
-        mentor_co_win: "Hedge completed (Green Book). The Exchange deducts a 5% fee EXCLUSIVELY on net profit.",
-        mentor_co_loss: "Loss accepted (Red Book). Clean loss. The Exchange takes ZERO commission on losing trades.",
+        mentor_co_win: "Hedge completed (Green Book).<br>Unlocked Liability: +€{liab}.<br>Net PNL added to bankroll (fee deducted): +€{net}.",
+        mentor_co_loss: "Hedge completed (Red Book).<br>Unlocked Liability: +€{liab}.<br>Net PNL applied (zero fee): €{net}.",
         mentor_risk: "Money Management: Fixed Stake set to €{stk}.<br>Remember: when you Lay, your Liability (Risk) is calculated as: Stake × (Odds - 1).",
         mentor_no_funds: "Trade rejected. Insufficient Bankroll to cover the Liability of €{liab}.",
         mentor_bet_back: "Backed at odds {odd}.<br>Stake and Liability are equal: €{liab}. Potential Profit: €{prof}.",
         mentor_bet_lay: "Layed at odds {odd}. You are the bookmaker!<br>Stake: €{stk}. Liability (Locked Risk): €{liab}.",
         tut_1: "1/3 | BASICS: 'Back' means betting FOR an outcome. 'Lay' means betting AGAINST it (you act as the bookmaker).",
         tut_2: "2/3 | STAKE VS LIABILITY: When backing, your risk is your Stake. When Laying, your Liability (the actual risk locked from balance) multiplies by the odds.",
-        tut_3: "3/3 | STRATEGY: 'Lay The Draw'. When the first goal is scored, Draw odds will spike, allowing a guaranteed profitable Cash Out."
+        tut_3: "3/3 | STRATEGY: 'Lay The Draw'. When the first goal is scored, Draw odds will spike, allowing a guaranteed profitable Cash Out.",
+        mentor_23: "Liquidity Shock. Messi penalty (1-0). ARG odds crash to 1.50. Market prices France's 0.00 xG.",
+        mentor_35: "Perfect transition on throw-in error. Di Maria (2-0). ARG @1.12. Massive Lay on the Draw, widening spread.",
+        mentor_54: "Anomaly: E. Martínez clearance error. Algorithmic Possession Value reset. Unpriced risk.",
+        mentor_80: "BLACK SWAN (Mbappé penalty). Poisson bots short-circuit. Energy differential destroys Time Decay.",
+        mentor_81: "MARKET CRASH! 2-2 in 97 seconds. Panic Selling on ARG. Draw collapses from 36.00 to 1.56. Liquidity void.",
+        mentor_ah: "End 90'. Cognitive dissonance: ARG -0.25 Asian Handicap yields a 'Half-Loss', trapped capital.",
+        mentor_gb: "Golden Boot Chaos: Mbappé Hat-Trick. Odds from 48.00 to 1.01. Devastating wealth transfer."
     },
     es: {
         avail: "Fondo", matched: "Igualado", back: "A favor", lay: "En contra", liability: "Exposición (Riesgo)", stake_lbl: "Stake Base:",
@@ -529,15 +546,22 @@ const I18N_DICT = {
         mentor_pen: "¡PENALTI! Venta de pánico. Volúmenes masivos A favor del tirador vacían el libro de órdenes.",
         mentor_goal: "¡GOL! Mercado Suspendido. Cancelación de órdenes. Recalculando Valor Razonable...",
         mentor_swing: "¡REPRECIO EXTREMO! Swing violento del mercado. La liquidez se mueve masivamente.",
-        mentor_co_win: "Cobertura completada (Libro Verde). El Exchange deduce 5% de comisión EXCLUSIVAMENTE sobre el neto.",
-        mentor_co_loss: "Pérdida aceptada (Libro Rojo). El Exchange NO retiene comisiones en pérdidas.",
+        mentor_co_win: "Cobertura completada (Libro Verde).<br>Responsabilidad desbloqueada: +€{liab}.<br>PNL neto añadido (comisión deducida): +€{net}.",
+        mentor_co_loss: "Cobertura completada (Libro Rojo).<br>Responsabilidad desbloqueada: +€{liab}.<br>PNL neto aplicado (cero comisión): €{net}.",
         mentor_risk: "Gestión de Riesgo: Stake fijo establecido en €{stk}.<br>Recuerda: al ir En Contra (Lay), tu Responsabilidad (Riesgo) es: Stake × (Cuota - 1).",
         mentor_no_funds: "Operación rechazada. Saldo insuficiente para cubrir la Responsabilidad de €{liab}.",
         mentor_bet_back: "A favor igualado a cuota {odd}.<br>Stake y Riesgo coinciden: €{liab}. Beneficio potencial: €{prof}.",
         mentor_bet_lay: "En contra igualado a cuota {odd}. ¡Tú eres la casa!<br>Stake: €{stk}. Responsabilidad (Riesgo Bloqueado): €{liab}.",
         tut_1: "1/3 | BÁSICOS: 'A favor' (Back) es apostar QUE SÍ ocurre. 'En contra' (Lay) es apostar QUE NO ocurre (tú eres la casa).",
         tut_2: "2/3 | STAKE Y RIESGO: Al ir A Favor, tu riesgo es tu Stake. Al ir En Contra, tu Responsabilidad (riesgo real retenido) se multiplica por la cuota.",
-        tut_3: "3/3 | ESTRATEGIA: 'Lay The Draw'. Al primer gol, la cuota del Empate sube, permitiendo un Cash Out con beneficios."
+        tut_3: "3/3 | ESTRATEGIA: 'Lay The Draw'. Al primer gol, la cuota del Empate sube, permitiendo un Cash Out con beneficios.",
+        mentor_23: "Shock de liquidez. Penalti Messi (1-0). Cuota ARG cae a 1.50. Mercado asume 0.00 xG de Francia.",
+        mentor_35: "Transición perfecta tras error. Di Maria (2-0). ARG @1.12. Massive Lay al Empate, spread aumenta.",
+        mentor_54: "Anomalía: Error despeje E. Martínez. Reset del Valor de Posesión. Riesgo fuera del modelo.",
+        mentor_80: "CISNE NEGRO (Penalti Mbappé). Bots de Poisson en cortocircuito. Diferencial de energía anula Time Decay.",
+        mentor_81: "¡CRASH DE MERCADO! 2-2 en 97s. Panic Selling en ARG. Empate colapsa de 36.00 a 1.56. Vacío de liquidez.",
+        mentor_ah: "Fin 90'. Disonancia cognitiva: Asian Handicap ARG -0.25 genera 'Half-Loss', capital atrapado.",
+        mentor_gb: "Caos Bota de Oro: Hat-Trick Mbappé. Cuota de 48.00 a 1.01. Transferencia masiva de riqueza."
     },
     pt: {
         avail: "Saldo", matched: "Corresp.", back: "A favor", lay: "Contra", liability: "Responsabilidade", stake_lbl: "Stake Base:",
@@ -552,15 +576,22 @@ const I18N_DICT = {
         mentor_pen: "PÊNALTI! Pânico de venda. Volumes massivos no Back esvaziam o livro de ordens.",
         mentor_goal: "GOLO! Mercado Suspenso. Cancelamento de ordens não correspondidas. Recálculo do Valor Justo...",
         mentor_swing: "REPRECIFICAÇÃO EXTREMA! Swing de mercado violento. Liquidez mudando massivamente.",
-        mentor_co_win: "Hedge concluído (Green Book). A Bolsa deduz 5% de comissão APENAS sobre o lucro líquido.",
-        mentor_co_loss: "Perda aceite (Red Book). A Bolsa NÃO cobra comissões sobre perdas.",
+        mentor_co_win: "Hedge concluído (Green Book).<br>Responsabilidade desbloqueada: +€{liab}.<br>PNL neto adicionado (taxa deduzida): +€{net}.",
+        mentor_co_loss: "Hedge concluído (Red Book).<br>Responsabilidade desbloqueada: +€{liab}.<br>PNL neto descontado (zero taxa): €{net}.",
         mentor_risk: "Gestão de Risco: Stake fixa em €{stk}.<br>Lembra-te: ao fazer Lay, a tua Responsabilidade (Risco) é calculada como: Stake × (Odd - 1).",
         mentor_no_funds: "Aposta rejeitada. Saldo insuficiente para cobrir a Responsabilidade de €{liab}.",
         mentor_bet_back: "A favor correspondido a odd {odd}.<br>Stake e Risco são iguais: €{liab}. Lucro potencial: €{prof}.",
         mentor_bet_lay: "Contra correspondido a odd {odd}. Tu és a casa de apostas!<br>Stake: €{stk}. Responsabilidade (Risco bloqueado): €{liab}.",
         tut_1: "1/3 | BÁSICO: 'A favor' aposta QUE SIM. 'Contra' (Lay) aposta QUE NÃO (tu assumes o papel da casa de apostas).",
         tut_2: "2/3 | STAKE VS RESPONSABILIDADE: No Back, o risco é a tua Stake. No Lay, a Responsabilidade (o risco real bloqueado do teu saldo) multiplica-se pela odd.",
-        tut_3: "3/3 | ESTRATÉGIA: 'Lay The Draw' (Contra o Empate). Ao primeiro golo, a odd do Empate sobe, permitindo um Cash Out com lucro garantido."
+        tut_3: "3/3 | ESTRATÉGIA: 'Lay The Draw' (Contra o Empate). Ao primeiro golo, a odd do Empate sobe, permitindo um Cash Out com lucro garantido.",
+        mentor_23: "Choque de liquidez. Penálti Messi (1-0). Odd ARG cai para 1.50. Mercado assume 0.00 xG da França.",
+        mentor_35: "Transição perfeita após erro. Di Maria (2-0). ARG @1.12. Massive Lay no Empate, spread aumenta.",
+        mentor_54: "Anomalia: Erro de alívio E. Martínez. Reset do Valor de Posse. Risco fora do modelo.",
+        mentor_80: "CISNE NEGRO (Penálti Mbappé). Bots de Poisson entram em curto-circuito. Diferencial de energia destrói Time Decay.",
+        mentor_81: "CRASH DE MERCADO! 2-2 em 97s. Panic Selling na ARG. Empate colapsa de 36.00 para 1.56. Vazio de liquidez.",
+        mentor_ah: "Fim 90'. Dissonância cognitiva: Asian Handicap ARG -0.25 gera 'Half-Loss', capital preso.",
+        mentor_gb: "Caos Bota de Ouro: Hat-Trick Mbappé. Odd de 48.00 para 1.01. Transferência massiva de riqueza."
     }
 };
 
@@ -650,7 +681,7 @@ const App = {
             this.updateI18n();
         });
         
-        let saved = JSON.parse(localStorage.getItem('qa_pro_v20')); // Update version to refresh invalid state
+        let saved = JSON.parse(localStorage.getItem('qa_pro_v22')); // Flush cache
         if(saved && saved.stake) { State.bal = saved.bal; State.stake = saved.stake; }
         
         this.updateI18n();
@@ -658,7 +689,7 @@ const App = {
         Sim.updateTime();
         Sim.renderUI();
         
-        // Avvio Immediato
+        // Avvio Immediato (Senza Overlay)
         setTimeout(() => { Sim.start(); }, 500);
     },
 
@@ -683,7 +714,7 @@ const App = {
 
 /**
  * ============================================================================
- * 🧠 CORE ENGINE STORICO 1:1 CON MENTOR PRIORITY QUEUE
+ * 🧠 CORE ENGINE STORICO CON TIMELINE "LUSAIL STRESS TEST" (Nativa)
  * ============================================================================
  */
 let matchInterval = null;
@@ -691,7 +722,7 @@ let matchInterval = null;
 let State = {
     active: false, susp: false, 
     sec: 0, 
-    score: [0,0], bal: 100.0, stake: 10, // Fixed STAKE mode standard for Exchanges
+    score: [0,0], bal: 100.00, stake: 10.00, 
     odds: { H: 2.78, X: 3.05, A: 2.82 }, 
     vol: { H: [15400, 8400], X: [12300, 9500], A: [14200, 8900] },
     pos: null, mState: 'idle',
@@ -699,25 +730,25 @@ let State = {
     mentorLockUntil: 0, 
     mentorPriority: 0,
     
-    // Spaziature temporali allungate per consentire una comoda lettura dei concetti didattici
+    // Timeline LUSAIL Stress Test
     events: [
         { time: 2, type: 'info', mentor: 'tut_1', priority: 8, triggered: false }, 
         { time: 25, type: 'info', mentor: 'tut_2', priority: 8, triggered: false }, 
         { time: 50, type: 'info', mentor: 'tut_3', priority: 8, triggered: false }, 
-        { time: 1380, type: 'goal', team: 'H', scorer: 'Messi (Pen)', triggered: false, priority: 10 }, 
-        { time: 2160, type: 'goal', team: 'H', scorer: 'Di Maria', triggered: false, priority: 10 }, 
-        { time: 2820, type: 'card', color: 'yellow', team: 'H', player: 'E. Fernandez', triggered: false, priority: 8 }, 
-        { time: 3300, type: 'card', color: 'yellow', team: 'A', player: 'Rabiot', triggered: false, priority: 8 }, 
-        { time: 4760, type: 'attack', team: 'A', desc: 'Rigore Francia!', triggered: false, mentor: 'mentor_pen', priority: 10 }, 
-        { time: 4800, type: 'goal', team: 'A', scorer: 'Mbappé (Pen)', triggered: false, priority: 10 }, 
-        { time: 4845, type: 'attack', team: 'A', desc: 'Azione Pericolosa!', triggered: false, priority: 1 }, 
-        { time: 4860, type: 'goal', team: 'A', scorer: 'Mbappé', triggered: false, mentor: 'mentor_swing', priority: 10 }, 
-        { time: 5220, type: 'card', color: 'yellow', team: 'A', player: 'Thuram', triggered: false, priority: 8 }, 
-        { time: 5300, type: 'card', color: 'yellow', team: 'H', player: 'Acuña', triggered: false, priority: 8 }
+        { time: 1380, type: 'goal', team: 'H', scorer: 'Messi (Pen)', triggered: false, mentor: 'mentor_23', priority: 10 },
+        { time: 2100, type: 'attack', team: 'H', desc: 'Errore rimessa FRA', triggered: false, priority: 5 },
+        { time: 2160, type: 'goal', team: 'H', scorer: 'Di Maria', triggered: false, mentor: 'mentor_35', priority: 10 },
+        { time: 2700, type: 'card', color: 'yellow', team: 'H', player: 'E. Fernandez', triggered: false, priority: 8 },
+        { time: 3240, type: 'attack', team: 'A', desc: 'Errore E. Martínez', triggered: false, mentor: 'mentor_54', priority: 10 },
+        { time: 4800, type: 'goal', team: 'A', scorer: 'Mbappé (Pen)', triggered: false, mentor: 'mentor_80', priority: 10 },
+        { time: 4860, type: 'goal', team: 'A', scorer: 'Mbappé', triggered: false, mentor: 'mentor_81', priority: 10 },
+        { time: 5400, type: 'info', mentor: 'mentor_ah', priority: 10, triggered: false }
     ]
 };
 
 const Sim = {
+    _currentSpreadFactor: 1,
+
     start() {
         if(State.active) return;
         State.active = true;
@@ -733,9 +764,9 @@ const Sim = {
 
     fastForward() {
         if(!State.active) return;
-        State.sec = 4750; // Salta a poco prima del rigore
+        State.sec = 4750; // Salta a poco prima del rigore Mbappé (Cigno Nero)
         State.score = [2,0];
-        State.cards.H.y = 1; State.cards.A.y = 1;
+        State.cards.H.y = 1; State.cards.A.y = 0;
         State.events.forEach(e => { if(e.time < State.sec) e.triggered = true; });
         this.renderCards();
         DOM.scoreH.innerText = '2';
@@ -896,37 +927,55 @@ const Sim = {
         this.renderTimeline();
     },
 
+    // MOTORE DI PREZZAMENTO LUSAIL OVERRIDE (NATIVO)
     calcOdds() {
         let rem = 1 - Math.min((State.sec / 5400), 0.99);
         let tH, tX, tA;
+        let spreadFactor = 1;
 
-        if (State.score[0] === 0 && State.score[1] === 0) {
-            tX = 1.01 + (3.05 - 1.01) * Math.pow(rem, 1.5);
-            tH = 2.78 + (1-rem)*5; tA = 2.82 + (1-rem)*5;
-        } else if (State.score[0] === 1 && State.score[1] === 0) {
-            tH = 1.01 + (1.40 - 1.01) * Math.pow(rem, 1.5);
-            tX = 4.00 + (1-rem)*8; tA = 10.0 + (1-rem)*30;
-        } else if (State.score[0] === 2 && State.score[1] === 0) {
-            tH = 1.01 + (1.08 - 1.01) * Math.pow(rem, 2);
-            tX = 15.0 + (1-rem)*50; tA = 80.0 + (1-rem)*200;
-        } else if (State.score[0] === 2 && State.score[1] === 1) {
-            tH = 1.25 + (1-rem)*1.5; 
-            tX = 5.50 + (1-rem)*10; 
-            tA = 12.0 + (1-rem)*20;
-        } else if (State.score[0] === 2 && State.score[1] === 2) {
-            tX = 1.80 + (1-rem)*1.5; 
-            tH = 3.50 + (1-rem)*5; 
-            tA = 2.80 + (1-rem)*3;
-        } else {
-            tH = 2.0; tX = 2.0; tA = 2.0;
+        if (State.sec < 4800) {
+            // FASE 0-79': Time Decay Lineare Pesante (Modello Poisson Overconfident)
+            if (State.score[0] === 0 && State.score[1] === 0) {
+                tX = 1.01 + (2.90 - 1.01) * Math.pow(rem, 1.5);
+                tH = 2.74 + (1-rem)*5; tA = 2.80 + (1-rem)*5;
+            } else if (State.score[0] === 1 && State.score[1] === 0) {
+                tH = 1.01 + (1.50 - 1.01) * Math.pow(rem, 2);
+                tX = 4.50 + (1-rem)*10; tA = 12.0 + (1-rem)*40;
+            } else if (State.score[0] === 2 && State.score[1] === 0) {
+                tH = 1.01 + (1.12 - 1.01) * Math.pow(rem, 3); // Schiacciamento innaturale verso 1.03
+                tX = 13.0 + (1-rem)*60; // La quota X va alla deriva
+                tA = 50.0 + (1-rem)*200;
+            } else {
+                tH = 2.0; tX = 2.0; tA = 2.0;
+            }
+        } else if (State.sec >= 4800 && State.sec < 4860) {
+            // Minuto 80-81': Rigore Mbappé (2-1). Contrazione in corso.
+            tH = 1.25; 
+            tX = 5.00; 
+            tA = 15.0;
+        } else if (State.sec >= 4860) {
+            // Minuto 81'+: CIGNO NERO (2-2). Fallimento Poisson, Vuoto liquidità, Panic Selling.
+            tX = 1.56 + (1-rem)*0.5; // Il Pareggio crolla e diventa favorito assoluto
+            tH = 3.50 + (1-rem)*2; 
+            tA = 2.80 + (1-rem)*2;
+            
+            if (State.sec < 4900) {
+                spreadFactor = 5; // Spread bid-ask allargato innaturalmente
+                State.vol.H[0] += Math.floor(Math.random() * 50000); // Spike volumi scarico massiccio
+                State.vol.H[1] += Math.floor(Math.random() * 80000); 
+            } else {
+                spreadFactor = 1.5;
+            }
         }
 
-        if(State.mState === 'h-attack') { tH -= 0.05; tX += 0.02; tA += 0.1; }
-        if(State.mState === 'a-attack') { tA -= 0.05; tX += 0.02; tH += 0.1; }
+        if (State.mState === 'h-attack') { tH -= 0.05; tX += 0.02; tA += 0.1; }
+        if (State.mState === 'a-attack') { tA -= 0.05; tX += 0.02; tH += 0.1; }
 
-        State.odds.H = Math.max(1.01, State.odds.H + (tH - State.odds.H)*0.2 + (Math.random()-0.5)*0.02);
-        State.odds.X = Math.max(1.01, State.odds.X + (tX - State.odds.X)*0.2 + (Math.random()-0.5)*0.05);
-        State.odds.A = Math.max(1.01, State.odds.A + (tA - State.odds.A)*0.2 + (Math.random()-0.5)*0.1);
+        State.odds.H = Math.max(1.01, State.odds.H + (tH - State.odds.H)*0.3 + (Math.random()-0.5)*0.02);
+        State.odds.X = Math.max(1.01, State.odds.X + (tX - State.odds.X)*0.4 + (Math.random()-0.5)*0.05);
+        State.odds.A = Math.max(1.01, State.odds.A + (tA - State.odds.A)*0.3 + (Math.random()-0.5)*0.1);
+
+        this._currentSpreadFactor = spreadFactor; 
 
         let totalVol = 0;
         ['H','X','A'].forEach(k => {
@@ -934,7 +983,8 @@ const Sim = {
             State.vol[k][1] = Math.floor(Math.max(10, State.vol[k][1] + (Math.random()-0.5)*150));
             totalVol += State.vol[k][0] + State.vol[k][1];
         });
-        DOM.volTot.innerText = `€${(totalVol + 1400000).toLocaleString()}`; 
+        
+        if (DOM.volTot) DOM.volTot.innerText = `€${(totalVol + 7500000).toLocaleString()}`; 
         
         Trade.updatePnl();
     },
@@ -946,26 +996,24 @@ const Sim = {
         this.renderTimeline();
     },
 
+    // RENDER UI LUSAIL OVERRIDE (NATIVO)
     renderUI() {
         const formatOdd = (n) => n >= 100 ? Math.round(n).toString() : parseFloat(n.toFixed(2)).toString();
         const formatK = (num) => num > 999 ? (num/1000).toFixed(1) + 'K' : num;
+        let sf = this._currentSpreadFactor || 1;
 
         ['H','X','A'].forEach(k => {
             let oB = Trade.roundTick(State.odds[k]); 
-            let oL = Trade.roundTick(oB + Trade.getTickStep(oB));
+            let oL = Trade.roundTick(oB + (Trade.getTickStep(oB) * sf)); // Applica l'allargamento dello spread al lato Lay
             
-            DOM.odds[`${k}-b`].innerText = formatOdd(oB);
-            DOM.odds[`${k}-l`].innerText = formatOdd(oL);
+            if (DOM.odds[`${k}-b`]) DOM.odds[`${k}-b`].innerText = formatOdd(oB);
+            if (DOM.odds[`${k}-l`]) DOM.odds[`${k}-l`].innerText = formatOdd(oL);
             
-            DOM.vols[`${k}-b`].innerText = `€${formatK(State.vol[k][0])}`;
-            DOM.vols[`${k}-l`].innerText = `€${formatK(State.vol[k][1])}`;
+            if (DOM.vols[`${k}-b`]) DOM.vols[`${k}-b`].innerText = `€${formatK(State.vol[k][0])}`;
+            if (DOM.vols[`${k}-l`]) DOM.vols[`${k}-l`].innerText = `€${formatK(State.vol[k][1])}`;
         });
     },
 
-    /**
-     * MENTOR AI CON SISTEMA A PRIORITÀ (Tempi Allungati per Didattica)
-     * @param {number} priority - 1 (Idle) a 10 (Goal/Penalty/Errori)
-     */
     mentor(key, vars = {}, force = false, priority = 1) {
         if (State.sec >= State.mentorLockUntil) {
             State.mentorPriority = 0;
@@ -977,9 +1025,8 @@ const Sim = {
         for (const [k, v] of Object.entries(vars)) {
             txt = txt.replace(`{${k}}`, v);
         }
-        if (DOM.mentorTxt) DOM.mentorTxt.innerHTML = txt; // Usato innerHTML per gestire i <br> aggiunti
+        if (DOM.mentorTxt) DOM.mentorTxt.innerHTML = txt;
         
-        // Tempi di blocco del Mentor dilatati
         let lockTime = 15;
         if (priority >= 5) lockTime = 20; 
         if (priority >= 8) lockTime = 25;
@@ -991,10 +1038,15 @@ const Sim = {
 
 /**
  * ============================================================================
- * 💰 TRADING & HEDGING (STANDARD STAKING EXCHANGE)
+ * 💰 TRADING & HEDGING (PRECISION FLOATING POINT FIX + CLEAR MENTOR)
  * ============================================================================
  */
 const Trade = {
+    // Risoluzione dei micro-errori JS (es. 100 - 3.33 = 96.67000000004)
+    _roundCents(val) {
+        return Math.round(val * 100) / 100;
+    },
+
     roundTick(p) {
         if(p <= 1.01) return 1.01; if(p < 2) return Math.round(p*100)/100; if(p < 3) return Math.round(p*50)/50;
         if(p < 4) return Math.round(p*20)/20; if(p < 6) return Math.round(p*10)/10; if(p < 10) return Math.round(p*5)/5;
@@ -1009,7 +1061,7 @@ const Trade = {
     },
     
     setStake(v) {
-        State.stake = v;
+        State.stake = this._roundCents(v);
         [2,10,25].forEach(i => {
             let el = document.getElementById(`stk-${i}`);
             if(el) {
@@ -1018,67 +1070,63 @@ const Trade = {
             }
         });
         
-        if(State.active) Sim.mentor('mentor_risk', { stk: v.toFixed(2) }, true, 6);
+        if(State.active) Sim.mentor('mentor_risk', { stk: State.stake.toFixed(2) }, true, 6);
         this.updateHeader();
     },
 
     updateHeader() {
         let balStr = `€ ${State.bal.toFixed(2)}`;
-        DOM.balMob.innerText = balStr;
-        DOM.balDsk.innerText = balStr;
+        if(DOM.balMob) DOM.balMob.innerText = balStr;
+        if(DOM.balDsk) DOM.balDsk.innerText = balStr;
         
         let l = State.pos ? State.pos.l : 0;
-        DOM.valLiab.innerText = `€ ${l.toFixed(2)}`;
-        
-        // Colora la liability di rosso se si è esposti
-        if (l > 0) {
-            DOM.valLiab.classList.remove('text-gray-400');
-            DOM.valLiab.classList.add('text-red-500');
-        } else {
-            DOM.valLiab.classList.remove('text-red-500');
-            DOM.valLiab.classList.add('text-gray-400');
+        if(DOM.valLiab) {
+            DOM.valLiab.innerText = `€ ${l.toFixed(2)}`;
+            if (l > 0) {
+                DOM.valLiab.classList.remove('text-gray-400');
+                DOM.valLiab.classList.add('text-red-500');
+            } else {
+                DOM.valLiab.classList.remove('text-red-500');
+                DOM.valLiab.classList.add('text-gray-400');
+            }
         }
     },
 
     trade(sel, type) {
         if(!State.active || State.susp || State.pos) return;
         
+        let sf = Sim._currentSpreadFactor || 1;
         let rawB = State.odds[sel];
-        let o = type === 'back' ? this.roundTick(rawB) : this.roundTick(rawB + this.getTickStep(rawB));
+        let o = type === 'back' ? this.roundTick(rawB) : this.roundTick(rawB + (this.getTickStep(rawB) * sf));
         
-        // STANDARD STAKING CALCULATION
-        let s = State.stake; 
-        
-        // MATEMATICA DI BORSA VERA
-        // Punta (Back): Rischio reale (Liability) = Stake. Vinci: Stake * (Quota - 1)
-        // Banca (Lay): Rischio reale (Liability) = Stake * (Quota - 1). Vinci: Stake
-        let l = type === 'lay' ? s * (o - 1) : s;
+        let s = this._roundCents(State.stake); 
+        let l = type === 'lay' ? this._roundCents(s * (o - 1)) : s;
 
-        // Validazione Fondi Verosimile
         if(State.bal < l) {
             Sim.mentor('mentor_no_funds', { liab: l.toFixed(2) }, true, 10);
             return;
         }
         
-        State.bal -= l;
+        // Sottrazione Ferrea dei fondi
+        State.bal = this._roundCents(State.bal - l);
         State.pos = { sel, t: type, e: o, s: s, l: l };
         
         Drag.reset(); 
-        DOM.posPanel.classList.remove('opacity-0', 'pointer-events-none');
-        DOM.posPanel.classList.add('opacity-100', 'pointer-events-auto');
+        if(DOM.posPanel) {
+            DOM.posPanel.classList.remove('opacity-0', 'pointer-events-none');
+            DOM.posPanel.classList.add('opacity-100', 'pointer-events-auto');
+        }
         
         App.updateI18n(); 
         
         document.getElementById('pos-label').className = `text-[#111] text-[11px] font-black px-2.5 py-1 rounded-sm shadow-sm ${type==='back'?'bg-[var(--btn-back)]':'bg-[var(--btn-lay)]'}`;
         const formatOdd = (n) => parseFloat(n.toFixed(2)).toString();
         
-        // UI Chiara e Divisa nel Widget
         document.getElementById('pos-odds').innerText = `@ ${formatOdd(o)}`;
         document.getElementById('pos-stake').innerText = `Stake: €${s.toFixed(2)}`;
         document.getElementById('pos-liab').innerText = `Resp: €${l.toFixed(2)}`;
         
-        // Profitto potenziale
-        let potProf = type === 'back' ? s * (o - 1) : s;
+        let potProf = type === 'back' ? this._roundCents(s * (o - 1)) : s;
         let mentorKey = type === 'back' ? 'mentor_bet_back' : 'mentor_bet_lay';
         Sim.mentor(mentorKey, { odd: formatOdd(o), stk: s.toFixed(2), liab: l.toFixed(2), prof: potProf.toFixed(2) }, true, 5);
 
@@ -1089,20 +1137,19 @@ const Trade = {
     updatePnl() {
         if(!State.pos) return;
         
+        let sf = Sim._currentSpreadFactor || 1;
         let rawB = State.odds[State.pos.sel];
         let cB = this.roundTick(rawB);
-        let cL = this.roundTick(rawB + this.getTickStep(rawB));
+        let cL = this.roundTick(rawB + (this.getTickStep(rawB) * sf));
         
-        // Per chiudere un Back devo fare un Lay (alle quote Lay attuali). Viceversa per il Lay.
         let current = State.pos.t === 'back' ? cL : cB;
         
-        // HEDGING STANDARD: Distribuzione perfetta del profitto/perdita su tutti gli esiti
         let pnl = State.pos.t === 'back' ? 
             State.pos.s * (State.pos.e / current - 1) : 
             State.pos.s * (1 - State.pos.e / current);
         
-        // L'Exchange deduce il 5% SOLO dal profitto netto positivo
         let net = pnl > 0 ? pnl * 0.95 : pnl;
+        net = this._roundCents(net);
         
         let str = `${net >= 0 ? '+' : '-'}€${Math.abs(net).toFixed(2)}`;
         let cls = `font-black leading-none tracking-tight ${net > 0 ? 'text-[#00e676]' : (net < 0 ? 'text-red-500' : 'text-[#111]')}`;
@@ -1116,34 +1163,37 @@ const Trade = {
     cashOut() {
         if(!State.pos || State.susp) return;
         
+        let sf = Sim._currentSpreadFactor || 1;
         let rawB = State.odds[State.pos.sel];
         let cB = this.roundTick(rawB);
-        let cL = this.roundTick(rawB + this.getTickStep(rawB));
+        let cL = this.roundTick(rawB + (this.getTickStep(rawB) * sf));
         let current = State.pos.t === 'back' ? cL : cB;
         
+        // Hedging Formula
         let pnl = State.pos.t === 'back' ? State.pos.s * (State.pos.e / current - 1) : State.pos.s * (1 - State.pos.e / current);
         
-        let comm = 0;
-        let net = pnl;
+        let net = pnl > 0 ? pnl * 0.95 : pnl;
+        net = this._roundCents(net); // Precision fix
         
+        // Mentor Feedback Analitico su cosa sta succedendo al portafoglio
         if (pnl > 0) {
-            comm = pnl * 0.05;
-            net = pnl - comm;
-            Sim.mentor('mentor_co_win', { val: comm.toFixed(2) }, true, 9);
+            Sim.mentor('mentor_co_win', { liab: State.pos.l.toFixed(2), net: net.toFixed(2) }, true, 9);
         } else {
-            Sim.mentor('mentor_co_loss', {}, true, 9);
+            Sim.mentor('mentor_co_loss', { liab: State.pos.l.toFixed(2), net: net.toFixed(2) }, true, 9);
         }
         
-        // Ripristino e applicazione saldo
-        State.bal += (State.pos.l + net);
+        // Aggiornamento Cassa Blindato (Restituisce la liability bloccata + aggiunge/sottrae il PNL)
+        State.bal = this._roundCents(State.bal + State.pos.l + net);
         State.pos = null;
         
-        DOM.posPanel.classList.remove('opacity-100', 'pointer-events-auto');
-        DOM.posPanel.classList.add('opacity-0', 'pointer-events-none');
+        if(DOM.posPanel) {
+            DOM.posPanel.classList.remove('opacity-100', 'pointer-events-auto');
+            DOM.posPanel.classList.add('opacity-0', 'pointer-events-none');
+        }
         
         this.renderState();
         this.updateHeader();
-        localStorage.setItem('qa_pro_v20', JSON.stringify({bal: State.bal, stake: State.stake}));
+        localStorage.setItem('qa_pro_v22', JSON.stringify({bal: State.bal, stake: State.stake}));
     },
 
     renderState() {
