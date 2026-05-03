@@ -6,7 +6,6 @@
     <meta name="theme-color" content="#111111">
     <title>Zero To Hero | Quant Exchange</title>
 
-    <!-- DNS Prefetch & Preconnect (Caricamento Globale Ultraveloce) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://flagcdn.com">
@@ -35,10 +34,9 @@
         }
 
         body { 
-            /* Sfondo Dark Istituzionale pulito (Niente foto pesanti) */
             background-image: linear-gradient(135deg, #0a0a0a 0%, #151515 100%);
             display: flex; align-items: center; justify-content: center; 
-            opacity: 0; transition: opacity 0.5s ease-out; /* ANTI FOUC */
+            opacity: 0; transition: opacity 0.4s ease-out; 
         }
         
         body.ready { opacity: 1; }
@@ -79,10 +77,7 @@
             z-index: 0;
         }
 
-        /* Questo wrapper impedisce lo schiacciamento mantenendo il rapporto 105:68 FIFA */
-        .pitch-wrapper {
-            position: relative; height: 92%; aspect-ratio: 105/68; max-width: 96%; z-index: 1;
-        }
+        .pitch-wrapper { position: relative; height: 92%; aspect-ratio: 105/68; max-width: 96%; z-index: 1; }
 
         .pitch-lines { position: absolute; inset: 0; border: 1.5px solid rgba(255,255,255,0.55); pointer-events: none; }
         .pitch-center-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1.5px; background: rgba(255,255,255,0.55); transform: translateX(-50%); }
@@ -99,12 +94,11 @@
         .pitch-pen-left { position: absolute; top: 50%; left: 11%; transform: translate(-50%, -50%); width: 3px; height: 3px; background: rgba(255,255,255,0.8); border-radius: 50%; }
         .pitch-pen-right { position: absolute; top: 50%; right: 11%; transform: translate(50%, -50%); width: 3px; height: 3px; background: rgba(255,255,255,0.8); border-radius: 50%; }
 
-        /* PALLONE TELEGRAM (EMOJI) E OLOGRAFIE */
         .ball { 
             position: absolute; z-index: 25; 
             transform: translate(-50%, -50%); transition: left 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             will-change: left, top; display: flex; align-items: center; justify-content: center;
-            font-size: 14px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.7)); /* Ombra per profondità sul prato */
+            font-size: 14px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.7)); 
         }
         
         .attack-cone {
@@ -114,7 +108,6 @@
             will-change: opacity, left, transform;
         }
 
-        /* BADGE TOTALMENTE TRASPARENTE */
         .info-badge {
             position: absolute; left: 50%; top: 15%; transform: translate(-50%, 0);
             display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 30;
@@ -129,27 +122,25 @@
         .tab-item { display: inline-block; padding: 10px 14px; font-size: 13px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; cursor: pointer; }
         .tab-active { color: #111; font-weight: 700; border-bottom-color: var(--bf-yellow); }
 
-        /* PULSANTI BETFAIR EXACT LAYOUT */
         .bf-btn-back { background-color: var(--btn-back); transition: background-color 0.1s; }
         .bf-btn-back:active { background-color: var(--btn-back-hover); }
         .bf-btn-lay { background-color: var(--btn-lay); transition: background-color 0.1s; }
         .bf-btn-lay:active { background-color: var(--btn-lay-hover); }
         
-        .btn-odd-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 44px; border-radius: 2px; }
-        .odd-price { font-size: 16px; font-weight: 900; line-height: 1.1; color: #111; }
-        .odd-vol { font-size: 10px; font-weight: 400; color: #555; margin-top: 1px; line-height: 1; }
+        .btn-odd-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 46px; border-radius: 2px; }
+        .odd-price { font-size: 17px; font-weight: 900; line-height: 1.1; color: #111; }
+        .odd-vol { font-size: 11px; font-weight: 400; color: #555; margin-top: 2px; line-height: 1; }
 
-        /* CARDS & OVERLAYS */
         .card-icon { width: 8px; height: 12px; border-radius: 1px; display: inline-block; margin-left: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         .card-yellow { background: #ffd600; border: 1px solid #ccaa00; }
         .card-red { background: #d50000; border: 1px solid #aa0000; }
 
-        /* DRAGGABLE CASHOUT PANEL (GLOBALE, LIBERTÀ ASSOLUTA) */
+        /* DRAGGABLE CASHOUT PANEL */
         #position-panel {
             position: fixed; 
             will-change: transform, opacity;
-            touch-action: none; /* Previene scroll del background durante il drag su mobile */
-            z-index: 999999; /* Sopra a ogni elemento della pagina */
+            touch-action: none; 
+            z-index: 999999; 
         }
         
         .team-flag { width: 22px; height: 16px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.4); object-fit: cover; }
@@ -167,8 +158,7 @@
 <body>
 
 <!-- WIDGET CASHOUT FLUTTUANTE GLOBALE -->
-<div id="position-panel" class="w-[260px] bg-white border border-gray-300 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.7)] flex-col transition-opacity duration-200 opacity-0 pointer-events-none cursor-move select-none" style="transform: translate(-50%, -50%); display: flex; left: 50%; top: 50%;">
-    <!-- VISUAL HEADER -->
+<div id="position-panel" class="w-[280px] bg-white border border-gray-300 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.7)] flex-col transition-opacity duration-200 opacity-0 pointer-events-none cursor-move select-none" style="transform: translate(-50%, -50%); display: flex; left: 50%; top: 50%;">
     <div class="bg-gray-100 p-2.5 border-b border-gray-200 rounded-t-lg flex justify-between items-center pointer-events-none">
         <div class="flex items-center gap-2">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#888"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
@@ -176,19 +166,17 @@
         </div>
     </div>
     
-    <!-- BODY -->
-    <div class="p-3 flex flex-col gap-2">
+    <div class="p-3.5 flex flex-col gap-3">
         <div class="flex justify-between items-center pb-2 border-b border-gray-100 pointer-events-none">
             <span id="pos-label" class="text-[#111] text-[10px] font-black px-2 py-0.5 rounded-sm shadow-sm">PUNTA</span>
             <span id="pos-info" class="text-[12px] font-mono font-bold text-gray-700">@ 0.00 | Stk €0.00</span>
         </div>
         <div class="flex items-center justify-between pt-1">
             <div class="flex flex-col leading-none pointer-events-none">
-                <span class="text-[9px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
-                <span id="pnl-val" class="text-[20px] font-black text-[#111] leading-none">€ 0.00</span>
+                <span class="text-[10px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
+                <span id="pnl-val" class="text-[22px] font-black text-[#111] leading-none">€ 0.00</span>
             </div>
-            <!-- BUTTON: Stops Drag propagation via JS -->
-            <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer" data-i18n="cashout">Cash Out</button>
+            <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-3 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer" data-i18n="cashout">Cash Out</button>
         </div>
     </div>
 </div>
@@ -203,7 +191,6 @@
         <!-- HEADER TOP "ZERO TO HERO" -->
         <header class="bg-[#0f0f0f] flex justify-between items-center px-3 py-1.5 shrink-0 shadow-sm z-20 h-[48px] border-b border-[#222]">
             <div class="flex items-center gap-2 text-white">
-                <!-- LOGO ZERO TO HERO SVG -->
                 <svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0 drop-shadow-md">
                     <circle cx="50" cy="50" r="48" fill="#000" />
                     <circle cx="50" cy="50" r="43" fill="none" stroke="url(#silver)" stroke-width="6" />
@@ -220,38 +207,38 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-1.5">
+            <div class="flex items-center gap-2">
                 <div class="bg-[#1a1a1a] rounded flex items-center border border-[#333] px-1">
-                    <select id="lang-selector" class="bg-transparent text-white text-[9px] font-bold outline-none border-none cursor-pointer py-1">
+                    <select id="lang-selector" class="bg-transparent text-white text-[10px] font-bold outline-none border-none cursor-pointer py-1">
                         <option value="it">🇮🇹 IT</option><option value="en">🇬🇧 EN</option><option value="es">🇪🇸 ES</option><option value="pt">🇵🇹 PT</option>
                     </select>
                 </div>
                 <div class="bg-[#1a1a1a] text-white px-2 py-0.5 rounded flex flex-col items-end shadow-sm leading-tight border border-[#333]">
                     <span class="text-[7px] text-gray-400 uppercase" data-i18n="avail">Cassa</span>
-                    <span id="bankroll-mobile" class="font-bold text-[10px] text-[#00e676]">€ 100.00</span>
+                    <span id="bankroll-mobile" class="font-bold text-[11px] text-[#00e676]">€ 100.00</span>
                 </div>
             </div>
         </header>
 
         <!-- LIVE SCORE STRIP -->
         <div class="bg-[#1a1a1a] flex flex-col shrink-0 z-10 relative">
-            <div class="text-white px-3 py-1.5 flex items-center border-b border-[#2a2a2a]">
+            <div class="text-white px-3 py-2 flex items-center border-b border-[#2a2a2a]">
                 <div class="flex flex-col items-center justify-center min-w-[36px] mr-2">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10-7h2v5h-2zM8 11h2v5H8zm8-4h2v5h-2z"/></svg>
-                    <span class="text-white text-[7px] font-black uppercase tracking-widest mt-0.5" data-i18n="live">Live</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10-7h2v5h-2zM8 11h2v5H8zm8-4h2v5h-2z"/></svg>
+                    <span class="text-white text-[8px] font-black uppercase tracking-widest mt-0.5" data-i18n="live">Live</span>
                 </div>
                 
                 <div class="flex flex-col items-end">
-                    <span class="text-[#00e676] font-mono text-[14px] font-bold w-10 text-center" id="match-timer">00:00</span>
-                    <span onclick="Sim.fastForward()" class="text-[8px] text-[#fab400] bg-[#333] px-1 rounded cursor-pointer mt-0.5 whitespace-nowrap active:bg-[#555] shadow-sm">⏩ 80'</span>
+                    <span class="text-[#00e676] font-mono text-[15px] font-bold w-12 text-center" id="match-timer">00:00</span>
+                    <span onclick="Sim.fastForward()" class="text-[9px] text-[#fab400] bg-[#333] px-1 rounded cursor-pointer mt-0.5 whitespace-nowrap active:bg-[#555] shadow-sm">⏩ 80'</span>
                 </div>
                 
-                <div class="flex flex-col gap-1 items-center text-[#00e676] font-mono text-[15px] font-bold leading-none ml-4 bg-[#111] px-2 py-1 rounded shadow-inner border border-[#333]">
+                <div class="flex flex-col gap-1 items-center text-[#00e676] font-mono text-[16px] font-bold leading-none ml-4 bg-[#111] px-2 py-1.5 rounded shadow-inner border border-[#333]">
                     <span id="score-h">0</span>
                     <span id="score-a">0</span>
                 </div>
                 
-                <div class="flex flex-col gap-1 text-[13px] font-bold tracking-tight leading-none ml-3 flex-grow overflow-hidden">
+                <div class="flex flex-col gap-1.5 text-[14px] font-bold tracking-tight leading-none ml-4 flex-grow overflow-hidden">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <img src="https://flagcdn.com/w40/ar.png" class="team-flag" alt="AR">
@@ -259,7 +246,7 @@
                         </div>
                         <div id="cards-h" class="flex shrink-0"></div>
                     </div>
-                    <div class="flex items-center justify-between mt-1">
+                    <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <img src="https://flagcdn.com/w40/fr.png" class="team-flag" alt="FR">
                             <span class="text-white truncate">Francia</span>
@@ -270,18 +257,18 @@
             </div>
             
             <!-- TIMELINE -->
-            <div class="px-3 py-1 flex items-center justify-between gap-1.5 relative bg-[#111]">
+            <div class="px-3 py-1.5 flex items-center justify-between gap-1.5 relative bg-[#111]">
                 <div class="relative w-[49%] h-1 bg-white/20 rounded-sm">
                     <div id="timeline-1" class="absolute left-0 top-0 bottom-0 bg-[#00e676] rounded-sm transition-all duration-1000" style="width: 0%"></div>
                 </div>
                 <div class="relative w-[49%] h-1 bg-white/20 rounded-sm">
                     <div id="timeline-2" class="absolute left-0 top-0 bottom-0 bg-[#00e676] rounded-sm transition-all duration-1000" style="width: 0%"></div>
                 </div>
-                <div id="timeline-events" class="absolute left-3 right-3 h-1 top-1 pointer-events-none"></div>
+                <div id="timeline-events" class="absolute left-3 right-3 h-1 top-1.5 pointer-events-none"></div>
             </div>
         </div>
 
-        <!-- PITCH RADAR DETTAGLIATO E INDEFORMABILE -->
+        <!-- PITCH RADAR DETTAGLIATO -->
         <section id="pitch-container">
             <div class="pitch-stripes"></div>
             
@@ -290,17 +277,14 @@
                     <div class="pitch-center-line"></div>
                     <div class="pitch-center-dot"></div>
                     <div class="pitch-center-circle"></div>
-                    <!-- Aree -->
                     <div class="pitch-area-left"></div>
                     <div class="pitch-area-right"></div>
                     <div class="pitch-goal-left"></div>
                     <div class="pitch-goal-right"></div>
-                    <!-- Lunette e Dischetti -->
                     <div class="pitch-arc-left"></div>
                     <div class="pitch-arc-right"></div>
                     <div class="pitch-pen-left"></div>
                     <div class="pitch-pen-right"></div>
-                    <!-- Corner -->
                     <div class="pitch-corner-tl"></div>
                     <div class="pitch-corner-tr"></div>
                     <div class="pitch-corner-bl"></div>
@@ -308,10 +292,8 @@
                 </div>
                 
                 <div id="attack-cone" class="attack-cone"></div>
-                <!-- Telegram Soccer Emoji -->
                 <div id="ball" class="ball" style="left: 50%; top: 50%;">⚽</div>
 
-                <!-- BADGE TRASPARENTE OLOGRAFICO -->
                 <div id="event-badge" class="info-badge">
                     <span id="event-team" class="text-white font-black text-[12px] tracking-tight leading-tight">Argentina</span>
                     <span id="event-desc" class="text-[#00e676] text-[9px] font-bold uppercase tracking-wider mt-0.5">Attacking</span>
@@ -331,22 +313,21 @@
             <!-- OVERLAY AVVIO COMPATTO -->
             <div id="start-overlay" class="absolute inset-0 z-50 bg-black/85 flex flex-col items-center justify-center backdrop-blur-md p-3 text-center transition-opacity duration-300">
                 <h1 class="text-white text-xl font-black italic mb-1 text-[var(--bf-yellow)]">World Cup Final '22</h1>
-                <p class="text-gray-300 text-[9px] mb-4 max-w-[220px] leading-snug" data-i18n="sim_desc">Algoritmi istituzionali e Spread dinamico. 1 Sec = 1 Sec Reale.</p>
-                <button onclick="Sim.start()" class="bg-[var(--zth-green)] text-[#111] font-black px-6 py-2 rounded shadow-[0_0_15px_rgba(57,255,20,0.4)] text-[10px] uppercase tracking-widest active:scale-95 transition-transform" data-i18n="start">Avvia Simulazione</button>
+                <p class="text-gray-300 text-[10px] mb-4 max-w-[240px] leading-snug">Zero Allucinazioni. 1 Sec = 1 Sec Reale.<br>Algoritmi, Liability e Spread in tempo reale.</p>
+                <button onclick="Sim.start()" class="bg-[var(--zth-green)] text-[#111] font-black px-8 py-2.5 rounded shadow-[0_0_15px_rgba(57,255,20,0.4)] text-[11px] uppercase tracking-widest active:scale-95 transition-transform" data-i18n="start">Avvia Simulazione</button>
             </div>
         </section>
 
-        <!-- MARKET ANALYST (MENTOR) BAR - ALTEZZA FISSA BLINDATA (68px) -->
-        <div class="bg-[#111] p-2.5 flex items-start gap-2.5 border-b border-[#333] shrink-0 shadow-inner h-[68px] overflow-hidden">
-            <!-- Icona Professionale Analista Quant -->
+        <!-- MARKET ANALYST (MENTOR) BAR - ALTEZZA FISSA BLINDATA -->
+        <div class="bg-[#111] p-3 flex items-start gap-3 border-b border-[#333] shrink-0 shadow-inner h-[76px] overflow-hidden">
             <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_10px_rgba(57,255,20,0.15)]">
                 <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-[var(--zth-green)]">
                     <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/>
                 </svg>
             </div>
             <div class="flex flex-col w-full">
-                <span class="text-[8px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-0.5">Analista Quant</span>
-                <p id="mentor-txt" class="text-[10px] font-medium text-gray-300 leading-tight line-clamp-3" data-i18n="mentor_idle">In attesa del fischio d'inizio. Consolidamento volumi in corso.</p>
+                <span class="text-[9px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-0.5">Analista Quant</span>
+                <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-snug line-clamp-3" data-i18n="mentor_idle">In attesa del fischio d'inizio. Consolidamento volumi in corso sulla Exchange.</p>
             </div>
         </div>
         
@@ -357,21 +338,25 @@
     <!-- ========================================== -->
     <div id="right-pane">
         
-        <!-- RISK MGMT HEADER (Ridotto) -->
-        <div class="bg-white flex justify-between items-center px-4 py-1.5 border-b border-gray-200 shrink-0">
+        <!-- RISK MGMT HEADER CON LIABILITY -->
+        <div class="bg-white flex justify-between items-center px-4 py-2 border-b border-gray-200 shrink-0">
             <div class="flex gap-1.5">
-                <button onclick="Trade.setRisk(1)" id="r-1" class="px-3 py-1 bg-white border border-gray-300 rounded text-[11px] font-bold text-gray-500 shadow-sm transition-colors">1%</button>
-                <button onclick="Trade.setRisk(2)" id="r-2" class="px-3 py-1 bg-gray-800 border border-gray-800 rounded text-[11px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors">2%</button>
-                <button onclick="Trade.setRisk(5)" id="r-5" class="px-3 py-1 bg-white border border-gray-300 rounded text-[11px] font-bold text-gray-500 shadow-sm transition-colors">5%</button>
+                <button onclick="Trade.setRisk(1)" id="r-1" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors">1%</button>
+                <button onclick="Trade.setRisk(2)" id="r-2" class="px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors">2%</button>
+                <button onclick="Trade.setRisk(5)" id="r-5" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors">5%</button>
             </div>
             <div class="flex gap-3">
                 <div class="flex flex-col items-end leading-tight desktop-only">
                     <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="avail">Cassa</span>
                     <span id="bankroll-desktop" class="font-mono font-bold text-[12px] text-[#00e676]">€ 100.00</span>
                 </div>
-                <div class="flex flex-col items-end leading-tight">
+                <div class="flex flex-col items-end leading-tight pr-2 border-r border-gray-200">
                     <span class="text-[7px] font-black text-gray-400 uppercase">Stake</span>
                     <span id="val-stk" class="font-mono font-black text-[13px] text-gray-800">€ 2.00</span>
+                </div>
+                <div class="flex flex-col items-end leading-tight">
+                    <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="liability">Resp.</span>
+                    <span id="val-liab" class="font-mono font-black text-[13px] text-red-500">€ 0.00</span>
                 </div>
             </div>
         </div>
@@ -383,18 +368,18 @@
         </div>
 
         <!-- MARKETS LIST -->
-        <div class="flex-grow overflow-y-auto bg-gray-100 relative pb-10">
+        <div class="flex-grow overflow-y-auto bg-gray-100 relative pb-20">
             
             <div class="bg-[#333] text-white flex justify-between items-center px-4 py-1.5 sticky top-0 z-10 shadow-sm">
                 <span class="text-[12px] font-bold" data-i18n="mo">Esito Finale</span>
                 <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 bg-[#fab400] rounded-sm flex items-center justify-center"><div class="w-1.5 h-1.5 bg-[#333] rounded-full"></div></div>
+                    <div class="w-3.5 h-3.5 bg-[#fab400] rounded-sm flex items-center justify-center"><div class="w-1.5 h-1.5 bg-[#333] rounded-full"></div></div>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="#00e676"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
                 </div>
             </div>
 
             <!-- HEADER COLONNE FIXED -->
-            <div class="bg-white flex items-center justify-between pl-4 pr-4 py-1 text-[10px] font-bold text-[#333] border-b border-gray-200 shadow-sm relative z-0">
+            <div class="bg-white flex items-center justify-between pl-4 pr-4 py-1.5 text-[11px] font-bold text-[#333] border-b border-gray-200 shadow-sm relative z-0">
                 <div class="truncate flex-grow">
                     <span><span data-i18n="matched">Abbinate</span>: <span id="vol-tot" class="font-normal text-gray-500">€0</span></span>
                 </div>
@@ -404,11 +389,11 @@
                 </div>
             </div>
 
-            <!-- ROW ARGENTINA (ALIGNMENT FIXED) -->
-            <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1 hover:bg-gray-50 transition-colors" id="row-H">
+            <!-- ROW ARGENTINA -->
+            <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-H">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
                     <img src="https://flagcdn.com/w40/ar.png" class="team-flag shrink-0" alt="AR">
-                    <span class="text-[13px] font-bold text-[#222] tracking-tight truncate">Argentina</span>
+                    <span class="text-[14px] font-bold text-[#222] tracking-tight truncate">Argentina</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
                     <div class="w-[70px] sm:w-[75px]">
@@ -426,11 +411,11 @@
                 </div>
             </div>
 
-            <!-- ROW FRANCIA (ALIGNMENT FIXED) -->
-            <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1 hover:bg-gray-50 transition-colors" id="row-A">
+            <!-- ROW FRANCIA -->
+            <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-A">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
                     <img src="https://flagcdn.com/w40/fr.png" class="team-flag shrink-0" alt="FR">
-                    <span class="text-[13px] font-bold text-[#222] tracking-tight truncate">Francia</span>
+                    <span class="text-[14px] font-bold text-[#222] tracking-tight truncate">Francia</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
                     <div class="w-[70px] sm:w-[75px]">
@@ -448,11 +433,11 @@
                 </div>
             </div>
 
-            <!-- ROW DRAW (ALIGNMENT FIXED) -->
-            <div class="flex items-center justify-between w-full bg-white border-b border-gray-300 pl-4 pr-4 py-1 hover:bg-gray-50 transition-colors" id="row-X">
+            <!-- ROW DRAW -->
+            <div class="flex items-center justify-between w-full bg-white border-b border-gray-300 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-X">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="#888" class="shrink-0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                    <span class="text-[13px] font-bold text-[#222] tracking-tight truncate" data-i18n="draw">Pareggio</span>
+                    <span class="text-[14px] font-bold text-[#222] tracking-tight truncate" data-i18n="draw">Pareggio</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
                     <div class="w-[70px] sm:w-[75px]">
@@ -476,12 +461,11 @@
 
 <script>
 /**
- * Inizializza l'applicazione in totale sicurezza post-renderizzazione.
+ * Zero FOUC Initialization
  */
 document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(() => {
         document.body.classList.add('ready');
-        App.init(); // Init eseguito SOLO a caricamento completato
     });
 });
 
@@ -492,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 const I18N_DICT = {
     it: {
-        avail: "Cassa", matched: "Abbinate", back: "Punta", lay: "Banca",
+        avail: "Cassa", matched: "Abbinate", back: "Punta", lay: "Banca", liability: "Resp.",
         draw: "Pareggio", start: "Avvia Simulazione", sim_desc: "1 Secondo = 1 Sec Reale.<br>Algoritmi e spread in tempo reale.",
         mo: "Esito Finale", ou: "Under/Over 2.5", market_most_played: "Più Giocati",
         cashout: "Cash Out", susp: "Sospeso", pos_open: "Posizione Aperta", 
@@ -505,10 +489,16 @@ const I18N_DICT = {
         mentor_goal: "GOAL! Mercato Sospeso. Cancellazione ordini non abbinati. Ricalcolo del Fair Value di Poisson in corso...",
         mentor_swing: "REPRICING ESTREMO! Swing di mercato violento. La liquidità si sta spostando per assorbire il nuovo scenario.",
         mentor_co_win: "Hedge completato (Green Book). L'Exchange deduce il 5% di fee (€{val}) ESCLUSIVAMENTE sull'utile netto generato.",
-        mentor_co_loss: "Loss accettata (Red Book). Posizione chiusa. L'Exchange NON trattiene alcuna commissione sulle perdite."
+        mentor_co_loss: "Loss accettata (Red Book). Posizione chiusa. L'Exchange NON trattiene alcuna commissione sulle perdite.",
+        mentor_risk: "Money Management: Stake impostato al {pct}% (€{stk}). In modalità Banca (Lay), la tua Responsabilità calcolata sarà: Stake × (Quota - 1).",
+        mentor_bet_back: "Punta abbinato a {odd}. Responsabilità limitata allo Stake netto (€{liab}). Rischio calcolato.",
+        mentor_bet_lay: "Banca abbinato a {odd}. La tua Responsabilità (Liability) reale sottratta dal saldo è di €{liab}.",
+        tut_1: "Lezioni Base: PUNTA (Back) significa scommettere A FAVORE. BANCA (Lay) significa scommettere CONTRO. Es: Bancando l'1 vinci se esce X o 2.",
+        tut_2: "Gestione del Rischio: La LIABILITY (Responsabilità) è il capitale a rischio quando Banchi. Formula: Stake × (Quota - 1).",
+        tut_3: "Strategia 'LAY THE DRAW': Banchiamo la X. Al primo gol, la quota del Pareggio si alza, garantendoci un Cash Out in profitto."
     },
     en: {
-        avail: "Bankroll", matched: "Matched", back: "Back", lay: "Lay",
+        avail: "Bankroll", matched: "Matched", back: "Back", lay: "Lay", liability: "Liab.",
         draw: "Draw", start: "Start Simulation", sim_desc: "1 Second = 1 Real Sec.<br>Real-time algorithms and spread.",
         mo: "Match Odds", ou: "Over/Under 2.5", market_most_played: "Popular",
         cashout: "Cash Out", susp: "Suspended", pos_open: "Open Position", 
@@ -521,10 +511,16 @@ const I18N_DICT = {
         mentor_goal: "GOAL! Market Suspended. Unmatched orders cancelled. Poisson Fair Value recalculation...",
         mentor_swing: "DRAMATIC REPRICING! Violent market swing. Liquidity shifting massively to absorb new scenario.",
         mentor_co_win: "Hedge completed (Green Book). The Exchange deducts a 5% fee (€{val}) EXCLUSIVELY on net profit.",
-        mentor_co_loss: "Loss accepted (Red Book). Clean loss. The Exchange takes ZERO commission on losing trades."
+        mentor_co_loss: "Loss accepted (Red Book). Clean loss. The Exchange takes ZERO commission on losing trades.",
+        mentor_risk: "Money Management: Stake at {pct}% (€{stk}). When Laying, your Liability will be: Stake × (Odds - 1).",
+        mentor_bet_back: "Back matched at {odd}. Liability limited to net Stake (€{liab}). Risk calculated.",
+        mentor_bet_lay: "Lay matched at {odd}. Your true Liability locked from balance is €{liab}.",
+        tut_1: "Basics: BACK means betting an outcome will happen. LAY means betting AGAINST it. E.g. Laying the Draw wins if either team wins.",
+        tut_2: "Risk Mgmt: LIABILITY is your true risk when Laying. Formula: Stake × (Odds - 1). Never expose more than your bankroll can handle.",
+        tut_3: "Strategy 'LAY THE DRAW': We Lay the Draw. When a goal is scored, Draw odds spike, allowing an immediate profitable Cash Out."
     },
     es: {
-        avail: "Fondo", matched: "Igualado", back: "A favor", lay: "En contra",
+        avail: "Fondo", matched: "Igualado", back: "A favor", lay: "En contra", liability: "Resp.",
         draw: "Empate", start: "Iniciar Simulación", sim_desc: "1 Seg = 1 Seg Real.<br>Algoritmos y spread en vivo.",
         mo: "Cuotas de partido", ou: "Más/Menos 2.5", market_most_played: "Populares",
         cashout: "Cash Out", susp: "Suspendido", pos_open: "Posición Abierta", 
@@ -537,10 +533,16 @@ const I18N_DICT = {
         mentor_goal: "¡GOL! Mercado Suspendido. Cancelación de órdenes. Recalculando Valor Razonable...",
         mentor_swing: "¡REPRECIO EXTREMO! Swing violento del mercado. La liquidez se mueve masivamente.",
         mentor_co_win: "Cobertura completada (Libro Verde). El Exchange deduce 5% de comisión (€{val}) EXCLUSIVAMENTE sobre el neto.",
-        mentor_co_loss: "Pérdida aceptada (Libro Rojo). El Exchange NO retiene comisiones en pérdidas."
+        mentor_co_loss: "Pérdida aceptada (Libro Rojo). El Exchange NO retiene comisiones en pérdidas.",
+        mentor_risk: "Gestión de Riesgo: Stake al {pct}% (€{stk}). Al ir En Contra (Lay), tu Responsabilidad será: Stake × (Cuota - 1).",
+        mentor_bet_back: "A favor igualado a {odd}. Responsabilidad limitada al Stake neto (€{liab}).",
+        mentor_bet_lay: "En contra igualado a {odd}. Tu Responsabilidad real bloqueada es €{liab}.",
+        tut_1: "Conceptos: A FAVOR (Back) apuestas a que algo ocurre. EN CONTRA (Lay) apuestas a que NO ocurre. Ej: Ir En Contra del Empate gana si hay un ganador.",
+        tut_2: "Riesgo: La RESPONSABILIDAD es tu riesgo real al ir En Contra. Fórmula: Stake × (Cuota - 1). Controla siempre tu capital.",
+        tut_3: "Estrategia 'LAY THE DRAW': Vamos En Contra del Empate. Al primer gol, la cuota de la X se dispara, permitiendo un Cash Out con beneficio."
     },
     pt: {
-        avail: "Saldo", matched: "Correspondido", back: "A favor", lay: "Contra",
+        avail: "Saldo", matched: "Correspondido", back: "A favor", lay: "Contra", liability: "Resp.",
         draw: "Empate", start: "Iniciar Simulação", sim_desc: "1 Seg = 1 Seg Real.<br>Algoritmos e spread ao vivo.",
         mo: "Probabilidades", ou: "Mais/Menos 2.5", market_most_played: "Populares",
         cashout: "Cash Out", susp: "Suspenso", pos_open: "Posição Aberta", 
@@ -553,20 +555,26 @@ const I18N_DICT = {
         mentor_goal: "GOLO! Mercado Suspenso. Cancelamento de ordens não correspondidas. Recálculo do Valor Justo...",
         mentor_swing: "REPRECIFICAÇÃO EXTREMA! Swing de mercado violento. Liquidez mudando massivamente.",
         mentor_co_win: "Hedge concluído (Green Book). A Bolsa deduz 5% de comissão (€{val}) APENAS sobre o lucro líquido.",
-        mentor_co_loss: "Perda aceite (Red Book). A Bolsa NÃO cobra comissões sobre perdas."
+        mentor_co_loss: "Perda aceite (Red Book). A Bolsa NÃO cobra comissões sobre perdas.",
+        mentor_risk: "Gestão de Risco: Stake em {pct}% (€{stk}). Em modo Contra (Lay), a Responsabilidade será: Stake × (Odd - 1).",
+        mentor_bet_back: "A favor correspondido a {odd}. Risco limitado ao Stake líquido (€{liab}).",
+        mentor_bet_lay: "Contra correspondido a {odd}. A sua Responsabilidade real deduzida do saldo é €{liab}.",
+        tut_1: "Básico: A FAVOR (Back) aposta que algo acontece. CONTRA (Lay) aposta que NÃO acontece. Ex: Lay ao Empate ganha se houver um vencedor.",
+        tut_2: "Risco: A RESPONSABILIDADE (Liability) é o seu risco real no Lay. Fórmula: Stake × (Odd - 1). Controle sempre a sua banca.",
+        tut_3: "Estratégia 'LAY THE DRAW': Fazemos Lay ao Empate. Ao primeiro golo, a odd do Empate dispara, permitindo um Cash Out lucrativo."
     }
 };
 
 /**
  * ============================================================================
- * 🚀 DOM CACHING & DRAGGABLE WIDGET (FULL SURFACE, GLOBAL POINTER EVENTS)
+ * 🚀 DOM CACHING & DRAGGABLE WIDGET
  * ============================================================================
  */
 const DOM = {
     odds: {}, vols: {}, btns: {},
     timer: null, scoreH: null, scoreA: null, volTot: null,
     tl1: null, tl2: null, tlEv: null, mentorTxt: null,
-    balMob: null, balDsk: null, valStk: null,
+    balMob: null, balDsk: null, valStk: null, valLiab: null,
     pnlMob: null, posPanel: null
 };
 
@@ -576,47 +584,36 @@ const Drag = {
     init() {
         const panel = document.getElementById('position-panel');
         if(!panel) return;
-        
-        // Listener su TUTTA L'AREA del pannello
         panel.addEventListener("pointerdown", (e) => this.start(e), {passive: false});
         document.addEventListener("pointerup", (e) => this.end(e), {passive: false});
         document.addEventListener("pointermove", (e) => this.move(e), {passive: false});
     },
     
     start(e) {
-        // Ignora il drag se stiamo cliccando il bottone del Cash Out per sicurezza
         if (e.target.tagName.toLowerCase() === 'button' || e.target.closest('button')) return;
-
         this.initialX = e.clientX - this.xOffset;
         this.initialY = e.clientY - this.yOffset;
-        
         if (e.target.closest('#position-panel')) {
             this.active = true;
             DOM.posPanel.setPointerCapture(e.pointerId);
         }
     },
     
-    end(e) {
-        this.active = false;
-    },
+    end(e) { this.active = false; },
     
     move(e) {
         if (this.active) {
             e.preventDefault();
             this.xOffset = e.clientX - this.initialX;
             this.yOffset = e.clientY - this.initialY;
-            
             requestAnimationFrame(() => {
-                if(DOM.posPanel) {
-                    DOM.posPanel.style.transform = `translate(calc(-50% + ${this.xOffset}px), calc(-50% + ${this.yOffset}px))`;
-                }
+                if(DOM.posPanel) DOM.posPanel.style.transform = `translate(calc(-50% + ${this.xOffset}px), calc(-50% + ${this.yOffset}px))`;
             });
         }
     },
     
     reset() {
-        this.xOffset = 0; this.yOffset = 0;
-        this.initialX = 0; this.initialY = 0;
+        this.xOffset = 0; this.yOffset = 0; this.initialX = 0; this.initialY = 0;
         if(DOM.posPanel) DOM.posPanel.style.transform = `translate(-50%, -50%)`;
     }
 };
@@ -625,7 +622,6 @@ const App = {
     lang: 'it',
     
     init() {
-        // Cache Popolation
         ['H', 'X', 'A'].forEach(k => {
             DOM.odds[`${k}-b`] = document.getElementById(`odd-${k}-b`);
             DOM.odds[`${k}-l`] = document.getElementById(`odd-${k}-l`);
@@ -645,6 +641,7 @@ const App = {
         DOM.balMob = document.getElementById('bankroll-mobile');
         DOM.balDsk = document.getElementById('bankroll-desktop');
         DOM.valStk = document.getElementById('val-stk');
+        DOM.valLiab = document.getElementById('val-liab');
         DOM.pnlMob = document.getElementById('pnl-val'); 
         DOM.posPanel = document.getElementById('position-panel');
 
@@ -655,7 +652,7 @@ const App = {
             this.updateI18n();
         });
         
-        let saved = JSON.parse(localStorage.getItem('qa_pro_v16'));
+        let saved = JSON.parse(localStorage.getItem('qa_pro_v19'));
         if(saved) { State.bal = saved.bal; State.risk = saved.risk; }
         
         this.updateI18n();
@@ -686,7 +683,7 @@ const App = {
 
 /**
  * ============================================================================
- * 🧠 CORE ENGINE STORICO 1:1 CON MENTOR PACING
+ * 🧠 CORE ENGINE STORICO 1:1 CON MENTOR PRIORITY QUEUE
  * ============================================================================
  */
 let matchInterval = null;
@@ -700,18 +697,22 @@ let State = {
     pos: null, mState: 'idle',
     cards: { H: {y:0, r:0}, A: {y:0, r:0} },
     mentorLockUntil: 0, 
+    mentorPriority: 0,
     
     events: [
-        { time: 1380, type: 'goal', team: 'H', scorer: 'Messi (Pen)', triggered: false }, 
-        { time: 2160, type: 'goal', team: 'H', scorer: 'Di Maria', triggered: false }, 
-        { time: 2820, type: 'card', color: 'yellow', team: 'H', player: 'E. Fernandez', triggered: false }, 
-        { time: 3300, type: 'card', color: 'yellow', team: 'A', player: 'Rabiot', triggered: false }, 
-        { time: 4760, type: 'attack', team: 'A', desc: 'Rigore Francia!', triggered: false, mentor: 'mentor_pen' }, 
-        { time: 4800, type: 'goal', team: 'A', scorer: 'Mbappé (Pen)', triggered: false }, 
-        { time: 4845, type: 'attack', team: 'A', desc: 'Azione Pericolosa!', triggered: false }, 
-        { time: 4860, type: 'goal', team: 'A', scorer: 'Mbappé', triggered: false, mentor: 'mentor_swing' }, 
-        { time: 5220, type: 'card', color: 'yellow', team: 'A', player: 'Thuram', triggered: false }, 
-        { time: 5300, type: 'card', color: 'yellow', team: 'H', player: 'Acuña', triggered: false }
+        { time: 2, type: 'info', mentor: 'tut_1', priority: 8, triggered: false }, // Info Punta/Banca
+        { time: 10, type: 'info', mentor: 'tut_2', priority: 8, triggered: false }, // Info Liability
+        { time: 18, type: 'info', mentor: 'tut_3', priority: 8, triggered: false }, // Info Lay the Draw
+        { time: 1380, type: 'goal', team: 'H', scorer: 'Messi (Pen)', triggered: false, priority: 10 }, 
+        { time: 2160, type: 'goal', team: 'H', scorer: 'Di Maria', triggered: false, priority: 10 }, 
+        { time: 2820, type: 'card', color: 'yellow', team: 'H', player: 'E. Fernandez', triggered: false, priority: 8 }, 
+        { time: 3300, type: 'card', color: 'yellow', team: 'A', player: 'Rabiot', triggered: false, priority: 8 }, 
+        { time: 4760, type: 'attack', team: 'A', desc: 'Rigore Francia!', triggered: false, mentor: 'mentor_pen', priority: 10 }, 
+        { time: 4800, type: 'goal', team: 'A', scorer: 'Mbappé (Pen)', triggered: false, priority: 10 }, 
+        { time: 4845, type: 'attack', team: 'A', desc: 'Azione Pericolosa!', triggered: false, priority: 1 }, 
+        { time: 4860, type: 'goal', team: 'A', scorer: 'Mbappé', triggered: false, mentor: 'mentor_swing', priority: 10 }, 
+        { time: 5220, type: 'card', color: 'yellow', team: 'A', player: 'Thuram', triggered: false, priority: 8 }, 
+        { time: 5300, type: 'card', color: 'yellow', team: 'H', player: 'Acuña', triggered: false, priority: 8 }
     ]
 };
 
@@ -720,16 +721,13 @@ const Sim = {
         if(State.active) return;
         State.active = true;
         document.getElementById('start-overlay').style.display = 'none';
-        
         const b = document.getElementById('ball');
         if (b) { b.style.left = '50%'; b.style.top = '50%'; }
 
         this.renderTimeline();
         this.renderCards();
-        
         this.tick();
         this.animRadar();
-
         matchInterval = setInterval(() => this.tick(), 1000); 
     },
 
@@ -772,7 +770,7 @@ const Sim = {
         const ev = State.events.find(e => e.time === State.sec && !e.triggered);
         if (ev) {
             ev.triggered = true;
-            if (ev.mentor) this.mentor(ev.mentor, {}, true);
+            if (ev.mentor) this.mentor(ev.mentor, {}, true, ev.priority || 10);
             if (ev.type === 'goal') this.goal(ev.team, ev.scorer, ev.mentor);
             if (ev.type === 'card') this.card(ev.team, ev.color, ev.player);
             if (ev.type === 'attack') this.forceAttack(ev.team, ev.desc);
@@ -790,7 +788,7 @@ const Sim = {
 
         DOM.tlEv.innerHTML = '';
         State.events.forEach(ev => {
-            if (ev.triggered) {
+            if (ev.triggered && ev.type !== 'info') {
                 let span = document.createElement('span');
                 let icon = '';
                 if(ev.type === 'goal') icon = '⚽';
@@ -846,17 +844,17 @@ const Sim = {
         let nx, ny;
 
         if (r < 0.25) {
-            State.mState = 'h-attack'; this.mentor('mentor_h');
+            State.mState = 'h-attack'; this.mentor('mentor_h', {}, false, 1);
             nx = 75 + Math.random()*15; ny = 20 + Math.random()*60;
             c.style.opacity = '1'; c.style.left = '60%'; c.style.transform = 'translateY(-50%) rotate(0deg)';
             badge.style.opacity = '1'; tName.innerText = 'Argentina'; tDesc.innerText = 'Attacking'; tDesc.style.color = 'var(--arg-blue)';
         } else if (r < 0.50) {
-            State.mState = 'a-attack'; this.mentor('mentor_a');
+            State.mState = 'a-attack'; this.mentor('mentor_a', {}, false, 1);
             nx = 10 + Math.random()*15; ny = 20 + Math.random()*60;
             c.style.opacity = '1'; c.style.left = '0%'; c.style.transform = 'translateY(-50%) rotate(180deg)';
             badge.style.opacity = '1'; tName.innerText = 'Francia'; tDesc.innerText = 'Attacking'; tDesc.style.color = '#2cb1e8';
         } else {
-            State.mState = 'idle'; this.mentor('mentor_idle');
+            State.mState = 'idle'; this.mentor('mentor_idle', {}, false, 1);
             nx = 40 + Math.random()*20; ny = 30 + Math.random()*40;
             c.style.opacity = '0';
             badge.style.opacity = '1'; tName.innerText = nx > 50 ? 'Argentina' : 'Francia'; tDesc.innerText = 'Ball Safe'; tDesc.style.color = '#00e676';
@@ -877,7 +875,7 @@ const Sim = {
         DOM.scoreH.innerText = State.score[0];
         DOM.scoreA.innerText = State.score[1];
         
-        if(!customMentor) this.mentor('mentor_goal', {}, true);
+        if(!customMentor) this.mentor('mentor_goal', {}, true, 10);
         Trade.renderState(); 
         this.renderTimeline();
 
@@ -893,7 +891,7 @@ const Sim = {
     card(team, color, player) {
         if(color === 'yellow') State.cards[team].y++;
         if(color === 'red') State.cards[team].r++;
-        this.mentor('mentor_card_y', { player: player }, true);
+        this.mentor('mentor_card_y', { player: player }, true, 8);
         this.renderCards();
         this.renderTimeline();
     },
@@ -964,22 +962,35 @@ const Sim = {
         });
     },
 
-    mentor(key, vars = {}, force = false) {
-        if (!force && State.sec < State.mentorLockUntil) return;
+    /**
+     * MENTOR AI CON SISTEMA A PRIORITÀ (Zero Allucinazioni)
+     * @param {number} priority - 1 (Idle) a 10 (Goal/Penalty)
+     */
+    mentor(key, vars = {}, force = false, priority = 1) {
+        if (State.sec >= State.mentorLockUntil) {
+            State.mentorPriority = 0;
+        }
 
+        if (!force && State.sec < State.mentorLockUntil && priority <= State.mentorPriority) return;
+        
         let txt = App.t(key);
         for (const [k, v] of Object.entries(vars)) {
             txt = txt.replace(`{${k}}`, v);
         }
         if (DOM.mentorTxt) DOM.mentorTxt.innerText = txt;
         
-        State.mentorLockUntil = State.sec + (force ? 15 : 8);
+        let lockTime = 8;
+        if (priority >= 5) lockTime = 12; 
+        if (priority >= 8) lockTime = 15;
+
+        State.mentorLockUntil = State.sec + lockTime;
+        State.mentorPriority = priority;
     }
 };
 
 /**
  * ============================================================================
- * 💰 TRADING & HEDGING (MATE ESATTA E COMMISSIONI SUL NETTO)
+ * 💰 TRADING & HEDGING (MATE ESATTA E GESTIONE LIABILITY)
  * ============================================================================
  */
 const Trade = {
@@ -1000,9 +1011,13 @@ const Trade = {
         State.risk = v/100;
         [1,2,5].forEach(i => {
             let el = document.getElementById(`r-${i}`);
-            if(i===v) el.className = "px-4 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors";
-            else el.className = "px-4 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors";
+            if(i===v) el.className = "px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors";
+            else el.className = "px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors";
         });
+        
+        let stk = (State.bal * State.risk).toFixed(2);
+        // Mentor Priority 6 per superare l'Idle ma essere sovrastato dai Gol
+        if(State.active) Sim.mentor('mentor_risk', { pct: v, stk: stk }, true, 6);
         this.updateHeader();
     },
 
@@ -1011,6 +1026,9 @@ const Trade = {
         DOM.balMob.innerText = balStr;
         DOM.balDsk.innerText = balStr;
         DOM.valStk.innerText = `€ ${(State.bal * State.risk).toFixed(2)}`;
+        
+        let l = State.pos ? State.pos.l : 0;
+        DOM.valLiab.innerText = `€ ${l.toFixed(2)}`;
     },
 
     trade(sel, type) {
@@ -1020,9 +1038,12 @@ const Trade = {
         let o = type === 'back' ? this.roundTick(rawB) : this.roundTick(rawB + this.getTickStep(rawB));
         
         let s = State.bal * State.risk;
+        // FORMULA LIABILITY ESATTA
         let l = type === 'lay' ? s * (o-1) : s;
 
+        // Se la responsabilità supera la cassa, operazione negata
         if(State.bal < l) return;
+        
         State.bal -= l;
         State.pos = { sel, t: type, e: o, s: s, l: l };
         
@@ -1036,6 +1057,10 @@ const Trade = {
         const formatOdd = (n) => parseFloat(n.toFixed(2)).toString();
         document.getElementById('pos-info').innerText = `@ ${formatOdd(o)} | Stk €${s.toFixed(2)}`;
         
+        // Mentor Priority 5 (Apertura Trade)
+        let mentorKey = type === 'back' ? 'mentor_bet_back' : 'mentor_bet_lay';
+        Sim.mentor(mentorKey, { odd: formatOdd(o), liab: l.toFixed(2) }, true, 5);
+
         this.renderState();
         this.updateHeader();
     },
@@ -1078,9 +1103,9 @@ const Trade = {
         if (pnl > 0) {
             comm = pnl * 0.05;
             net = pnl - comm;
-            Sim.mentor('mentor_co_win', { val: comm.toFixed(2) }, true);
+            Sim.mentor('mentor_co_win', { val: comm.toFixed(2) }, true, 9);
         } else {
-            Sim.mentor('mentor_co_loss', {}, true);
+            Sim.mentor('mentor_co_loss', {}, true, 9);
         }
         
         State.bal += (State.pos.l + net);
@@ -1091,7 +1116,7 @@ const Trade = {
         
         this.renderState();
         this.updateHeader();
-        localStorage.setItem('qa_pro_v16', JSON.stringify({bal: State.bal, risk: State.risk}));
+        localStorage.setItem('qa_pro_v19', JSON.stringify({bal: State.bal, risk: State.risk}));
     },
 
     renderState() {
