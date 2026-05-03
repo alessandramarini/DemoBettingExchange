@@ -262,11 +262,6 @@
             </svg>
             <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-tight italic" data-i18n="mentor_idle">Il mercato è in attesa del fischio d'inizio.</p>
         </div>
-        
-        <!-- Desktop Position Panel Injector -->
-        <div id="desktop-pos" class="desktop-only flex-grow bg-[#222] p-4 flex flex-col items-center justify-center border-t border-[#111]">
-            <p class="text-gray-500 font-mono text-[11px] uppercase tracking-widest text-center" data-i18n="no_pos">Nessuna posizione aperta.<br>Seleziona una quota.</p>
-        </div>
     </div>
 
     <!-- ========================================== -->
@@ -364,42 +359,50 @@
             </div>
 
             <!-- ROW DRAW -->
-            <div class="flex justify-between items-center bg-white border-b border-gray-300 pl-4 pr-4 py-2 hover:bg-gray-50 transition-colors" id="row-X">
+            <div class="market-row pl-4 pr-4 border-b border-gray-300" id="row-X">
                 <div class="flex items-center gap-3 flex-grow overflow-hidden pr-2">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="#666" class="shrink-0"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
                     <span class="text-[15px] font-bold text-[#222] tracking-tight truncate" data-i18n="draw">Pareggio</span>
                 </div>
                 <div class="flex gap-2 shrink-0">
-                    <div class="w-[72px] sm:w-[80px]">
+                    <div class="w-[72px]">
                         <button onclick="Trade.trade('X', 'back')" class="btn-odd-container bf-btn-back" id="btn-X-b">
                             <span class="odd-price" id="odd-X-b">3.05</span>
-                            <span class="odd-vol" id="vol-X-b">€22K</span>
+                            <span class="odd-vol" id="vol-X-b">€4,280</span>
                         </button>
                     </div>
-                    <div class="w-[72px] sm:w-[80px]">
+                    <div class="w-[72px]">
                         <button onclick="Trade.trade('X', 'lay')" class="btn-odd-container bf-btn-lay" id="btn-X-l">
                             <span class="odd-price" id="odd-X-l">3.10</span>
-                            <span class="odd-vol" id="vol-X-l">€18K</span>
+                            <span class="odd-vol" id="vol-X-l">€3,240</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- CASHOUT FLOATING PANEL (Mobile) -->
-            <div id="position-panel" class="absolute bottom-4 left-4 right-4 bg-white border border-gray-300 rounded shadow-[0_10px_30px_rgba(0,0,0,0.25)] p-3 transform translate-y-[150%] transition-transform duration-300 ease-out flex-col gap-2 z-30 hidden mobile-only">
-                <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                    <div class="flex items-center gap-2">
-                        <span id="pos-label" class="text-[#111] text-[10px] font-black px-2 py-0.5 rounded-sm shadow-sm">PUNTA</span>
-                        <span id="pos-info" class="text-[12px] font-mono font-bold text-gray-700">@ 0.00 | Stk €0.00</span>
+            <!-- CASHOUT FLOATING PANEL (Draggable, Opacity Transition) -->
+            <div id="position-panel" class="fixed top-1/2 left-1/2 w-[260px] bg-white border border-gray-300 rounded-lg shadow-[0_15px_40px_rgba(0,0,0,0.4)] flex-col z-[100] transition-opacity duration-300 opacity-0 pointer-events-none" style="transform: translate(-50%, -50%); display: flex;">
+                
+                <!-- DRAG HANDLE -->
+                <div id="drag-handle" class="bg-gray-100 p-2 border-b border-gray-200 rounded-t-lg flex justify-between items-center cursor-move select-none active:bg-gray-200 transition-colors touch-none">
+                    <div class="flex items-center gap-2 pointer-events-none">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#888"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
+                        <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest" data-i18n="pos_open">Posizione Aperta</span>
                     </div>
-                    <span class="text-[9px] font-black text-gray-400 uppercase" data-i18n="pos_open">Posizione Aperta</span>
                 </div>
-                <div class="flex items-center justify-between pt-1">
-                    <div class="flex flex-col leading-none">
-                        <span class="text-[9px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
-                        <span id="pnl-val" class="text-[22px] font-black text-[#111]">€ 0.00</span>
+                
+                <div class="p-3 flex flex-col gap-2">
+                    <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+                        <span id="pos-label" class="text-[#111] text-[10px] font-black px-2 py-0.5 rounded-sm shadow-sm">PUNTA</span>
+                        <span id="pos-info" class="text-[11px] font-mono font-bold text-gray-700">@ 0.00 | Stk €0.00</span>
                     </div>
-                    <button onclick="Trade.cashOut()" id="btn-cashout" class="bg-[var(--bf-yellow)] hover:bg-[#e0a000] text-[#111] font-black px-6 py-2.5 rounded-sm text-xs uppercase tracking-widest shadow-md active:scale-95 transition-transform" data-i18n="cashout">Cash Out</button>
+                    <div class="flex items-center justify-between pt-1">
+                        <div class="flex flex-col leading-none">
+                            <span class="text-[9px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
+                            <span id="pnl-val-mob" class="text-[20px] font-black text-[#111] leading-none">€ 0.00</span>
+                        </div>
+                        <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[#fab400] hover:bg-[#e0a000] text-[#111] font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform" data-i18n="cashout">Cash Out</button>
+                    </div>
                 </div>
             </div>
 
@@ -462,7 +465,7 @@ const I18N_DICT = {
 
 /**
  * ============================================================================
- * 🚀 DOM CACHING PER PERFORMANCE MASSIMA (Zero Lag)
+ * 🚀 DOM CACHING PER PERFORMANCE MASSIMA E WIDGET DRAGGABLE
  * ============================================================================
  */
 const DOM = {
@@ -470,14 +473,23 @@ const DOM = {
     timer: null, scoreH: null, scoreA: null, volTot: null,
     tl1: null, tl2: null, tlEv: null, mentorTxt: null,
     balMob: null, balDsk: null, valStk: null,
-    pnlMob: null, pnlDskContainer: null
+    pnlMob: null, posPanel: null
 };
+
+// Variabili per il Drag Widget
+let dragActive = false;
+let currentX = 0;
+let currentY = 0;
+let initialX = 0;
+let initialY = 0;
+let xOffset = 0;
+let yOffset = 0;
 
 const App = {
     lang: 'it',
     
     init() {
-        // Init Cache (Eseguito una volta per massime performance)
+        // Init Cache
         ['H', 'X', 'A'].forEach(k => {
             DOM.odds[`${k}-b`] = document.getElementById(`odd-${k}-b`);
             DOM.odds[`${k}-l`] = document.getElementById(`odd-${k}-l`);
@@ -497,15 +509,26 @@ const App = {
         DOM.balMob = document.getElementById('bankroll-mobile');
         DOM.balDsk = document.getElementById('bankroll-desktop');
         DOM.valStk = document.getElementById('val-stk');
-        DOM.pnlMob = document.getElementById('pnl-val'); // ID corretto
-        DOM.pnlDskContainer = document.getElementById('desktop-pos');
+        DOM.pnlMob = document.getElementById('pnl-val-mob');
+        DOM.posPanel = document.getElementById('position-panel');
+
+        // Inizializzazione Logica Drag Fluid
+        const dragHandle = document.getElementById('drag-handle');
+        if(dragHandle) {
+            dragHandle.addEventListener("touchstart", (e) => this.dragStart(e), {passive: false});
+            document.addEventListener("touchend", (e) => this.dragEnd(e), {passive: false});
+            document.addEventListener("touchmove", (e) => this.drag(e), {passive: false});
+            dragHandle.addEventListener("mousedown", (e) => this.dragStart(e));
+            document.addEventListener("mouseup", (e) => this.dragEnd(e));
+            document.addEventListener("mousemove", (e) => this.drag(e));
+        }
 
         document.getElementById('lang-selector').addEventListener('change', (e) => {
             this.lang = e.target.value;
             this.updateI18n();
         });
         
-        let saved = JSON.parse(localStorage.getItem('qa_z2h_v1'));
+        let saved = JSON.parse(localStorage.getItem('qa_pro_v6'));
         if(saved) { State.bal = saved.bal; State.risk = saved.risk; }
         
         this.updateI18n();
@@ -529,19 +552,63 @@ const App = {
             let action = State.pos.t === 'back' ? dict.back.toUpperCase() : dict.lay.toUpperCase();
             document.getElementById('pos-label').innerText = `${action} ${label}`;
             
-            if(DOM.pnlDskContainer && getComputedStyle(DOM.pnlDskContainer).display !== 'none') {
-                 let dLabel = DOM.pnlDskContainer.querySelector('#pos-label');
+            let dskPnl = document.getElementById('desktop-pos');
+            if(dskPnl && getComputedStyle(dskPnl).display !== 'none') {
+                 let dLabel = dskPnl.querySelector('#pos-label');
                  if(dLabel) dLabel.innerText = `${action} ${label}`;
             }
         }
     },
     
-    t(key) { return I18N_DICT[this.lang][key]; }
+    t(key) { return I18N_DICT[this.lang][key]; },
+
+    // Funzioni per il trascinamento del pannello (Widget Libero)
+    dragStart(e) {
+        if (e.target.closest('#drag-handle')) {
+            dragActive = true;
+            if (e.type === "touchstart") {
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            } else {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+            }
+        }
+    },
+
+    dragEnd(e) {
+        if (!dragActive) return;
+        initialX = currentX;
+        initialY = currentY;
+        dragActive = false;
+    },
+
+    drag(e) {
+        if (dragActive) {
+            e.preventDefault();
+            if (e.type === "touchmove") {
+                currentX = e.touches[0].clientX - initialX;
+                currentY = e.touches[0].clientY - initialY;
+            } else {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+            }
+            xOffset = currentX;
+            yOffset = currentY;
+            if(DOM.posPanel) DOM.posPanel.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px))`;
+        }
+    },
+
+    resetDrag() {
+        xOffset = 0; yOffset = 0;
+        currentX = 0; currentY = 0;
+        if(DOM.posPanel) DOM.posPanel.style.transform = `translate(-50%, -50%)`;
+    }
 };
 
 /**
  * ============================================================================
- * 🧠 CORE ENGINE STORICO 1:1 REALE (Nessuna allucinazione)
+ * 🧠 CORE ENGINE STORICO 1:1 REALE
  * ============================================================================
  */
 let State = {
@@ -862,17 +929,19 @@ const Trade = {
         State.bal -= l;
         State.pos = { sel, t: type, e: o, s: s, l: l };
         
-        let pnlEl = document.getElementById('position-panel');
-        pnlEl.classList.remove('hidden'); pnlEl.style.display = 'flex';
-        setTimeout(() => pnlEl.classList.remove('translate-y-[150%]'), 10);
+        // Reset posizione widget e Mostralo
+        App.resetDrag();
+        DOM.posPanel.classList.remove('opacity-0', 'pointer-events-none');
+        DOM.posPanel.classList.add('opacity-100', 'pointer-events-auto');
         
-        App.updateI18n();
+        App.updateI18n(); 
         
-        document.getElementById('pos-label').className = `text-[#111] text-[11px] font-black px-2.5 py-1 rounded-sm shadow-sm ${type==='back'?'bg-[var(--btn-back)]':'bg-[var(--btn-lay)]'}`;
+        document.getElementById('pos-label').className = `text-[#111] text-[10px] font-black px-2.5 py-1 rounded-sm shadow-sm ${type==='back'?'bg-[var(--btn-back)]':'bg-[var(--btn-lay)]'}`;
+        
         const formatOdd = (n) => parseFloat(n.toFixed(2)).toString();
         document.getElementById('pos-info').innerText = `@ ${formatOdd(o)} | Stk €${s.toFixed(2)}`;
         
-        this.syncDesktopPanel(pnlEl.innerHTML);
+        this.syncDesktopPanel(DOM.posPanel.innerHTML);
         this.renderState();
         this.updateHeader();
     },
@@ -883,9 +952,9 @@ const Trade = {
         let rawB = State.odds[State.pos.sel];
         let cB = this.roundTick(rawB);
         let cL = this.roundTick(rawB + this.getTickStep(rawB));
+        
         let current = State.pos.t === 'back' ? cL : cB;
         
-        // Formule matematiche esatte Hedging
         let pnl = State.pos.t === 'back' ? 
             State.pos.s * (State.pos.e / current - 1) : 
             State.pos.s * (1 - State.pos.e / current);
@@ -895,11 +964,14 @@ const Trade = {
         let str = `${net >= 0 ? '+' : '-'}€${Math.abs(net).toFixed(2)}`;
         let cls = `font-black leading-none ${net > 0 ? 'text-[#00e676]' : (net < 0 ? 'text-red-500' : 'text-[#111]')}`;
 
-        if (DOM.pnlMob) { DOM.pnlMob.innerText = str; DOM.pnlMob.className = 'text-[28px] ' + cls; }
+        // Aggiorna widget Mobile
+        if (DOM.pnlMob) { DOM.pnlMob.innerText = str; DOM.pnlMob.className = 'text-[20px] ' + cls; }
 
-        if(DOM.pnlDskContainer && getComputedStyle(DOM.pnlDskContainer).display !== 'none') {
-            let dEl = DOM.pnlDskContainer.querySelector('#pnl-val');
-            if(dEl) { dEl.innerText = str; dEl.className = 'text-[32px] ' + cls; }
+        // Aggiorna Pannello Desktop se visibile
+        let dskPnl = document.getElementById('desktop-pos');
+        if(dskPnl && getComputedStyle(dskPnl).display !== 'none') {
+            let dEl = dskPnl.querySelector('#pnl-val-mob');
+            if(dEl) { dEl.innerText = str; dEl.className = 'text-[26px] ' + cls; }
         }
     },
 
@@ -917,15 +989,15 @@ const Trade = {
         State.bal += (State.pos.l + net);
         State.pos = null;
         
-        let pnlEl = document.getElementById('position-panel');
-        pnlEl.classList.add('translate-y-[150%]');
-        setTimeout(() => { pnlEl.classList.add('hidden'); pnlEl.style.display = 'none'; }, 300);
+        // Nascondi widget Cashout
+        DOM.posPanel.classList.remove('opacity-100', 'pointer-events-auto');
+        DOM.posPanel.classList.add('opacity-0', 'pointer-events-none');
         
-        this.syncDesktopPanel(`<p class="text-gray-500 font-mono text-[11px] uppercase tracking-widest text-center" data-i18n="no_pos">${App.t('no_pos')}</p>`);
+        this.syncDesktopPanel(`<p class="text-gray-500 font-mono text-xs uppercase tracking-widest text-center" data-i18n="no_pos">${App.t('no_pos')}</p>`);
         
         this.renderState();
         this.updateHeader();
-        localStorage.setItem('qa_z2h_v1', JSON.stringify({bal: State.bal, risk: State.risk}));
+        localStorage.setItem('qa_pro_v6', JSON.stringify({bal: State.bal, risk: State.risk}));
     },
 
     renderState() {
@@ -946,23 +1018,16 @@ const Trade = {
         const updateCoBtn = (coBtn) => {
             if(coBtn) {
                 if(State.susp || State.sec >= 5700) {
-                    coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-6 py-3 rounded-sm text-sm uppercase tracking-widest cursor-not-allowed";
+                    coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest cursor-not-allowed";
                     coBtn.innerText = App.t('susp');
                 } else {
-                    coBtn.disabled = false; coBtn.className = "bg-[#fab400] hover:bg-[#e0a000] text-[#111] font-black px-6 py-3 rounded-sm text-sm uppercase tracking-widest shadow-md active:scale-95 transition-transform";
+                    coBtn.disabled = false; coBtn.className = "bg-[#fab400] hover:bg-[#e0a000] text-[#111] font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest shadow-md active:scale-95 transition-transform";
                     coBtn.innerText = App.t('cashout');
                 }
             }
         };
 
-        updateCoBtn(document.getElementById('btn-cashout'));
-        if(DOM.pnlDskContainer) updateCoBtn(DOM.pnlDskContainer.querySelector('#btn-cashout'));
-    },
-    
-    syncDesktopPanel(html) {
-        if(DOM.pnlDskContainer && getComputedStyle(DOM.pnlDskContainer).display !== 'none') {
-            DOM.pnlDskContainer.innerHTML = html;
-        }
+        updateCoBtn(document.getElementById('btn-cashout-mob'));
     }
 };
 
