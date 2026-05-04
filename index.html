@@ -45,7 +45,7 @@
         
         body.ready { opacity: 1; }
         
-        /* ADAPTIVE PRO LAYOUT */
+        /* ADAPTIVE PRO LAYOUT COMPACTED FOR ZERO SCROLLING */
         #app-container { 
             width: 100%; height: 100%; background: #f2f2f2; 
             display: flex; flex-direction: column; overflow: hidden;
@@ -62,15 +62,15 @@
         }
         
         @media (max-width: 799px) {
-            #left-pane { display: flex; flex-direction: column; flex-shrink: 0; background: #222; z-index: 10;}
-            #right-pane { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; position: relative; background: #f2f2f2; z-index: 10;}
+            #left-pane { display: flex; flex-direction: column; flex-shrink: 1; min-height: 0; background: #222; z-index: 10;}
+            #right-pane { display: flex; flex-direction: column; flex-grow: 1; min-height: 0; overflow: hidden; position: relative; background: #f2f2f2; z-index: 10;}
             .desktop-only { display: none !important; }
         }
 
-        /* PITCH RADAR */
+        /* PITCH RADAR (Scales gracefully) */
         #pitch-container {
-            position: relative; width: 100%; flex-shrink: 0; 
-            height: 22vh; min-height: 140px; max-height: 220px;
+            position: relative; width: 100%; flex-shrink: 1; 
+            height: 18vh; min-height: 100px; max-height: 180px;
             background-color: var(--pitch-green);
             border-bottom: 2px solid #111; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
@@ -103,7 +103,7 @@
             position: absolute; z-index: 25; 
             transform: translate(-50%, -50%); transition: left 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
             will-change: left, top; display: flex; align-items: center; justify-content: center;
-            font-size: 14px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.7)); 
+            font-size: 13px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.7)); 
         }
         
         .attack-cone {
@@ -124,7 +124,7 @@
         /* MARKET UI COMPONENTS */
         .market-tabs { overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 1px solid #ddd; background: #fff; flex-shrink: 0; -webkit-overflow-scrolling: touch; }
         .market-tabs::-webkit-scrollbar { display: none; }
-        .tab-item { display: inline-block; padding: 10px 14px; font-size: 13px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; cursor: pointer; }
+        .tab-item { display: inline-block; padding: 8px 12px; font-size: 11px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; cursor: pointer; }
         .tab-active { color: #111; font-weight: 700; border-bottom-color: var(--bf-yellow); }
 
         .bf-btn-back { background-color: var(--btn-back); transition: background-color 0.1s; border-radius: 2px; }
@@ -132,9 +132,9 @@
         .bf-btn-lay { background-color: var(--btn-lay); transition: background-color 0.1s; border-radius: 2px; }
         .bf-btn-lay:active { background-color: var(--btn-lay-hover); }
         
-        .btn-odd-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 46px; }
-        .odd-price { font-size: 17px; font-weight: 900; line-height: 1.1; color: #111; will-change: contents; }
-        .odd-vol { font-size: 11px; font-weight: 400; color: #444; margin-top: 2px; line-height: 1; }
+        .btn-odd-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 38px; }
+        .odd-price { font-size: 15px; font-weight: 900; line-height: 1; color: #111; will-change: contents; }
+        .odd-vol { font-size: 9px; font-weight: 500; color: #444; margin-top: 2px; line-height: 1; }
 
         .card-icon { width: 8px; height: 12px; border-radius: 1px; display: inline-block; margin-left: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         .card-yellow { background: #ffd600; border: 1px solid #ccaa00; }
@@ -156,7 +156,7 @@
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            line-height: 1.4;
+            line-height: 1.35;
         }
         
         /* STILI DIDATTICI PER PAROLE CHIAVE DEL BETTING EXCHANGE */
@@ -207,9 +207,9 @@
     <div id="left-pane">
         
         <!-- HEADER TOP "ZERO TO HERO" -->
-        <header class="bg-[#0f0f0f] flex justify-between items-center px-3 py-1.5 shrink-0 shadow-sm z-20 h-[48px] border-b border-[#222]">
+        <header class="bg-[#0f0f0f] flex justify-between items-center px-3 shrink-0 shadow-sm z-20 h-[42px] border-b border-[#222]">
             <div class="flex items-center gap-2 text-white">
-                <svg viewBox="0 0 100 100" class="w-8 h-8 shrink-0 drop-shadow-md">
+                <svg viewBox="0 0 100 100" class="w-7 h-7 shrink-0 drop-shadow-md">
                     <circle cx="50" cy="50" r="48" fill="#000" />
                     <circle cx="50" cy="50" r="43" fill="none" stroke="url(#silver)" stroke-width="6" />
                     <path d="M 32 72 Q 50 40 72 28 Q 55 55 32 72 Z" fill="var(--zth-green)" />
@@ -220,43 +220,43 @@
                     </defs>
                 </svg>
                 <div class="flex flex-col">
-                    <span class="font-black text-[15px] tracking-tight leading-none text-white font-sans">ZERO TO HERO</span>
-                    <span class="text-[9px] font-bold leading-none uppercase mt-0.5 text-[var(--bf-yellow)]">Academy</span>
+                    <span class="font-black text-[14px] tracking-tight leading-none text-white font-sans">ZERO TO HERO</span>
+                    <span class="text-[8px] font-bold leading-none uppercase mt-[1px] text-[var(--bf-yellow)]">Academy</span>
                 </div>
             </div>
             
             <div class="flex items-center gap-2">
                 <div class="bg-[#1a1a1a] rounded flex items-center border border-[#333] px-1">
-                    <select id="lang-selector" class="bg-transparent text-white text-[10px] font-bold outline-none border-none cursor-pointer py-1">
+                    <select id="lang-selector" class="bg-transparent text-white text-[9px] font-bold outline-none border-none cursor-pointer py-1">
                         <option value="it">🇮🇹 IT</option><option value="en">🇬🇧 EN</option><option value="es">🇪🇸 ES</option><option value="pt">🇵🇹 PT</option>
                     </select>
                 </div>
                 <div class="bg-[#1a1a1a] text-white px-2 py-0.5 rounded flex flex-col items-end shadow-sm leading-tight border border-[#333]">
                     <span class="text-[7px] text-gray-400 uppercase" data-i18n="avail">Cassa</span>
-                    <span id="bankroll-mobile" class="font-bold text-[11px] text-[#00e676]">€ 100.00</span>
+                    <span id="bankroll-mobile" class="font-bold text-[10px] text-[#00e676]">€ 100.00</span>
                 </div>
             </div>
         </header>
 
-        <!-- LIVE SCORE STRIP -->
+        <!-- LIVE SCORE STRIP COMPACT -->
         <div class="bg-[#1a1a1a] flex flex-col shrink-0 z-10 relative">
-            <div class="text-white px-3 py-2 flex items-center border-b border-[#2a2a2a]">
-                <div class="flex flex-col items-center justify-center min-w-[36px] mr-2">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10-7h2v5h-2zM8 11h2v5H8zm8-4h2v5h-2z"/></svg>
-                    <span class="text-white text-[8px] font-black uppercase tracking-widest mt-0.5" data-i18n="live">Live</span>
+            <div class="text-white px-3 py-1 flex items-center border-b border-[#2a2a2a]">
+                <div class="flex flex-col items-center justify-center min-w-[32px] mr-2">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10-7h2v5h-2zM8 11h2v5H8zm8-4h2v5h-2z"/></svg>
+                    <span class="text-white text-[7px] font-black uppercase tracking-widest mt-[1px]" data-i18n="live">Live</span>
                 </div>
                 
                 <div class="flex flex-col items-end">
-                    <span class="text-[#00e676] font-mono text-[15px] font-bold w-12 text-center" id="match-timer">00:00</span>
-                    <span onclick="Sim.fastForward()" class="text-[9px] text-[#fab400] bg-[#333] px-1 rounded cursor-pointer mt-0.5 whitespace-nowrap active:bg-[#555] shadow-sm">⏩ 80'</span>
+                    <span class="text-[#00e676] font-mono text-[13px] font-bold w-10 text-center" id="match-timer">00:00</span>
+                    <span onclick="Sim.fastForward()" class="text-[8px] text-[#fab400] bg-[#333] px-1 rounded cursor-pointer mt-0.5 whitespace-nowrap active:bg-[#555] shadow-sm">⏩ 80'</span>
                 </div>
                 
-                <div class="flex flex-col gap-1 items-center text-[#00e676] font-mono text-[16px] font-bold leading-none ml-4 bg-[#111] px-2 py-1.5 rounded shadow-inner border border-[#333]">
+                <div class="flex flex-col gap-0.5 items-center text-[#00e676] font-mono text-[14px] font-bold leading-none ml-3 bg-[#111] px-2 py-1 rounded shadow-inner border border-[#333]">
                     <span id="score-h">0</span>
                     <span id="score-a">0</span>
                 </div>
                 
-                <div class="flex flex-col gap-1.5 text-[14px] font-bold tracking-tight leading-none ml-4 flex-grow overflow-hidden">
+                <div class="flex flex-col gap-1 text-[12px] font-bold tracking-tight leading-none ml-3 flex-grow overflow-hidden">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
                             <img src="https://flagcdn.com/w40/ar.png" loading="lazy" class="team-flag" alt="AR">
@@ -274,8 +274,8 @@
                 </div>
             </div>
             
-            <!-- TIMELINE (Altezza fissa. Il container eventi si sovrappone ESATTAMENTE alle linee da 4px) -->
-            <div class="px-3 flex items-center justify-between relative bg-[#111] h-[38px] border-b border-[#222]">
+            <!-- TIMELINE -->
+            <div class="px-3 flex items-center justify-between relative bg-[#111] h-[24px] border-b border-[#222]">
                 <div class="relative w-[49%] h-[4px] bg-white/20 rounded-sm">
                     <div id="timeline-1" class="absolute left-0 top-0 bottom-0 bg-[#00e676] rounded-sm transition-all duration-1000" style="width: 0%"></div>
                 </div>
@@ -309,17 +309,17 @@
                 <div id="ball" class="ball" style="left: 50%; top: 50%;">⚽</div>
 
                 <div id="event-badge" class="info-badge">
-                    <span id="event-team" class="text-white font-black text-[12px] tracking-tight leading-tight">Argentina</span>
-                    <span id="event-desc" class="text-[#00e676] text-[9px] font-bold uppercase tracking-wider mt-0.5">Attacking</span>
+                    <span id="event-team" class="text-white font-black text-[11px] tracking-tight leading-tight">Argentina</span>
+                    <span id="event-desc" class="text-[#00e676] text-[8px] font-bold uppercase tracking-wider mt-0.5">Attacking</span>
                 </div>
             </div>
 
-            <!-- OVERLAY GOAL (ZERO OMBRE, Z-INDEX SUPERIORE) -->
+            <!-- OVERLAY GOAL -->
             <div id="goal-alert" class="absolute inset-0 z-50 bg-black/85 flex flex-col items-center justify-center hidden backdrop-blur-md">
                 <span class="bg-red-600 text-white font-black text-[11px] px-4 py-1.5 rounded shadow-xl tracking-widest uppercase mb-4 animate-pulse border border-red-400" data-i18n="susp">Sospeso</span>
-                <span class="text-[80px] sm:text-[100px] animate-bounce mb-2" style="filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));">⚽</span>
-                <h2 id="scorer-name" class="text-3xl sm:text-4xl font-black text-white italic drop-shadow-xl mt-2">Messi</h2>
-                <h2 class="text-6xl sm:text-7xl font-black text-[#00e676] italic mt-1 tracking-tighter" style="text-shadow: 0 4px 10px rgba(0,0,0,0.9), 0 0 30px rgba(0,230,118,0.8);">GOAL!</h2>
+                <span class="text-[70px] sm:text-[90px] animate-bounce mb-2" style="filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));">⚽</span>
+                <h2 id="scorer-name" class="text-3xl sm:text-4xl font-black text-white italic drop-shadow-xl mt-1">Messi</h2>
+                <h2 class="text-5xl sm:text-7xl font-black text-[#00e676] italic mt-1 tracking-tighter" style="text-shadow: 0 4px 10px rgba(0,0,0,0.9), 0 0 30px rgba(0,230,118,0.8);">GOAL!</h2>
             </div>
 
             <!-- OVERLAY FINE PARTITA -->
@@ -329,15 +329,18 @@
         </section>
 
         <!-- MARKET ANALYST (MENTOR) BAR -->
-        <div class="bg-[#111] p-3 flex items-start gap-3 border-b border-[#333] shrink-0 shadow-inner h-[90px] min-h-[90px] overflow-hidden relative">
-            <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_10px_rgba(250,180,0,0.15)]">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[var(--bf-yellow)]">
+        <div class="bg-[#111] p-3 flex items-center gap-3 border-b border-[#333] shrink-0 shadow-inner h-[80px] min-h-[80px] overflow-hidden relative">
+            
+            <!-- LAMPADINA CENTRATA CON DOLCE BAGLIORE GIALLO -->
+            <div class="w-10 h-10 rounded-md bg-[#0a0a0a] border border-[#222] flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(250,180,0,0.4)]">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[var(--bf-yellow)]" style="filter: drop-shadow(0 0 3px rgba(250,180,0,0.8));">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 0 1 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1zM10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2z"/>
                 </svg>
             </div>
-            <div class="flex flex-col w-full h-full">
-                <span class="text-[9px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-0.5" data-i18n="mentor_title">Guida Partita</span>
-                <p id="mentor-txt" class="text-[12px] font-medium text-gray-300 leading-snug line-clamp-3"></p>
+            
+            <div class="flex flex-col w-full">
+                <span class="text-[8px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-[2px]" data-i18n="mentor_title">Guida Partita</span>
+                <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-snug line-clamp-3"></p>
             </div>
         </div>
         
@@ -348,22 +351,22 @@
     <!-- ========================================== -->
     <div id="right-pane">
         
-        <!-- RISK MGMT HEADER CON PERCENTUALI E LIABILITY -->
-        <div class="bg-white flex justify-between items-center px-4 py-2 border-b border-gray-200 shrink-0 shadow-sm z-10">
+        <!-- RISK MGMT HEADER -->
+        <div class="bg-white flex justify-between items-center px-3 py-1.5 border-b border-gray-200 shrink-0 shadow-sm z-10">
             <div class="flex gap-1.5 items-center">
-                <span class="text-[9px] font-black text-gray-400 uppercase mr-1" data-i18n="stake_lbl">Stake Base:</span>
-                <button onclick="Trade.setStakePct(1)" id="stk-1" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors cursor-pointer touch-manipulation">1%</button>
-                <button onclick="Trade.setStakePct(2)" id="stk-2" class="px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors cursor-pointer touch-manipulation">2%</button>
-                <button onclick="Trade.setStakePct(5)" id="stk-5" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors cursor-pointer touch-manipulation">5%</button>
+                <span class="text-[8px] font-black text-gray-400 uppercase mr-1" data-i18n="stake_lbl">Stake Base:</span>
+                <button onclick="Trade.setStakePct(1)" id="stk-1" class="px-2.5 py-1 bg-white border border-gray-300 rounded text-[11px] font-bold text-gray-500 shadow-sm transition-colors cursor-pointer touch-manipulation">1%</button>
+                <button onclick="Trade.setStakePct(2)" id="stk-2" class="px-2.5 py-1 bg-gray-800 border border-gray-800 rounded text-[11px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors cursor-pointer touch-manipulation">2%</button>
+                <button onclick="Trade.setStakePct(5)" id="stk-5" class="px-2.5 py-1 bg-white border border-gray-300 rounded text-[11px] font-bold text-gray-500 shadow-sm transition-colors cursor-pointer touch-manipulation">5%</button>
             </div>
-            <div class="flex gap-3">
+            <div class="flex gap-2">
                 <div class="flex flex-col items-end leading-tight desktop-only">
                     <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="avail">Cassa</span>
-                    <span id="bankroll-desktop" class="font-mono font-bold text-[12px] text-[#00e676]">€ 100.00</span>
+                    <span id="bankroll-desktop" class="font-mono font-bold text-[11px] text-[#00e676]">€ 100.00</span>
                 </div>
-                <div class="flex flex-col items-end leading-tight pl-3 border-l border-gray-200">
+                <div class="flex flex-col items-end leading-tight pl-2 border-l border-gray-200">
                     <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="liability">Liability</span>
-                    <span id="val-liab" class="font-mono font-black text-[13px] text-gray-400">€ 0.00</span>
+                    <span id="val-liab" class="font-mono font-black text-[12px] text-gray-400">€ 0.00</span>
                 </div>
             </div>
         </div>
@@ -374,47 +377,47 @@
             <div class="tab-item" data-i18n="ou">Under/Over 2.5</div>
         </div>
 
-        <!-- MARKETS LIST (Scorre su schermi bassi) -->
-        <div class="flex-grow overflow-y-auto bg-gray-100 relative pb-20" style="-webkit-overflow-scrolling: touch;">
+        <!-- MARKETS LIST COMPACTED -->
+        <div class="flex-grow overflow-y-auto bg-gray-100 relative pb-2" style="-webkit-overflow-scrolling: touch;">
             
-            <!-- OVERLAY MERCATO SOSPESO CHE COPRE LE QUOTE -->
+            <!-- OVERLAY MERCATO SOSPESO -->
             <div id="market-suspended-overlay" class="absolute inset-0 z-50 bg-white/60 backdrop-blur-[2px] hidden flex-col items-center justify-center">
-                <span class="bg-red-600 text-white font-black text-xl px-8 py-3 rounded shadow-2xl tracking-widest uppercase border-2 border-red-800 animate-pulse drop-shadow-lg" data-i18n="susp">Sospeso</span>
+                <span class="bg-red-600 text-white font-black text-lg px-6 py-2 rounded shadow-2xl tracking-widest uppercase border border-red-800 animate-pulse drop-shadow-lg" data-i18n="susp">Sospeso</span>
             </div>
 
-            <div class="bg-[#333] text-white flex justify-between items-center px-4 py-1.5 sticky top-0 z-10 shadow-sm">
-                <span class="text-[12px] font-bold" data-i18n="mo">Esito Finale</span>
-                <div class="flex items-center gap-2">
-                    <div class="w-3.5 h-3.5 bg-[#fab400] rounded-sm flex items-center justify-center"><div class="w-1.5 h-1.5 bg-[#333] rounded-full"></div></div>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#00e676"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            <div class="bg-[#333] text-white flex justify-between items-center px-3 py-1 sticky top-0 z-10 shadow-sm">
+                <span class="text-[11px] font-bold" data-i18n="mo">Esito Finale</span>
+                <div class="flex items-center gap-1.5">
+                    <div class="w-3 h-3 bg-[#fab400] rounded-sm flex items-center justify-center"><div class="w-1 h-1 bg-[#333] rounded-full"></div></div>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="#00e676"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
                 </div>
             </div>
 
-            <!-- HEADER COLONNE FIXED -->
-            <div class="bg-white flex items-center justify-between pl-4 pr-4 py-1.5 text-[11px] font-bold text-[#333] border-b border-gray-200 shadow-sm relative z-0">
+            <!-- HEADER COLONNE -->
+            <div class="bg-white flex items-center justify-between pl-3 pr-3 py-1 text-[10px] font-bold text-[#333] border-b border-gray-200 shadow-sm relative z-0">
                 <div class="truncate flex-grow">
                     <span><span data-i18n="matched">Matched</span>: <span id="vol-tot" class="font-normal text-gray-500">€0</span></span>
                 </div>
-                <div class="flex gap-1.5 shrink-0">
-                    <div class="w-[70px] sm:w-[75px] text-center text-blue-800 bg-[#e4f1f9] rounded-sm py-0.5" data-i18n="back">Back</div>
-                    <div class="w-[70px] sm:w-[75px] text-center text-pink-800 bg-[#fdebf0] rounded-sm py-0.5" data-i18n="lay">Lay</div>
+                <div class="flex gap-1 shrink-0">
+                    <div class="w-[65px] sm:w-[75px] text-center text-blue-800 bg-[#e4f1f9] rounded-sm py-0.5" data-i18n="back">Back</div>
+                    <div class="w-[65px] sm:w-[75px] text-center text-pink-800 bg-[#fdebf0] rounded-sm py-0.5" data-i18n="lay">Lay</div>
                 </div>
             </div>
 
             <!-- ROW ARGENTINA -->
-            <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-H">
-                <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
+            <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-3 pr-3 py-1 hover:bg-gray-50 transition-colors" id="row-H">
+                <div class="flex items-center gap-2 flex-grow truncate pr-2">
                     <img src="https://flagcdn.com/w40/ar.png" loading="lazy" class="team-flag shrink-0" alt="AR">
-                    <span class="text-[14px] font-bold text-[#222] tracking-tight truncate">Argentina</span>
+                    <span class="text-[13px] font-bold text-[#222] tracking-tight truncate">Argentina</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
-                    <div class="w-[70px] sm:w-[75px]">
+                    <div class="w-[65px] sm:w-[75px]">
                         <button onclick="Trade.trade('H', 'back')" class="btn-odd-container bf-btn-back cursor-pointer touch-manipulation" id="btn-H-b">
                             <span class="odd-price" id="odd-H-b">2.78</span>
                             <span class="odd-vol" id="vol-H-b">€12K</span>
                         </button>
                     </div>
-                    <div class="w-[70px] sm:w-[75px]">
+                    <div class="w-[65px] sm:w-[75px]">
                         <button onclick="Trade.trade('H', 'lay')" class="btn-odd-container bf-btn-lay cursor-pointer touch-manipulation" id="btn-H-l">
                             <span class="odd-price" id="odd-H-l">2.80</span>
                             <span class="odd-vol" id="vol-H-l">€4K</span>
@@ -424,19 +427,19 @@
             </div>
 
             <!-- ROW FRANCIA -->
-            <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-A">
-                <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
+            <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-3 pr-3 py-1 hover:bg-gray-50 transition-colors" id="row-A">
+                <div class="flex items-center gap-2 flex-grow truncate pr-2">
                     <img src="https://flagcdn.com/w40/fr.png" loading="lazy" class="team-flag shrink-0" alt="FR">
-                    <span class="text-[14px] font-bold text-[#222] tracking-tight truncate">Francia</span>
+                    <span class="text-[13px] font-bold text-[#222] tracking-tight truncate">Francia</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
-                    <div class="w-[70px] sm:w-[75px]">
+                    <div class="w-[65px] sm:w-[75px]">
                         <button onclick="Trade.trade('A', 'back')" class="btn-odd-container bf-btn-back cursor-pointer touch-manipulation" id="btn-A-b">
                             <span class="odd-price" id="odd-A-b">2.84</span>
                             <span class="odd-vol" id="vol-A-b">€14K</span>
                         </button>
                     </div>
-                    <div class="w-[70px] sm:w-[75px]">
+                    <div class="w-[65px] sm:w-[75px]">
                         <button onclick="Trade.trade('A', 'lay')" class="btn-odd-container bf-btn-lay cursor-pointer touch-manipulation" id="btn-A-l">
                             <span class="odd-price" id="odd-A-l">2.86</span>
                             <span class="odd-vol" id="vol-A-l">€8K</span>
@@ -446,19 +449,19 @@
             </div>
 
             <!-- ROW DRAW -->
-            <div class="flex items-center justify-between w-full bg-white border-b border-gray-300 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-X">
-                <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#888" class="shrink-0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                    <span class="text-[14px] font-bold text-[#222] tracking-tight truncate" data-i18n="draw">Pareggio</span>
+            <div class="flex items-center justify-between w-full bg-white border-b border-gray-300 pl-3 pr-3 py-1 hover:bg-gray-50 transition-colors" id="row-X">
+                <div class="flex items-center gap-2 flex-grow truncate pr-2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#888" class="shrink-0"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                    <span class="text-[13px] font-bold text-[#222] tracking-tight truncate" data-i18n="draw">Pareggio</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
-                    <div class="w-[70px] sm:w-[75px]">
+                    <div class="w-[65px] sm:w-[75px]">
                         <button onclick="Trade.trade('X', 'back')" class="btn-odd-container bf-btn-back cursor-pointer touch-manipulation" id="btn-X-b">
                             <span class="odd-price" id="odd-X-b">3.05</span>
                             <span class="odd-vol" id="vol-X-b">€22K</span>
                         </button>
                     </div>
-                    <div class="w-[70px] sm:w-[75px]">
+                    <div class="w-[65px] sm:w-[75px]">
                         <button onclick="Trade.trade('X', 'lay')" class="btn-odd-container bf-btn-lay cursor-pointer touch-manipulation" id="btn-X-l">
                             <span class="odd-price" id="odd-X-l">3.10</span>
                             <span class="odd-vol" id="vol-X-l">€18K</span>
@@ -710,7 +713,7 @@ const App = {
             if(State.lastMentorKey) Sim.mentor(State.lastMentorKey, State.lastMentorVars, true, State.mentorPriority);
         });
         
-        let saved = JSON.parse(localStorage.getItem('qa_pro_v25')); // Flush cache
+        let saved = JSON.parse(localStorage.getItem('qa_pro_v26')); // Flush cache
         if(saved && saved.bal) { State.bal = saved.bal; }
         
         this.updateI18n();
@@ -860,44 +863,36 @@ const Sim = {
 
         DOM.tlEv.innerHTML = '';
         State.events.forEach(ev => {
-            if (ev.triggered && ev.type !== 'info') {
-                let span = document.createElement('span');
-                let icon = '';
-                if(ev.type === 'goal') icon = '⚽';
-                if(ev.type === 'card' && ev.color === 'yellow') icon = '🟨';
-                if(ev.type === 'card' && ev.color === 'red') icon = '🟥';
+            if (ev.triggered && (ev.type === 'goal' || ev.type === 'card')) {
+                let el = document.createElement('div');
                 
-                if (icon !== '') {
-                    span.innerText = icon;
-                    span.className = 'absolute text-[12px] transform -translate-x-1/2 flex items-center justify-center z-10 drop-shadow-md leading-none';
-                    
-                    // Mappatura precisa sui due segmenti da 49%
-                    let leftPct;
-                    if(ev.time <= 2700) {
-                        leftPct = (ev.time / 2700) * 49;
-                    } else {
-                        leftPct = 51 + ((ev.time - 2700) / 2700) * 49;
-                    }
-                    span.style.left = leftPct + '%'; 
-                    
-                    // Logica Palloni Geometricamente Cieca:
-                    // Il container timeline-events è di 4px, sovrapposto perfettamente alle linee verdi.
-                    if (ev.type === 'goal') {
-                        if (ev.team === 'H') {
-                            span.style.bottom = '100%'; // Argentina tangente da SOPRA
-                            span.style.paddingBottom = '1px';
-                        } else {
-                            span.style.top = '100%'; // Francia tangente da SOTTO
-                            span.style.paddingTop = '1px';
-                        }
-                    } else {
-                        // I cartellini gialli stanno incastonati al centro
-                        span.style.top = '50%';
-                        span.style.transform = 'translate(-50%, -50%)';
-                    }
-                    
-                    DOM.tlEv.appendChild(span);
+                if (ev.type === 'goal') {
+                    el.innerText = '⚽';
+                    el.className = 'absolute text-[12px] transform -translate-x-1/2 flex items-center justify-center z-10 drop-shadow-md leading-none';
+                } else if (ev.type === 'card') {
+                    el.className = `absolute transform -translate-x-1/2 z-10 drop-shadow-md card-icon card-${ev.color}`;
+                    el.style.marginLeft = '0';
                 }
+                
+                // Mappatura precisa sui due segmenti da 49%
+                let leftPct;
+                if(ev.time <= 2700) {
+                    leftPct = (ev.time / 2700) * 49;
+                } else {
+                    leftPct = 51 + ((ev.time - 2700) / 2700) * 49;
+                }
+                el.style.left = leftPct + '%'; 
+                
+                // Logica Tangente Unificata (Goal e Cartellini)
+                if (ev.team === 'H') {
+                    el.style.bottom = '100%'; // Argentina tangente da SOPRA
+                    el.style.marginBottom = '1px';
+                } else if (ev.team === 'A') {
+                    el.style.top = '100%'; // Francia tangente da SOTTO
+                    el.style.marginTop = '1px';
+                }
+                
+                DOM.tlEv.appendChild(el);
             }
         });
     },
@@ -1268,7 +1263,7 @@ const Trade = {
         
         this.renderState();
         this.updateHeader();
-        localStorage.setItem('qa_pro_v25', JSON.stringify({bal: State.bal}));
+        localStorage.setItem('qa_pro_v26', JSON.stringify({bal: State.bal}));
     },
 
     renderState() {
