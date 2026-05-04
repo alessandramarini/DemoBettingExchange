@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#111111">
-    <title>Zero To Hero | Quant Exchange</title>
+    <meta name="description" content="Simulatore professionale di Betting Exchange.">
+    <title>Zero To Hero | Match Guide Simulator</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,17 +27,20 @@
             --arg-blue: #74acdf;
         }
         
-        /* ZERO FLASH SETUP & BACKGROUND */
+        /* ZERO FLASH SETUP, BACKGROUND & PERF */
         html, body { 
             background-color: #080808; color: #333; margin: 0; padding: 0; 
-            height: 100dvh; overflow: hidden; font-family: 'Roboto', sans-serif; 
-            -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; 
+            height: 100dvh; overflow: hidden; 
+            font-family: 'Roboto', system-ui, -apple-system, sans-serif; 
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+            -webkit-tap-highlight-color: transparent; 
+            text-rendering: optimizeLegibility;
         }
 
         body { 
             background-image: linear-gradient(135deg, #0a0a0a 0%, #151515 100%);
             display: flex; align-items: center; justify-content: center; 
-            opacity: 0; transition: opacity 0.4s ease-out; 
+            opacity: 0; transition: opacity 0.3s ease-out; 
         }
         
         body.ready { opacity: 1; }
@@ -46,6 +50,7 @@
             width: 100%; height: 100%; background: #f2f2f2; 
             display: flex; flex-direction: column; overflow: hidden;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            transform: translateZ(0); /* Hardware Acceleration */
         }
         
         @media (min-width: 800px) {
@@ -62,7 +67,7 @@
             .desktop-only { display: none !important; }
         }
 
-        /* PITCH RADAR: GEOMETRIA E PROPORZIONI BLINDATE */
+        /* PITCH RADAR */
         #pitch-container {
             position: relative; width: 100%; flex-shrink: 0; 
             height: 22vh; min-height: 140px; max-height: 220px;
@@ -117,7 +122,7 @@
         #event-desc { text-shadow: 0 1px 3px rgba(0,0,0,1); letter-spacing: 0.5px; }
 
         /* MARKET UI COMPONENTS */
-        .market-tabs { overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 1px solid #ddd; background: #fff; flex-shrink: 0;}
+        .market-tabs { overflow-x: auto; white-space: nowrap; scrollbar-width: none; border-bottom: 1px solid #ddd; background: #fff; flex-shrink: 0; -webkit-overflow-scrolling: touch; }
         .market-tabs::-webkit-scrollbar { display: none; }
         .tab-item { display: inline-block; padding: 10px 14px; font-size: 13px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; cursor: pointer; }
         .tab-active { color: #111; font-weight: 700; border-bottom-color: var(--bf-yellow); }
@@ -128,7 +133,7 @@
         .bf-btn-lay:active { background-color: var(--btn-lay-hover); }
         
         .btn-odd-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 46px; }
-        .odd-price { font-size: 17px; font-weight: 900; line-height: 1.1; color: #111; }
+        .odd-price { font-size: 17px; font-weight: 900; line-height: 1.1; color: #111; will-change: contents; }
         .odd-vol { font-size: 11px; font-weight: 400; color: #444; margin-top: 2px; line-height: 1; }
 
         .card-icon { width: 8px; height: 12px; border-radius: 1px; display: inline-block; margin-left: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.5); }
@@ -145,14 +150,23 @@
         
         .team-flag { width: 22px; height: 16px; border-radius: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.4); object-fit: cover; }
         
-        /* MENTOR TEXT CLAMP PER ALTEZZA FISSA BLINDATA */
+        /* MENTOR FORMATTING */
         .line-clamp-3 {
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            line-height: 1.3;
+            line-height: 1.4;
         }
+        
+        /* STILI DIDATTICI PER PAROLE CHIAVE DEL BETTING EXCHANGE */
+        .t-b { color: #00e676; font-weight: 900; text-shadow: 0 0 5px rgba(0,230,118,0.2); } /* Back / Green */
+        .t-l { color: #ff4444; font-weight: 900; text-shadow: 0 0 5px rgba(255,68,68,0.2); } /* Lay / Red */
+        .t-y { color: var(--bf-yellow); font-weight: 900; } /* Cash Out / Concepts */
+        .t-c { color: #00e5ff; font-weight: 900; } /* Math / Logic / Variables */
+        
+        /* PNL Animation */
+        #pnl-val { transition: color 0.2s ease, transform 0.1s ease; will-change: contents, transform; }
     </style>
 </head>
 <body>
@@ -169,7 +183,7 @@
     
     <div class="p-3.5 flex flex-col gap-3">
         <div class="flex justify-between items-center pb-2 border-b border-gray-100 pointer-events-none">
-            <span id="pos-label" class="text-[#111] text-[11px] font-black px-2 py-1 rounded-sm shadow-sm">PUNTA</span>
+            <span id="pos-label" class="text-[#111] text-[11px] font-black px-2 py-1 rounded-sm shadow-sm">BACK</span>
             <div class="flex flex-col items-end">
                 <span id="pos-stake" class="text-[11px] font-mono font-bold text-gray-700">Stake: €0.00</span>
                 <span id="pos-liab" class="text-[11px] font-mono font-bold text-red-500">Resp: €0.00</span>
@@ -245,14 +259,14 @@
                 <div class="flex flex-col gap-1.5 text-[14px] font-bold tracking-tight leading-none ml-4 flex-grow overflow-hidden">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="https://flagcdn.com/w40/ar.png" class="team-flag" alt="AR">
+                            <img src="https://flagcdn.com/w40/ar.png" loading="lazy" class="team-flag" alt="AR">
                             <span class="text-white truncate">Argentina</span>
                         </div>
                         <div id="cards-h" class="flex shrink-0"></div>
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="https://flagcdn.com/w40/fr.png" class="team-flag" alt="FR">
+                            <img src="https://flagcdn.com/w40/fr.png" loading="lazy" class="team-flag" alt="FR">
                             <span class="text-white truncate">Francia</span>
                         </div>
                         <div id="cards-a" class="flex shrink-0"></div>
@@ -260,19 +274,19 @@
                 </div>
             </div>
             
-            <!-- TIMELINE -->
-            <div class="px-3 py-1.5 flex items-center justify-between gap-1.5 relative bg-[#111]">
-                <div class="relative w-[49%] h-1 bg-white/20 rounded-sm">
+            <!-- TIMELINE (Altezza fissa. Il container eventi si sovrappone ESATTAMENTE alle linee da 4px) -->
+            <div class="px-3 flex items-center justify-between relative bg-[#111] h-[38px] border-b border-[#222]">
+                <div class="relative w-[49%] h-[4px] bg-white/20 rounded-sm">
                     <div id="timeline-1" class="absolute left-0 top-0 bottom-0 bg-[#00e676] rounded-sm transition-all duration-1000" style="width: 0%"></div>
                 </div>
-                <div class="relative w-[49%] h-1 bg-white/20 rounded-sm">
+                <div class="relative w-[49%] h-[4px] bg-white/20 rounded-sm">
                     <div id="timeline-2" class="absolute left-0 top-0 bottom-0 bg-[#00e676] rounded-sm transition-all duration-1000" style="width: 0%"></div>
                 </div>
-                <div id="timeline-events" class="absolute left-3 right-3 h-1 top-1.5 pointer-events-none"></div>
+                <div id="timeline-events" class="absolute left-3 right-3 top-1/2 -translate-y-1/2 h-[4px] pointer-events-none z-10"></div>
             </div>
         </div>
 
-        <!-- PITCH RADAR DETTAGLIATO -->
+        <!-- PITCH RADAR -->
         <section id="pitch-container">
             <div class="pitch-stripes"></div>
             
@@ -289,10 +303,6 @@
                     <div class="pitch-arc-right"></div>
                     <div class="pitch-pen-left"></div>
                     <div class="pitch-pen-right"></div>
-                    <div class="pitch-corner-tl"></div>
-                    <div class="pitch-corner-tr"></div>
-                    <div class="pitch-corner-bl"></div>
-                    <div class="pitch-corner-br"></div>
                 </div>
                 
                 <div id="attack-cone" class="attack-cone"></div>
@@ -304,27 +314,30 @@
                 </div>
             </div>
 
-            <div id="goal-alert" class="absolute inset-0 z-40 bg-black/80 flex flex-col items-center justify-center hidden backdrop-blur-sm">
-                <span class="text-5xl sm:text-6xl animate-bounce mb-2">⚽</span>
-                <h2 id="scorer-name" class="text-2xl sm:text-3xl font-black text-white italic drop-shadow-xl">Messi</h2>
-                <h2 class="text-4xl sm:text-6xl font-black text-white italic drop-shadow-xl" style="text-shadow: 0 0 20px #00e676;">GOAL!</h2>
+            <!-- OVERLAY GOAL (ZERO OMBRE, Z-INDEX SUPERIORE) -->
+            <div id="goal-alert" class="absolute inset-0 z-50 bg-black/85 flex flex-col items-center justify-center hidden backdrop-blur-md">
+                <span class="bg-red-600 text-white font-black text-[11px] px-4 py-1.5 rounded shadow-xl tracking-widest uppercase mb-4 animate-pulse border border-red-400" data-i18n="susp">Sospeso</span>
+                <span class="text-[80px] sm:text-[100px] animate-bounce mb-2" style="filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));">⚽</span>
+                <h2 id="scorer-name" class="text-3xl sm:text-4xl font-black text-white italic drop-shadow-xl mt-2">Messi</h2>
+                <h2 class="text-6xl sm:text-7xl font-black text-[#00e676] italic mt-1 tracking-tighter" style="text-shadow: 0 4px 10px rgba(0,0,0,0.9), 0 0 30px rgba(0,230,118,0.8);">GOAL!</h2>
             </div>
 
-            <div id="suspended" class="absolute inset-0 z-40 bg-black/70 hidden flex-col items-center justify-center backdrop-blur-sm">
-                <span class="bg-red-600 text-white font-black text-sm px-6 py-2 rounded-sm shadow-xl tracking-widest uppercase" data-i18n="susp">Sospeso</span>
+            <!-- OVERLAY FINE PARTITA -->
+            <div id="suspended" class="absolute inset-0 z-40 bg-black/80 hidden flex-col items-center justify-center backdrop-blur-sm">
+                <span class="bg-red-600 text-white font-black text-base px-8 py-3 rounded-sm shadow-xl tracking-widest uppercase border border-red-500" data-i18n="susp">Sospeso</span>
             </div>
         </section>
 
-        <!-- MARKET ANALYST (MENTOR) BAR - ALTEZZA FISSA BLINDATA -->
-        <div class="bg-[#111] p-3 flex items-start gap-3 border-b border-[#333] shrink-0 shadow-inner h-[76px] overflow-hidden">
-            <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_10px_rgba(57,255,20,0.15)]">
-                <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-[var(--zth-green)]">
-                    <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/>
+        <!-- MARKET ANALYST (MENTOR) BAR -->
+        <div class="bg-[#111] p-3 flex items-start gap-3 border-b border-[#333] shrink-0 shadow-inner h-[90px] min-h-[90px] overflow-hidden relative">
+            <div class="w-8 h-8 rounded-full bg-[#1a1a1a] border border-[#333] flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_10px_rgba(250,180,0,0.15)]">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[var(--bf-yellow)]">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 0 1 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1zM10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2z"/>
                 </svg>
             </div>
-            <div class="flex flex-col w-full">
-                <span class="text-[9px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-0.5">Analista Quant</span>
-                <p id="mentor-txt" class="text-[11px] font-medium text-gray-300 leading-snug line-clamp-3" data-i18n="mentor_idle">Analisi mercato in corso. Volumi stabilizzati.</p>
+            <div class="flex flex-col w-full h-full">
+                <span class="text-[9px] font-black text-[var(--bf-yellow)] uppercase tracking-widest mb-0.5" data-i18n="mentor_title">Guida Partita</span>
+                <p id="mentor-txt" class="text-[12px] font-medium text-gray-300 leading-snug line-clamp-3"></p>
             </div>
         </div>
         
@@ -335,13 +348,13 @@
     <!-- ========================================== -->
     <div id="right-pane">
         
-        <!-- RISK MGMT HEADER CON LIABILITY -->
+        <!-- RISK MGMT HEADER CON PERCENTUALI E LIABILITY -->
         <div class="bg-white flex justify-between items-center px-4 py-2 border-b border-gray-200 shrink-0 shadow-sm z-10">
             <div class="flex gap-1.5 items-center">
                 <span class="text-[9px] font-black text-gray-400 uppercase mr-1" data-i18n="stake_lbl">Stake Base:</span>
-                <button onclick="Trade.setStake(2)" id="stk-2" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors">€2</button>
-                <button onclick="Trade.setStake(10)" id="stk-10" class="px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors">€10</button>
-                <button onclick="Trade.setStake(25)" id="stk-25" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors">€25</button>
+                <button onclick="Trade.setStakePct(1)" id="stk-1" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors cursor-pointer touch-manipulation">1%</button>
+                <button onclick="Trade.setStakePct(2)" id="stk-2" class="px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors cursor-pointer touch-manipulation">2%</button>
+                <button onclick="Trade.setStakePct(5)" id="stk-5" class="px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors cursor-pointer touch-manipulation">5%</button>
             </div>
             <div class="flex gap-3">
                 <div class="flex flex-col items-end leading-tight desktop-only">
@@ -349,7 +362,7 @@
                     <span id="bankroll-desktop" class="font-mono font-bold text-[12px] text-[#00e676]">€ 100.00</span>
                 </div>
                 <div class="flex flex-col items-end leading-tight pl-3 border-l border-gray-200">
-                    <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="liability">Esposizione (Rischio)</span>
+                    <span class="text-[7px] font-black text-gray-400 uppercase" data-i18n="liability">Liability</span>
                     <span id="val-liab" class="font-mono font-black text-[13px] text-gray-400">€ 0.00</span>
                 </div>
             </div>
@@ -361,9 +374,14 @@
             <div class="tab-item" data-i18n="ou">Under/Over 2.5</div>
         </div>
 
-        <!-- MARKETS LIST -->
-        <div class="flex-grow overflow-y-auto bg-gray-100 relative pb-20">
+        <!-- MARKETS LIST (Scorre su schermi bassi) -->
+        <div class="flex-grow overflow-y-auto bg-gray-100 relative pb-20" style="-webkit-overflow-scrolling: touch;">
             
+            <!-- OVERLAY MERCATO SOSPESO CHE COPRE LE QUOTE -->
+            <div id="market-suspended-overlay" class="absolute inset-0 z-50 bg-white/60 backdrop-blur-[2px] hidden flex-col items-center justify-center">
+                <span class="bg-red-600 text-white font-black text-xl px-8 py-3 rounded shadow-2xl tracking-widest uppercase border-2 border-red-800 animate-pulse drop-shadow-lg" data-i18n="susp">Sospeso</span>
+            </div>
+
             <div class="bg-[#333] text-white flex justify-between items-center px-4 py-1.5 sticky top-0 z-10 shadow-sm">
                 <span class="text-[12px] font-bold" data-i18n="mo">Esito Finale</span>
                 <div class="flex items-center gap-2">
@@ -375,29 +393,29 @@
             <!-- HEADER COLONNE FIXED -->
             <div class="bg-white flex items-center justify-between pl-4 pr-4 py-1.5 text-[11px] font-bold text-[#333] border-b border-gray-200 shadow-sm relative z-0">
                 <div class="truncate flex-grow">
-                    <span><span data-i18n="matched">Abbinate</span>: <span id="vol-tot" class="font-normal text-gray-500">€0</span></span>
+                    <span><span data-i18n="matched">Matched</span>: <span id="vol-tot" class="font-normal text-gray-500">€0</span></span>
                 </div>
                 <div class="flex gap-1.5 shrink-0">
-                    <div class="w-[70px] sm:w-[75px] text-center text-blue-800 bg-[#e4f1f9] rounded-sm py-0.5" data-i18n="back">Punta</div>
-                    <div class="w-[70px] sm:w-[75px] text-center text-pink-800 bg-[#fdebf0] rounded-sm py-0.5" data-i18n="lay">Banca</div>
+                    <div class="w-[70px] sm:w-[75px] text-center text-blue-800 bg-[#e4f1f9] rounded-sm py-0.5" data-i18n="back">Back</div>
+                    <div class="w-[70px] sm:w-[75px] text-center text-pink-800 bg-[#fdebf0] rounded-sm py-0.5" data-i18n="lay">Lay</div>
                 </div>
             </div>
 
             <!-- ROW ARGENTINA -->
             <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-H">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
-                    <img src="https://flagcdn.com/w40/ar.png" class="team-flag shrink-0" alt="AR">
+                    <img src="https://flagcdn.com/w40/ar.png" loading="lazy" class="team-flag shrink-0" alt="AR">
                     <span class="text-[14px] font-bold text-[#222] tracking-tight truncate">Argentina</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
                     <div class="w-[70px] sm:w-[75px]">
-                        <button onclick="Trade.trade('H', 'back')" class="btn-odd-container bf-btn-back" id="btn-H-b">
+                        <button onclick="Trade.trade('H', 'back')" class="btn-odd-container bf-btn-back cursor-pointer touch-manipulation" id="btn-H-b">
                             <span class="odd-price" id="odd-H-b">2.78</span>
                             <span class="odd-vol" id="vol-H-b">€12K</span>
                         </button>
                     </div>
                     <div class="w-[70px] sm:w-[75px]">
-                        <button onclick="Trade.trade('H', 'lay')" class="btn-odd-container bf-btn-lay" id="btn-H-l">
+                        <button onclick="Trade.trade('H', 'lay')" class="btn-odd-container bf-btn-lay cursor-pointer touch-manipulation" id="btn-H-l">
                             <span class="odd-price" id="odd-H-l">2.80</span>
                             <span class="odd-vol" id="vol-H-l">€4K</span>
                         </button>
@@ -408,18 +426,18 @@
             <!-- ROW FRANCIA -->
             <div class="flex items-center justify-between w-full bg-white border-b border-gray-200 pl-4 pr-4 py-1.5 hover:bg-gray-50 transition-colors" id="row-A">
                 <div class="flex items-center gap-2.5 flex-grow truncate pr-2">
-                    <img src="https://flagcdn.com/w40/fr.png" class="team-flag shrink-0" alt="FR">
+                    <img src="https://flagcdn.com/w40/fr.png" loading="lazy" class="team-flag shrink-0" alt="FR">
                     <span class="text-[14px] font-bold text-[#222] tracking-tight truncate">Francia</span>
                 </div>
                 <div class="flex gap-1 shrink-0">
                     <div class="w-[70px] sm:w-[75px]">
-                        <button onclick="Trade.trade('A', 'back')" class="btn-odd-container bf-btn-back" id="btn-A-b">
+                        <button onclick="Trade.trade('A', 'back')" class="btn-odd-container bf-btn-back cursor-pointer touch-manipulation" id="btn-A-b">
                             <span class="odd-price" id="odd-A-b">2.84</span>
                             <span class="odd-vol" id="vol-A-b">€14K</span>
                         </button>
                     </div>
                     <div class="w-[70px] sm:w-[75px]">
-                        <button onclick="Trade.trade('A', 'lay')" class="btn-odd-container bf-btn-lay" id="btn-A-l">
+                        <button onclick="Trade.trade('A', 'lay')" class="btn-odd-container bf-btn-lay cursor-pointer touch-manipulation" id="btn-A-l">
                             <span class="odd-price" id="odd-A-l">2.86</span>
                             <span class="odd-vol" id="vol-A-l">€8K</span>
                         </button>
@@ -435,13 +453,13 @@
                 </div>
                 <div class="flex gap-1 shrink-0">
                     <div class="w-[70px] sm:w-[75px]">
-                        <button onclick="Trade.trade('X', 'back')" class="btn-odd-container bf-btn-back" id="btn-X-b">
+                        <button onclick="Trade.trade('X', 'back')" class="btn-odd-container bf-btn-back cursor-pointer touch-manipulation" id="btn-X-b">
                             <span class="odd-price" id="odd-X-b">3.05</span>
                             <span class="odd-vol" id="vol-X-b">€22K</span>
                         </button>
                     </div>
                     <div class="w-[70px] sm:w-[75px]">
-                        <button onclick="Trade.trade('X', 'lay')" class="btn-odd-container bf-btn-lay" id="btn-X-l">
+                        <button onclick="Trade.trade('X', 'lay')" class="btn-odd-container bf-btn-lay cursor-pointer touch-manipulation" id="btn-X-l">
                             <span class="odd-price" id="odd-X-l">3.10</span>
                             <span class="odd-vol" id="vol-X-l">€18K</span>
                         </button>
@@ -466,132 +484,141 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * ============================================================================
- * 🌐 i18n MULTILINGUAL ENGINE (CON EVENTI LUSAIL E MENTOR CHIARO SUI CONTI)
+ * 🌐 i18n MULTILINGUAL ENGINE - SHORT, CLEAR, 3-LINE MESSAGES MAX
  * ============================================================================
  */
 const I18N_DICT = {
     it: {
-        avail: "Cassa", matched: "Abbinate", back: "Punta", lay: "Banca", liability: "Esposizione (Rischio)", stake_lbl: "Stake Base:",
-        draw: "Pareggio", start: "Avvia Simulazione",
+        avail: "Cassa", draw: "Pareggio", start: "Avvia Simulazione",
         mo: "Esito Finale", ou: "Under/Over 2.5", market_most_played: "Più Giocati",
-        cashout: "Cash Out", susp: "Sospeso", pos_open: "Posizione Aperta", 
-        pnl: "Live PNL", no_pos: "Nessuna esposizione sul mercato.<br>Attendi l'occasione d'ingresso.",
-        mentor_idle: "Mercato stabile. Il Time Decay erode i margini sulla X. I volumi sulle vittorie confermano lo status quo.",
-        mentor_h: "Aumento degli Expected Goals (xG) per l'Argentina. I Market Maker restringono lo spread, Punta in drop.",
-        mentor_a: "Incursione Francia in area. Liquidità rimossa dal banco per mitigare il rischio, spread in allargamento.",
-        mentor_card_y: "Ammonizione. L'algoritmo prezza il 'Red Card Risk Premium' correggendo la probabilità implicita al rialzo.",
-        mentor_pen: "RIGORE! Panic selling sui book. Volumi massicci in Back sul tiratore, svuotamento dell'order book in corso.",
-        mentor_goal: "GOAL! Mercato Sospeso. Cancellazione ordini non abbinati. Ricalcolo del Fair Value di Poisson...",
-        mentor_swing: "REPRICING ESTREMO! Swing di mercato violento. La liquidità si sta spostando per assorbire il nuovo scenario.",
-        // CHIAREZZA MATEMATICA NEL CASHOUT
-        mentor_co_win: "Hedge completato (Green Book).<br>Responsabilità sbloccata: +€{liab}.<br>PNL netto aggiunto alla cassa (+5% fee dedotta): +€{net}.",
-        mentor_co_loss: "Hedge completato (Red Book).<br>Responsabilità sbloccata: +€{liab}.<br>PNL netto scalato (zero fee): €{net}.",
+        susp: "Sospeso", pos_open: "Posizione Aperta", mentor_title: "Guida Partita",
+        matched: "Matched", back: "Back", lay: "Lay", liability: "Liability", stake_lbl: "Stake:", cashout: "Cash Out", pnl: "Live PNL",
         
-        mentor_risk: "Money Management: Stake fisso impostato a €{stk}.<br>Ricorda: se Banchi (Lay), la tua Liability (Rischio) è data da: Stake × (Quota - 1).",
-        mentor_no_funds: "Operazione annullata. Cassa insufficiente per coprire la Responsabilità (Liability) di €{liab}.",
-        mentor_bet_back: "Hai Puntato a quota {odd}.<br>Stake e Rischio coincidonoo: €{liab}. Profitto potenziale se vinci: €{prof}.",
-        mentor_bet_lay: "Hai Bancato a quota {odd}. Fai tu da banco!<br>Stake: €{stk}. Responsabilità bloccata (il tuo vero rischio): €{liab}.",
-        tut_1: "1/3 | LEZIONI BASE: 'Punta' (Back) significa scommettere A FAVORE. 'Banca' (Lay) significa scommettere CONTRO (fai tu da bookmaker).",
-        tut_2: "2/3 | STAKE E LIABILITY: Se Punti, rischi il tuo Stake. Se Banchi, la tua Responsabilità (il rischio reale prelevato dalla cassa) si moltiplica per la quota.",
-        tut_3: "3/3 | STRATEGIA: Banchiamo il Pareggio (Lay The Draw). Al primo goal, la quota della X si alzerà, garantendoci un Cash Out in profitto matematico.",
-        // LUSAIL OVERRIDE STRINGS
-        mentor_23: "Shock di liquidità. Rigore Messi (1-0). Quota ARG crolla a 1.50. Il mercato prezza lo 0.00 xG della Francia.",
-        mentor_35: "Transizione perfetta su errore di rimessa. Di Maria (2-0). Quota ARG @1.12. Massive Lay sull'esito X, spread in allargamento.",
-        mentor_54: "Anomalia: Errore rinvio E. Martínez. Reset del Possession Value algoritmico. Rischio non prezzato dai modelli.",
-        mentor_80: "CIGNO NERO (Rigore Mbappé). I bot basati su Poisson vanno in cortocircuito. Il differenziale energetico distrugge il Time Decay.",
-        mentor_81: "CRASH DI MERCATO! 2-2 in 97 secondi. Panic Selling sull'Argentina. Draw collassa da 36.00 a 1.56. Vuoto di liquidità nell'Order Book.",
-        mentor_ah: "Fine 90'. Dissonanza cognitiva: L'Asian Handicap ARG -0.25 genera una 'Half-Loss' nonostante l'inerzia, capitali intrappolati.",
-        mentor_gb: "Caos Golden Boot: Tripletta Mbappé. Quota da 48.00 a 1.01. Trasferimento asimmetrico di ricchezza devastante per le posizioni su Messi."
+        mentor_idle: "Mercato stabile. Il <span class='t-y'>Time Decay</span> erode i margini sulla X. Volumi confermano lo status quo.",
+        mentor_h: "Aumento <span class='t-c'>xG</span> per l'Argentina. <span class='t-c'>Market Maker</span> restringono lo <span class='t-y'>Spread</span>, <span class='t-b'>Back</span> in drop.",
+        mentor_a: "Incursione Francia. Liquidità rimossa per mitigare il rischio, <span class='t-y'>Spread</span> in allargamento.",
+        mentor_card_y: "Ammonizione. L'algoritmo prezza il <span class='t-l'>Red Card Risk Premium</span> correggendo la probabilità.",
+        mentor_pen: "RIGORE! Panic selling. Volumi massicci in <span class='t-b'>Back</span> sul tiratore, svuotamento dell'<span class='t-y'>Order Book</span>.",
+        mentor_goal: "GOAL! Mercato Sospeso. Ordini cancellati. Ricalcolo del <span class='t-c'>Fair Value</span> basato su <span class='t-c'>Poisson</span>...",
+        mentor_swing: "<span class='t-y'>REPRICING</span> ESTREMO! <span class='t-y'>Swing</span> violento. La liquidità si sposta per assorbire il nuovo scenario.",
+        
+        mentor_co_win: "<span class='t-b'>Hedge</span> completato. <span class='t-l'>Liability</span> sbloccata: +€{liab}.<br><span class='t-b'>PNL</span> netto in cassa (+5% fee): +€{net}.",
+        mentor_co_loss: "<span class='t-b'>Hedge</span> completato. <span class='t-l'>Liability</span> sbloccata: +€{liab}.<br><span class='t-b'>PNL</span> netto scalato (zero fee): €{net}.",
+        mentor_risk: "<span class='t-c'>Money Mgmt</span>: <span class='t-c'>Stake</span> dinamico al {pct}% (€{stk}).<br>Nel <span class='t-l'>Lay</span> la <span class='t-l'>Liability</span> è: <span class='t-c'>Stake</span> × (Quota - 1).",
+        mentor_no_funds: "Operazione annullata. Cassa insufficiente per la <span class='t-l'>Liability</span> di €{liab}.",
+        mentor_bet_back: "Piazzato <span class='t-b'>Back</span> @ {odd}. <span class='t-c'>Stake</span> = Rischio: €{liab}.<br>Profitto potenziale netto: €{prof}.",
+        mentor_bet_lay: "Piazzato <span class='t-l'>Lay</span> @ {odd}. Fai tu da banco!<br><span class='t-l'>Liability</span> (Il tuo rischio bloccato): €{liab}.",
+        
+        tut_1: "Inizia la partita! ⚡ Usa il <span class='t-b'>Back</span> per scommettere a favore. Usa il <span class='t-l'>Lay</span> per scommettere contro: diventi tu il bookmaker!",
+        tut_2: "Domina il mercato! 🛡️ Nel <span class='t-b'>Back</span> rischi solo il tuo <span class='t-c'>Stake</span>. Nel <span class='t-l'>Lay</span>, la <span class='t-l'>Liability</span> sale con la quota.",
+        tut_3: "Entriamo in azione! 🎯 Piazziamo un <span class='t-l'>Lay</span> sul Pareggio. Al primo gol la quota della X esploderà: preparati al <span class='t-y'>Cash Out</span>!",
+        
+        mentor_23: "Shock di liquidità. Rigore Messi. Quota a 1.50. Il mercato prezza 0.00 <span class='t-c'>xG</span> Francia.",
+        mentor_35: "Transizione perfetta. Di Maria (2-0). Quota @1.12. Massicci <span class='t-l'>Lay</span> sulla X, <span class='t-y'>Spread</span> in volo.",
+        mentor_54: "Errore E. Martínez. Reset del Possession Value. Rischio anomalo non prezzato.",
+        mentor_80: "BLACK SWAN! (Rigore Mbappé). I bot in tilt. Il differenziale distrugge il <span class='t-y'>Time Decay</span>.",
+        mentor_81: "CRASH DI MERCATO! 2-2 in 97s. Panic Selling sull'ARG. La X collassa da 36.00 a 1.56.",
+        mentor_ah: "Fine 90'. Dissonanza: L'<span class='t-c'>Asian Handicap</span> ARG -0.25 genera Half-Loss, capitali intrappolati.",
+        mentor_gb: "Caos Golden Boot: Tripletta Mbappé. Quota a 1.01. Devastante swing di ricchezza."
     },
     en: {
-        avail: "Bankroll", matched: "Matched", back: "Back", lay: "Lay", liability: "Liability (Risk)", stake_lbl: "Base Stake:",
-        draw: "Draw", start: "Start Simulation",
+        avail: "Bankroll", draw: "Draw", start: "Start Simulation",
         mo: "Match Odds", ou: "Over/Under 2.5", market_most_played: "Popular",
-        cashout: "Cash Out", susp: "Suspended", pos_open: "Open Position", 
-        pnl: "Live PNL", no_pos: "No market exposure.<br>Wait for entry trigger.",
-        mentor_idle: "Stable market. Time decay eroding Draw margins. Volumes confirm current status quo.",
-        mentor_h: "xG increase for Argentina. Market Makers tightening the spread, Back odds dropping.",
-        mentor_a: "France in the box. Liquidity pulled to mitigate risk, spread widening.",
-        mentor_card_y: "Yellow Card. Algorithm pricing in the 'Red Card Risk Premium' correcting implied probabilities.",
-        mentor_pen: "PENALTY! Panic selling. Massive Back volumes on the kicker emptying the order book.",
-        mentor_goal: "GOAL! Market Suspended. Unmatched orders cancelled. Poisson Fair Value recalculation...",
-        mentor_swing: "DRAMATIC REPRICING! Violent market swing. Liquidity shifting massively to absorb new scenario.",
-        mentor_co_win: "Hedge completed (Green Book).<br>Unlocked Liability: +€{liab}.<br>Net PNL added to bankroll (fee deducted): +€{net}.",
-        mentor_co_loss: "Hedge completed (Red Book).<br>Unlocked Liability: +€{liab}.<br>Net PNL applied (zero fee): €{net}.",
-        mentor_risk: "Money Management: Fixed Stake set to €{stk}.<br>Remember: when you Lay, your Liability (Risk) is calculated as: Stake × (Odds - 1).",
-        mentor_no_funds: "Trade rejected. Insufficient Bankroll to cover the Liability of €{liab}.",
-        mentor_bet_back: "Backed at odds {odd}.<br>Stake and Liability are equal: €{liab}. Potential Profit: €{prof}.",
-        mentor_bet_lay: "Layed at odds {odd}. You are the bookmaker!<br>Stake: €{stk}. Liability (Locked Risk): €{liab}.",
-        tut_1: "1/3 | BASICS: 'Back' means betting FOR an outcome. 'Lay' means betting AGAINST it (you act as the bookmaker).",
-        tut_2: "2/3 | STAKE VS LIABILITY: When backing, your risk is your Stake. When Laying, your Liability (the actual risk locked from balance) multiplies by the odds.",
-        tut_3: "3/3 | STRATEGY: 'Lay The Draw'. When the first goal is scored, Draw odds will spike, allowing a guaranteed profitable Cash Out.",
-        mentor_23: "Liquidity Shock. Messi penalty (1-0). ARG odds crash to 1.50. Market prices France's 0.00 xG.",
-        mentor_35: "Perfect transition on throw-in error. Di Maria (2-0). ARG @1.12. Massive Lay on the Draw, widening spread.",
-        mentor_54: "Anomaly: E. Martínez clearance error. Algorithmic Possession Value reset. Unpriced risk.",
-        mentor_80: "BLACK SWAN (Mbappé penalty). Poisson bots short-circuit. Energy differential destroys Time Decay.",
-        mentor_81: "MARKET CRASH! 2-2 in 97 seconds. Panic Selling on ARG. Draw collapses from 36.00 to 1.56. Liquidity void.",
-        mentor_ah: "End 90'. Cognitive dissonance: ARG -0.25 Asian Handicap yields a 'Half-Loss', trapped capital.",
-        mentor_gb: "Golden Boot Chaos: Mbappé Hat-Trick. Odds from 48.00 to 1.01. Devastating wealth transfer."
+        susp: "Suspended", pos_open: "Open Position", mentor_title: "Match Guide",
+        matched: "Matched", back: "Back", lay: "Lay", liability: "Liability", stake_lbl: "Stake:", cashout: "Cash Out", pnl: "Live PNL",
+        
+        mentor_idle: "Stable market. <span class='t-y'>Time Decay</span> erodes Draw margins. Volumes confirm status quo.",
+        mentor_h: "ARG <span class='t-c'>xG</span> increase. <span class='t-c'>Market Makers</span> tighten <span class='t-y'>Spread</span>, <span class='t-b'>Back</span> drops.",
+        mentor_a: "France attacks. Liquidity pulled to mitigate risk, <span class='t-y'>Spread</span> widening.",
+        mentor_card_y: "Yellow Card. Algo prices the <span class='t-l'>Red Card Risk Premium</span> correcting probabilities.",
+        mentor_pen: "PENALTY! Panic selling. Massive <span class='t-b'>Back</span> volumes on kicker emptying <span class='t-y'>Order Book</span>.",
+        mentor_goal: "GOAL! Market Suspended. Orders cancelled. <span class='t-c'>Poisson Fair Value</span> recalculation...",
+        mentor_swing: "EXTREME <span class='t-y'>REPRICING</span>! Violent <span class='t-y'>Swing</span>. Liquidity shifts massively for new scenario.",
+        
+        mentor_co_win: "<span class='t-b'>Hedge</span> completed. <span class='t-l'>Liability</span> unlocked: +€{liab}.<br>Net <span class='t-b'>PNL</span> to bankroll (+5% fee): +€{net}.",
+        mentor_co_loss: "<span class='t-b'>Hedge</span> completed. <span class='t-l'>Liability</span> unlocked: +€{liab}.<br>Net <span class='t-b'>PNL</span> subtracted (zero fee): €{net}.",
+        mentor_risk: "<span class='t-c'>Money Mgmt</span>: Dynamic <span class='t-c'>Stake</span> at {pct}% (€{stk}).<br>In a <span class='t-l'>Lay</span>, <span class='t-l'>Liability</span> is: <span class='t-c'>Stake</span> × (Odds - 1).",
+        mentor_no_funds: "Trade rejected. Insufficient Bankroll for <span class='t-l'>Liability</span> of €{liab}.",
+        mentor_bet_back: "Placed <span class='t-b'>Back</span> @ {odd}. <span class='t-c'>Stake</span> = Risk: €{liab}.<br>Potential net profit: €{prof}.",
+        mentor_bet_lay: "Placed <span class='t-l'>Lay</span> @ {odd}. You act as bookmaker!<br><span class='t-l'>Liability</span> (Locked risk): €{liab}.",
+        
+        tut_1: "Game on! ⚡ Remember: <span class='t-b'>Back</span> means betting FOR an outcome. <span class='t-l'>Lay</span> means betting AGAINST it—you are the bookmaker!",
+        tut_2: "Manage risk like a pro! 🛡️ In <span class='t-b'>Back</span> you risk your <span class='t-c'>Stake</span>. In <span class='t-l'>Lay</span>, your <span class='t-l'>Liability</span> multiplies with the odds.",
+        tut_3: "Ready for action? 🎯 Place a <span class='t-l'>Lay</span> on the Draw. At the first goal, odds will spike—perfect time for a <span class='t-y'>Cash Out</span>!",
+        
+        mentor_23: "Liquidity Shock. Messi penalty. Odds at 1.50. Market prices 0.00 <span class='t-c'>xG</span> for FRA.",
+        mentor_35: "Perfect transition. Di Maria (2-0). Odds @1.12. Massive <span class='t-l'>Lay</span> on Draw, <span class='t-y'>Spread</span> flies.",
+        mentor_54: "E. Martínez error. Possession Value reset. Unpriced anomalous risk.",
+        mentor_80: "BLACK SWAN! (Mbappé pen). Bots short-circuit. Energy destroys <span class='t-y'>Time Decay</span>.",
+        mentor_81: "MARKET CRASH! 2-2 in 97s. Panic Selling on ARG. Draw collapses to 1.56.",
+        mentor_ah: "End 90'. Dissonance: ARG -0.25 <span class='t-c'>Asian Handicap</span> gives Half-Loss, trapped capital.",
+        mentor_gb: "Golden Boot Chaos: Mbappé Hat-Trick. Odds to 1.01. Wealth transfer."
     },
     es: {
-        avail: "Fondo", matched: "Igualado", back: "A favor", lay: "En contra", liability: "Exposición (Riesgo)", stake_lbl: "Stake Base:",
-        draw: "Empate", start: "Iniciar Simulación", 
+        avail: "Fondo", draw: "Empate", start: "Iniciar Simulación", 
         mo: "Cuotas de partido", ou: "Más/Menos 2.5", market_most_played: "Populares",
-        cashout: "Cash Out", susp: "Suspendido", pos_open: "Posición Abierta", 
-        pnl: "PNL en vivo", no_pos: "Sin exposición en el mercado.<br>Espera oportunidad.",
-        mentor_idle: "Mercado estable. El Time Decay erosiona los márgenes del empate. Volúmenes confirman status quo.",
-        mentor_h: "Aumento de xG para Argentina. Market Makers ajustan spread, cuota A favor cayendo.",
-        mentor_a: "Francia en el área. Liquidez retirada para mitigar riesgo, spread ampliándose.",
-        mentor_card_y: "Amonestación. Algoritmo cotizando el 'Red Card Risk Premium' corrigiendo probabilidad.",
-        mentor_pen: "¡PENALTI! Venta de pánico. Volúmenes masivos A favor del tirador vacían el libro de órdenes.",
-        mentor_goal: "¡GOL! Mercado Suspendido. Cancelación de órdenes. Recalculando Valor Razonable...",
-        mentor_swing: "¡REPRECIO EXTREMO! Swing violento del mercado. La liquidez se mueve masivamente.",
-        mentor_co_win: "Cobertura completada (Libro Verde).<br>Responsabilidad desbloqueada: +€{liab}.<br>PNL neto añadido (comisión deducida): +€{net}.",
-        mentor_co_loss: "Cobertura completada (Libro Rojo).<br>Responsabilidad desbloqueada: +€{liab}.<br>PNL neto aplicado (cero comisión): €{net}.",
-        mentor_risk: "Gestión de Riesgo: Stake fijo establecido en €{stk}.<br>Recuerda: al ir En Contra (Lay), tu Responsabilidad (Riesgo) es: Stake × (Cuota - 1).",
-        mentor_no_funds: "Operación rechazada. Saldo insuficiente para cubrir la Responsabilidad de €{liab}.",
-        mentor_bet_back: "A favor igualado a cuota {odd}.<br>Stake y Riesgo coinciden: €{liab}. Beneficio potencial: €{prof}.",
-        mentor_bet_lay: "En contra igualado a cuota {odd}. ¡Tú eres la casa!<br>Stake: €{stk}. Responsabilidad (Riesgo Bloqueado): €{liab}.",
-        tut_1: "1/3 | BÁSICOS: 'A favor' (Back) es apostar QUE SÍ ocurre. 'En contra' (Lay) es apostar QUE NO ocurre (tú eres la casa).",
-        tut_2: "2/3 | STAKE Y RIESGO: Al ir A Favor, tu riesgo es tu Stake. Al ir En Contra, tu Responsabilidad (riesgo real retenido) se multiplica por la cuota.",
-        tut_3: "3/3 | ESTRATEGIA: 'Lay The Draw'. Al primer gol, la cuota del Empate sube, permitiendo un Cash Out con beneficios.",
-        mentor_23: "Shock de liquidez. Penalti Messi (1-0). Cuota ARG cae a 1.50. Mercado asume 0.00 xG de Francia.",
-        mentor_35: "Transición perfecta tras error. Di Maria (2-0). ARG @1.12. Massive Lay al Empate, spread aumenta.",
-        mentor_54: "Anomalía: Error despeje E. Martínez. Reset del Valor de Posesión. Riesgo fuera del modelo.",
-        mentor_80: "CISNE NEGRO (Penalti Mbappé). Bots de Poisson en cortocircuito. Diferencial de energía anula Time Decay.",
-        mentor_81: "¡CRASH DE MERCADO! 2-2 en 97s. Panic Selling en ARG. Empate colapsa de 36.00 a 1.56. Vacío de liquidez.",
-        mentor_ah: "Fin 90'. Disonancia cognitiva: Asian Handicap ARG -0.25 genera 'Half-Loss', capital atrapado.",
-        mentor_gb: "Caos Bota de Oro: Hat-Trick Mbappé. Cuota de 48.00 a 1.01. Transferencia masiva de riqueza."
+        susp: "Suspendido", pos_open: "Posición Abierta", mentor_title: "Guía del Partido",
+        matched: "Matched", back: "Back", lay: "Lay", liability: "Liability", stake_lbl: "Stake:", cashout: "Cash Out", pnl: "Live PNL",
+        
+        mentor_idle: "Mercado estable. El <span class='t-y'>Time Decay</span> erosiona el Empate. Volúmenes confirman status quo.",
+        mentor_h: "Aumento <span class='t-c'>xG</span> ARG. <span class='t-c'>Market Makers</span> ajustan <span class='t-y'>Spread</span>, <span class='t-b'>Back</span> cayendo.",
+        mentor_a: "Francia ataca. Liquidez retirada para mitigar riesgo, <span class='t-y'>Spread</span> ampliándose.",
+        mentor_card_y: "Amonestación. El algoritmo cotiza el <span class='t-l'>Red Card Risk Premium</span>.",
+        mentor_pen: "¡PENALTI! Venta de pánico. Volúmenes masivos en <span class='t-b'>Back</span> vacían el <span class='t-y'>Order Book</span>.",
+        mentor_goal: "¡GOL! Mercado Suspendido. Órdenes canceladas. Recalculando <span class='t-c'>Fair Value</span>...",
+        mentor_swing: "¡<span class='t-y'>REPRICING</span> EXTREMO! <span class='t-y'>Swing</span> violento. La liquidez se mueve masivamente.",
+        
+        mentor_co_win: "<span class='t-b'>Hedge</span> completado. <span class='t-l'>Liability</span> libre: +€{liab}.<br><span class='t-b'>PNL</span> neto en fondo (+5% fee): +€{net}.",
+        mentor_co_loss: "<span class='t-b'>Hedge</span> completado. <span class='t-l'>Liability</span> libre: +€{liab}.<br><span class='t-b'>PNL</span> neto restado (zero fee): €{net}.",
+        mentor_risk: "<span class='t-c'>Money Mgmt</span>: <span class='t-c'>Stake</span> dinámico al {pct}% (€{stk}).<br>En el <span class='t-l'>Lay</span>, la <span class='t-l'>Liability</span> es: <span class='t-c'>Stake</span> × (Cuota - 1).",
+        mentor_no_funds: "Operación rechazada. Saldo insuficiente para <span class='t-l'>Liability</span> de €{liab}.",
+        mentor_bet_back: "Hecho <span class='t-b'>Back</span> @ {odd}. <span class='t-c'>Stake</span> = Riesgo: €{liab}.<br>Beneficio potencial: €{prof}.",
+        mentor_bet_lay: "Hecho <span class='t-l'>Lay</span> @ {odd}. ¡Eres la casa!<br><span class='t-l'>Liability</span> (Riesgo bloqueado): €{liab}.",
+        
+        tut_1: "¡Empieza el espectáculo! ⚡ <span class='t-b'>Back</span> es apostar A FAVOR. Con <span class='t-l'>Lay</span> apuestas EN CONTRA y tú te conviertes en la casa de apuestas.",
+        tut_2: "¡Gestiona el riesgo! 🛡️ En <span class='t-b'>Back</span> arriesgas tu <span class='t-c'>Stake</span>. En <span class='t-l'>Lay</span>, tu <span class='t-l'>Liability</span> se multiplica por la cuota.",
+        tut_3: "¿Listo para la acción? 🎯 Colocamos un <span class='t-l'>Lay</span> al Empate. Al primer gol la cuota volará: ¡momento ideal para hacer <span class='t-y'>Cash Out</span>!",
+        
+        mentor_23: "Shock de liquidez. Penalti Messi. Cuota a 1.50. Mercado asume 0.00 <span class='t-c'>xG</span> FRA.",
+        mentor_35: "Transición perfecta. Di Maria (2-0). Cuota @1.12. Massive <span class='t-l'>Lay</span> al Empate.",
+        mentor_54: "Error E. Martínez. Reset del Valor de Posesión. Riesgo no cotizado.",
+        mentor_80: "¡BLACK SWAN! (Penalti Mbappé). Bots en corto. Energía anula <span class='t-y'>Time Decay</span>.",
+        mentor_81: "¡CRASH DE MERCADO! 2-2 en 97s. Panic Selling en ARG. Empate colapsa a 1.56.",
+        mentor_ah: "Fin 90'. Disonancia: <span class='t-c'>Asian Handicap</span> ARG -0.25 genera Half-Loss.",
+        mentor_gb: "Caos Golden Boot: Hat-Trick Mbappé. Cuota a 1.01. Transferencia de riqueza."
     },
     pt: {
-        avail: "Saldo", matched: "Corresp.", back: "A favor", lay: "Contra", liability: "Responsabilidade", stake_lbl: "Stake Base:",
-        draw: "Empate", start: "Iniciar Simulação", 
+        avail: "Saldo", draw: "Empate", start: "Iniciar Simulação", 
         mo: "Probabilidades", ou: "Mais/Menos 2.5", market_most_played: "Populares",
-        cashout: "Cash Out", susp: "Suspenso", pos_open: "Posição Aberta", 
-        pnl: "Live PNL", no_pos: "Nenhuma exposição no mercado.<br>Aguarde oportunidade.",
-        mentor_idle: "Mercado estável. O Time Decay corrói as margens do Empate. Volumes confirmam status quo.",
-        mentor_h: "Aumento de xG para a Argentina. Market Makers reduzem o spread, Back em queda.",
-        mentor_a: "França na área. Liquidez retirada para mitigar risco, spread aumentando.",
-        mentor_card_y: "Cartão amarelo. Algoritmo cotando o 'Red Card Risk Premium' corrigindo probabilidade.",
-        mentor_pen: "PÊNALTI! Pânico de venda. Volumes massivos no Back esvaziam o livro de ordens.",
-        mentor_goal: "GOLO! Mercado Suspenso. Cancelamento de ordens não correspondidas. Recálculo do Valor Justo...",
-        mentor_swing: "REPRECIFICAÇÃO EXTREMA! Swing de mercado violento. Liquidez mudando massivamente.",
-        mentor_co_win: "Hedge concluído (Green Book).<br>Responsabilidade desbloqueada: +€{liab}.<br>PNL neto adicionado (taxa deduzida): +€{net}.",
-        mentor_co_loss: "Hedge concluído (Red Book).<br>Responsabilidade desbloqueada: +€{liab}.<br>PNL neto descontado (zero taxa): €{net}.",
-        mentor_risk: "Gestão de Risco: Stake fixa em €{stk}.<br>Lembra-te: ao fazer Lay, a tua Responsabilidade (Risco) é calculada como: Stake × (Odd - 1).",
-        mentor_no_funds: "Aposta rejeitada. Saldo insuficiente para cobrir a Responsabilidade de €{liab}.",
-        mentor_bet_back: "A favor correspondido a odd {odd}.<br>Stake e Risco são iguais: €{liab}. Lucro potencial: €{prof}.",
-        mentor_bet_lay: "Contra correspondido a odd {odd}. Tu és a casa de apostas!<br>Stake: €{stk}. Responsabilidade (Risco bloqueado): €{liab}.",
-        tut_1: "1/3 | BÁSICO: 'A favor' aposta QUE SIM. 'Contra' (Lay) aposta QUE NÃO (tu assumes o papel da casa de apostas).",
-        tut_2: "2/3 | STAKE VS RESPONSABILIDADE: No Back, o risco é a tua Stake. No Lay, a Responsabilidade (o risco real bloqueado do teu saldo) multiplica-se pela odd.",
-        tut_3: "3/3 | ESTRATÉGIA: 'Lay The Draw' (Contra o Empate). Ao primeiro golo, a odd do Empate sobe, permitindo um Cash Out com lucro garantido.",
-        mentor_23: "Choque de liquidez. Penálti Messi (1-0). Odd ARG cai para 1.50. Mercado assume 0.00 xG da França.",
-        mentor_35: "Transição perfeita após erro. Di Maria (2-0). ARG @1.12. Massive Lay no Empate, spread aumenta.",
-        mentor_54: "Anomalia: Erro de alívio E. Martínez. Reset do Valor de Posse. Risco fora do modelo.",
-        mentor_80: "CISNE NEGRO (Penálti Mbappé). Bots de Poisson entram em curto-circuito. Diferencial de energia destrói Time Decay.",
-        mentor_81: "CRASH DE MERCADO! 2-2 em 97s. Panic Selling na ARG. Empate colapsa de 36.00 para 1.56. Vazio de liquidez.",
-        mentor_ah: "Fim 90'. Dissonância cognitiva: Asian Handicap ARG -0.25 gera 'Half-Loss', capital preso.",
-        mentor_gb: "Caos Bota de Ouro: Hat-Trick Mbappé. Odd de 48.00 para 1.01. Transferência massiva de riqueza."
+        susp: "Suspenso", pos_open: "Posição Aberta", mentor_title: "Guia da Partida",
+        matched: "Matched", back: "Back", lay: "Lay", liability: "Liability", stake_lbl: "Stake:", cashout: "Cash Out", pnl: "Live PNL",
+        
+        mentor_idle: "Mercado estável. O <span class='t-y'>Time Decay</span> corrói o Empate. Volumes confirmam status quo.",
+        mentor_h: "Aumento <span class='t-c'>xG</span> ARG. <span class='t-c'>Market Makers</span> reduzem <span class='t-y'>Spread</span>, <span class='t-b'>Back</span> em queda.",
+        mentor_a: "França ataca. Liquidez retirada para mitigar risco, <span class='t-y'>Spread</span> aumentando.",
+        mentor_card_y: "Cartão amarelo. Algoritmo cota o <span class='t-l'>Red Card Risk Premium</span>.",
+        mentor_pen: "PÊNALTI! Pânico de venda. Volumes massivos no <span class='t-b'>Back</span> esvaziam <span class='t-y'>Order Book</span>.",
+        mentor_goal: "GOLO! Mercado Suspenso. Ordens canceladas. Recálculo do <span class='t-c'>Fair Value</span>...",
+        mentor_swing: "<span class='t-y'>REPRICING</span> EXTREMO! <span class='t-y'>Swing</span> violento. Liquidez mudando massivamente.",
+        
+        mentor_co_win: "<span class='t-b'>Hedge</span> concluído. <span class='t-l'>Liability</span> livre: +€{liab}.<br><span class='t-b'>PNL</span> neto adicionado (+5% fee): +€{net}.",
+        mentor_co_loss: "<span class='t-b'>Hedge</span> concluído. <span class='t-l'>Liability</span> livre: +€{liab}.<br><span class='t-b'>PNL</span> neto descontado (zero fee): €{net}.",
+        mentor_risk: "<span class='t-c'>Money Mgmt</span>: <span class='t-c'>Stake</span> dinâmica a {pct}% (€{stk}).<br>No <span class='t-l'>Lay</span>, a <span class='t-l'>Liability</span> é: <span class='t-c'>Stake</span> × (Odd - 1).",
+        mentor_no_funds: "Aposta rejeitada. Saldo insuficiente para <span class='t-l'>Liability</span> de €{liab}.",
+        mentor_bet_back: "Fez <span class='t-b'>Back</span> a odd {odd}. <span class='t-c'>Stake</span> = Risco: €{liab}.<br>Lucro potencial: €{prof}.",
+        mentor_bet_lay: "Fez <span class='t-l'>Lay</span> a odd {odd}. Tu és a casa!<br><span class='t-l'>Liability</span> (Risco bloqueado): €{liab}.",
+        
+        tut_1: "Que comece o jogo! ⚡ <span class='t-b'>Back</span> é apostar A FAVOR. Com <span class='t-l'>Lay</span> apostas CONTRA e assumes o papel da casa de apostas!",
+        tut_2: "Gere o risco como um pro! 🛡️ No <span class='t-b'>Back</span> o risco é a tua <span class='t-c'>Stake</span>. No <span class='t-l'>Lay</span>, a tua <span class='t-l'>Liability</span> multiplica-se pela odd.",
+        tut_3: "Pronto para a ação? 🎯 Fazemos <span class='t-l'>Lay</span> ao Empate. Ao 1º golo a odd sobe, garantindo um <span class='t-y'>Cash Out</span> perfeito!",
+        
+        mentor_23: "Choque de liquidez. Penálti Messi. Odd a 1.50. Mercado assume 0.00 <span class='t-c'>xG</span> FRA.",
+        mentor_35: "Transição perfeita. Di Maria (2-0). Odd @1.12. Massive <span class='t-l'>Lay</span> no Empate.",
+        mentor_54: "Erro E. Martínez. Reset do Valor de Posse. Risco fora do modelo.",
+        mentor_80: "BLACK SWAN! (Penálti Mbappé). Bots em curto. Diferencial destrói <span class='t-y'>Time Decay</span>.",
+        mentor_81: "CRASH DE MERCADO! 2-2 em 97s. Panic Selling na ARG. Empate colapsa a 1.56.",
+        mentor_ah: "Fim 90'. Dissonância: <span class='t-c'>Asian Handicap</span> ARG -0.25 gera Half-Loss.",
+        mentor_gb: "Caos Golden Boot: Hat-Trick Mbappé. Odd a 1.01. Transferência massiva."
     }
 };
 
@@ -679,17 +706,19 @@ const App = {
         document.getElementById('lang-selector').addEventListener('change', (e) => {
             this.lang = e.target.value;
             this.updateI18n();
+            // Retrigger mentor text with new lang
+            if(State.lastMentorKey) Sim.mentor(State.lastMentorKey, State.lastMentorVars, true, State.mentorPriority);
         });
         
-        let saved = JSON.parse(localStorage.getItem('qa_pro_v22')); // Flush cache
-        if(saved && saved.stake) { State.bal = saved.bal; State.stake = saved.stake; }
+        let saved = JSON.parse(localStorage.getItem('qa_pro_v25')); // Flush cache
+        if(saved && saved.bal) { State.bal = saved.bal; }
         
         this.updateI18n();
-        Trade.setStake(State.stake);
+        Trade.setStakePct(2); // Inizia con il 2% della cassa
         Sim.updateTime();
         Sim.renderUI();
         
-        // Avvio Immediato (Senza Overlay)
+        // Avvio Immediato
         setTimeout(() => { Sim.start(); }, 500);
     },
 
@@ -714,7 +743,7 @@ const App = {
 
 /**
  * ============================================================================
- * 🧠 CORE ENGINE STORICO CON TIMELINE "LUSAIL STRESS TEST" (Nativa)
+ * 🧠 CORE ENGINE STORICO CON TIMELINE "LUSAIL STRESS TEST"
  * ============================================================================
  */
 let matchInterval = null;
@@ -722,19 +751,21 @@ let matchInterval = null;
 let State = {
     active: false, susp: false, 
     sec: 0, 
-    score: [0,0], bal: 100.00, stake: 10.00, 
+    score: [0,0], bal: 100.00, stake: 2.00, currentPct: 2,
     odds: { H: 2.78, X: 3.05, A: 2.82 }, 
     vol: { H: [15400, 8400], X: [12300, 9500], A: [14200, 8900] },
     pos: null, mState: 'idle',
     cards: { H: {y:0, r:0}, A: {y:0, r:0} },
     mentorLockUntil: 0, 
     mentorPriority: 0,
+    lastMentorKey: 'mentor_idle',
+    lastMentorVars: {},
     
-    // Timeline LUSAIL Stress Test
+    // Timeline dilatata per consentire lettura dei concetti
     events: [
         { time: 2, type: 'info', mentor: 'tut_1', priority: 8, triggered: false }, 
-        { time: 25, type: 'info', mentor: 'tut_2', priority: 8, triggered: false }, 
-        { time: 50, type: 'info', mentor: 'tut_3', priority: 8, triggered: false }, 
+        { time: 50, type: 'info', mentor: 'tut_2', priority: 8, triggered: false }, 
+        { time: 100, type: 'info', mentor: 'tut_3', priority: 8, triggered: false }, 
         { time: 1380, type: 'goal', team: 'H', scorer: 'Messi (Pen)', triggered: false, mentor: 'mentor_23', priority: 10 },
         { time: 2100, type: 'attack', team: 'H', desc: 'Errore rimessa FRA', triggered: false, priority: 5 },
         { time: 2160, type: 'goal', team: 'H', scorer: 'Di Maria', triggered: false, mentor: 'mentor_35', priority: 10 },
@@ -764,12 +795,22 @@ const Sim = {
 
     fastForward() {
         if(!State.active) return;
-        State.sec = 4750; // Salta a poco prima del rigore Mbappé (Cigno Nero)
+        
+        // Reset massivo dei dati per allineamento perfetto 80' Minuto
+        State.sec = 4750; // Poco prima del Cigno Nero
         State.score = [2,0];
-        State.cards.H.y = 1; State.cards.A.y = 0;
-        State.events.forEach(e => { if(e.time < State.sec) e.triggered = true; });
+        State.cards.H.y = 1; State.cards.H.r = 0;
+        State.cards.A.y = 0; State.cards.A.r = 0;
+        
+        // Aggiorna gli eventi storici come eseguiti
+        State.events.forEach(e => { 
+            e.triggered = (e.time <= State.sec); 
+        });
+        
+        DOM.scoreH.innerText = State.score[0];
+        DOM.scoreA.innerText = State.score[1];
+        
         this.renderCards();
-        DOM.scoreH.innerText = '2';
         this.updateTime();
         this.calcOdds();
         this.renderUI();
@@ -828,8 +869,33 @@ const Sim = {
                 
                 if (icon !== '') {
                     span.innerText = icon;
-                    span.className = 'absolute text-[9px] transform -translate-x-1/2 -translate-y-1/2 top-1/2 z-10 drop-shadow-md';
-                    span.style.left = (ev.time / 5400 * 100) + '%'; 
+                    span.className = 'absolute text-[12px] transform -translate-x-1/2 flex items-center justify-center z-10 drop-shadow-md leading-none';
+                    
+                    // Mappatura precisa sui due segmenti da 49%
+                    let leftPct;
+                    if(ev.time <= 2700) {
+                        leftPct = (ev.time / 2700) * 49;
+                    } else {
+                        leftPct = 51 + ((ev.time - 2700) / 2700) * 49;
+                    }
+                    span.style.left = leftPct + '%'; 
+                    
+                    // Logica Palloni Geometricamente Cieca:
+                    // Il container timeline-events è di 4px, sovrapposto perfettamente alle linee verdi.
+                    if (ev.type === 'goal') {
+                        if (ev.team === 'H') {
+                            span.style.bottom = '100%'; // Argentina tangente da SOPRA
+                            span.style.paddingBottom = '1px';
+                        } else {
+                            span.style.top = '100%'; // Francia tangente da SOTTO
+                            span.style.paddingTop = '1px';
+                        }
+                    } else {
+                        // I cartellini gialli stanno incastonati al centro
+                        span.style.top = '50%';
+                        span.style.transform = 'translate(-50%, -50%)';
+                    }
+                    
                     DOM.tlEv.appendChild(span);
                 }
             }
@@ -900,7 +966,6 @@ const Sim = {
         
         document.getElementById('goal-alert').style.display = 'flex';
         document.getElementById('scorer-name').innerText = scorer;
-        document.getElementById('suspended').style.display = 'flex';
         document.getElementById('event-badge').style.opacity = '0';
         document.getElementById('attack-cone').style.opacity = '0';
         DOM.scoreH.innerText = State.score[0];
@@ -913,7 +978,6 @@ const Sim = {
         setTimeout(() => {
             State.susp = false;
             document.getElementById('goal-alert').style.display = 'none';
-            document.getElementById('suspended').style.display = 'none';
             document.getElementById('ball').style.left = '50%'; document.getElementById('ball').style.top = '50%';
             Trade.renderState();
         }, 6000); 
@@ -927,14 +991,12 @@ const Sim = {
         this.renderTimeline();
     },
 
-    // MOTORE DI PREZZAMENTO LUSAIL OVERRIDE (NATIVO)
     calcOdds() {
         let rem = 1 - Math.min((State.sec / 5400), 0.99);
         let tH, tX, tA;
         let spreadFactor = 1;
 
         if (State.sec < 4800) {
-            // FASE 0-79': Time Decay Lineare Pesante (Modello Poisson Overconfident)
             if (State.score[0] === 0 && State.score[1] === 0) {
                 tX = 1.01 + (2.90 - 1.01) * Math.pow(rem, 1.5);
                 tH = 2.74 + (1-rem)*5; tA = 2.80 + (1-rem)*5;
@@ -942,26 +1004,22 @@ const Sim = {
                 tH = 1.01 + (1.50 - 1.01) * Math.pow(rem, 2);
                 tX = 4.50 + (1-rem)*10; tA = 12.0 + (1-rem)*40;
             } else if (State.score[0] === 2 && State.score[1] === 0) {
-                tH = 1.01 + (1.12 - 1.01) * Math.pow(rem, 3); // Schiacciamento innaturale verso 1.03
-                tX = 13.0 + (1-rem)*60; // La quota X va alla deriva
+                tH = 1.01 + (1.12 - 1.01) * Math.pow(rem, 3);
+                tX = 13.0 + (1-rem)*60; 
                 tA = 50.0 + (1-rem)*200;
             } else {
                 tH = 2.0; tX = 2.0; tA = 2.0;
             }
         } else if (State.sec >= 4800 && State.sec < 4860) {
-            // Minuto 80-81': Rigore Mbappé (2-1). Contrazione in corso.
-            tH = 1.25; 
-            tX = 5.00; 
-            tA = 15.0;
+            tH = 1.25; tX = 5.00; tA = 15.0;
         } else if (State.sec >= 4860) {
-            // Minuto 81'+: CIGNO NERO (2-2). Fallimento Poisson, Vuoto liquidità, Panic Selling.
-            tX = 1.56 + (1-rem)*0.5; // Il Pareggio crolla e diventa favorito assoluto
+            tX = 1.56 + (1-rem)*0.5; 
             tH = 3.50 + (1-rem)*2; 
             tA = 2.80 + (1-rem)*2;
             
             if (State.sec < 4900) {
-                spreadFactor = 5; // Spread bid-ask allargato innaturalmente
-                State.vol.H[0] += Math.floor(Math.random() * 50000); // Spike volumi scarico massiccio
+                spreadFactor = 5; // Spread si allarga a dismisura in fase di crash
+                State.vol.H[0] += Math.floor(Math.random() * 50000); 
                 State.vol.H[1] += Math.floor(Math.random() * 80000); 
             } else {
                 spreadFactor = 1.5;
@@ -986,7 +1044,8 @@ const Sim = {
         
         if (DOM.volTot) DOM.volTot.innerText = `€${(totalVol + 7500000).toLocaleString()}`; 
         
-        Trade.updatePnl();
+        // PNL Aggiornato Istantaneamente seguendo le quote!
+        window.requestAnimationFrame(() => Trade.updatePnl());
     },
 
     updateTime() {
@@ -996,7 +1055,6 @@ const Sim = {
         this.renderTimeline();
     },
 
-    // RENDER UI LUSAIL OVERRIDE (NATIVO)
     renderUI() {
         const formatOdd = (n) => n >= 100 ? Math.round(n).toString() : parseFloat(n.toFixed(2)).toString();
         const formatK = (num) => num > 999 ? (num/1000).toFixed(1) + 'K' : num;
@@ -1004,7 +1062,7 @@ const Sim = {
 
         ['H','X','A'].forEach(k => {
             let oB = Trade.roundTick(State.odds[k]); 
-            let oL = Trade.roundTick(oB + (Trade.getTickStep(oB) * sf)); // Applica l'allargamento dello spread al lato Lay
+            let oL = Trade.roundTick(oB + (Trade.getTickStep(oB) * sf)); 
             
             if (DOM.odds[`${k}-b`]) DOM.odds[`${k}-b`].innerText = formatOdd(oB);
             if (DOM.odds[`${k}-l`]) DOM.odds[`${k}-l`].innerText = formatOdd(oL);
@@ -1021,15 +1079,19 @@ const Sim = {
 
         if (!force && State.sec < State.mentorLockUntil && priority <= State.mentorPriority) return;
         
+        State.lastMentorKey = key;
+        State.lastMentorVars = vars;
+
         let txt = App.t(key);
         for (const [k, v] of Object.entries(vars)) {
             txt = txt.replace(`{${k}}`, v);
         }
         if (DOM.mentorTxt) DOM.mentorTxt.innerHTML = txt;
         
-        let lockTime = 15;
-        if (priority >= 5) lockTime = 20; 
-        if (priority >= 8) lockTime = 25;
+        // MODERAZIONE ESPERTO: Tempi di lettura aumentati enormemente
+        let lockTime = 25; 
+        if (priority >= 5) lockTime = 35; 
+        if (priority >= 8) lockTime = 45;
 
         State.mentorLockUntil = State.sec + lockTime;
         State.mentorPriority = priority;
@@ -1038,11 +1100,10 @@ const Sim = {
 
 /**
  * ============================================================================
- * 💰 TRADING & HEDGING (PRECISION FLOATING POINT FIX + CLEAR MENTOR)
+ * 💰 TRADING E MONEY MANAGEMENT DINAMICO
  * ============================================================================
  */
 const Trade = {
-    // Risoluzione dei micro-errori JS (es. 100 - 3.33 = 96.67000000004)
     _roundCents(val) {
         return Math.round(val * 100) / 100;
     },
@@ -1060,17 +1121,21 @@ const Trade = {
         if(p < 30) return 1; if(p < 50) return 2; if(p < 100) return 5; return 10;
     },
     
-    setStake(v) {
-        State.stake = this._roundCents(v);
-        [2,10,25].forEach(i => {
+    setStakePct(pct) {
+        State.currentPct = pct;
+        // Stake Dinamico: Calcolato in % sulla cassa attuale
+        State.stake = this._roundCents(State.bal * (pct / 100));
+        if(State.stake < 0.10) State.stake = 0.10; // Floor matematico minimo
+
+        [1, 2, 5].forEach(i => {
             let el = document.getElementById(`stk-${i}`);
             if(el) {
-                if(i===v) el.className = "px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors";
-                else el.className = "px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors";
+                if(i === pct) el.className = "px-3.5 py-1.5 bg-gray-800 border border-gray-800 rounded text-[12px] font-bold text-[var(--bf-yellow)] shadow-sm transition-colors cursor-pointer touch-manipulation";
+                else el.className = "px-3.5 py-1.5 bg-white border border-gray-300 rounded text-[12px] font-bold text-gray-500 shadow-sm transition-colors cursor-pointer touch-manipulation";
             }
         });
         
-        if(State.active) Sim.mentor('mentor_risk', { stk: State.stake.toFixed(2) }, true, 6);
+        if(State.active) Sim.mentor('mentor_risk', { stk: State.stake.toFixed(2), pct: pct }, true, 6);
         this.updateHeader();
     },
 
@@ -1107,9 +1172,11 @@ const Trade = {
             return;
         }
         
-        // Sottrazione Ferrea dei fondi
         State.bal = this._roundCents(State.bal - l);
         State.pos = { sel, t: type, e: o, s: s, l: l };
+        
+        // Ricalcola il prossimo stake ora che la cassa è scesa
+        if(State.currentPct) this.setStakePct(State.currentPct);
         
         Drag.reset(); 
         if(DOM.posPanel) {
@@ -1128,12 +1195,13 @@ const Trade = {
         
         let potProf = type === 'back' ? this._roundCents(s * (o - 1)) : s;
         let mentorKey = type === 'back' ? 'mentor_bet_back' : 'mentor_bet_lay';
-        Sim.mentor(mentorKey, { odd: formatOdd(o), stk: s.toFixed(2), liab: l.toFixed(2), prof: potProf.toFixed(2) }, true, 5);
+        Sim.mentor(mentorKey, { odd: formatOdd(o), stk: s.toFixed(2), liab: l.toFixed(2), prof: potProf.toFixed(2) }, true, 6);
 
         this.renderState();
         this.updateHeader();
     },
 
+    // IL PNL SEGUE ISTANTANEAMENTE LE QUOTE ESATTE SUL MERCATO OPPOSTO (Hedging Rules)
     updatePnl() {
         if(!State.pos) return;
         
@@ -1142,8 +1210,11 @@ const Trade = {
         let cB = this.roundTick(rawB);
         let cL = this.roundTick(rawB + (this.getTickStep(rawB) * sf));
         
+        // Se ho Bancato (Lay), per uscire dal mercato devo Puntare (Back). Uso cB.
+        // Se ho Puntato (Back), per uscire dal mercato devo Bancare (Lay). Uso cL.
         let current = State.pos.t === 'back' ? cL : cB;
         
+        // Formula Scientifica di copertura in Live (Hedged PNL)
         let pnl = State.pos.t === 'back' ? 
             State.pos.s * (State.pos.e / current - 1) : 
             State.pos.s * (1 - State.pos.e / current);
@@ -1155,6 +1226,11 @@ const Trade = {
         let cls = `font-black leading-none tracking-tight ${net > 0 ? 'text-[#00e676]' : (net < 0 ? 'text-red-500' : 'text-[#111]')}`;
 
         if (DOM.pnlMob) { 
+            // Animazione PNL: Flash colorato durante gli spike
+            if (DOM.pnlMob.innerText !== str) {
+                DOM.pnlMob.style.transform = 'scale(1.05)';
+                setTimeout(() => DOM.pnlMob.style.transform = 'scale(1)', 100);
+            }
             DOM.pnlMob.innerText = str; 
             DOM.pnlMob.className = 'text-[24px] ' + cls; 
         }
@@ -1169,22 +1245,21 @@ const Trade = {
         let cL = this.roundTick(rawB + (this.getTickStep(rawB) * sf));
         let current = State.pos.t === 'back' ? cL : cB;
         
-        // Hedging Formula
         let pnl = State.pos.t === 'back' ? State.pos.s * (State.pos.e / current - 1) : State.pos.s * (1 - State.pos.e / current);
         
         let net = pnl > 0 ? pnl * 0.95 : pnl;
-        net = this._roundCents(net); // Precision fix
+        net = this._roundCents(net); 
         
-        // Mentor Feedback Analitico su cosa sta succedendo al portafoglio
         if (pnl > 0) {
             Sim.mentor('mentor_co_win', { liab: State.pos.l.toFixed(2), net: net.toFixed(2) }, true, 9);
         } else {
             Sim.mentor('mentor_co_loss', { liab: State.pos.l.toFixed(2), net: net.toFixed(2) }, true, 9);
         }
         
-        // Aggiornamento Cassa Blindato (Restituisce la liability bloccata + aggiunge/sottrae il PNL)
         State.bal = this._roundCents(State.bal + State.pos.l + net);
         State.pos = null;
+        
+        if(State.currentPct) this.setStakePct(State.currentPct);
         
         if(DOM.posPanel) {
             DOM.posPanel.classList.remove('opacity-100', 'pointer-events-auto');
@@ -1193,11 +1268,17 @@ const Trade = {
         
         this.renderState();
         this.updateHeader();
-        localStorage.setItem('qa_pro_v22', JSON.stringify({bal: State.bal, stake: State.stake}));
+        localStorage.setItem('qa_pro_v25', JSON.stringify({bal: State.bal}));
     },
 
     renderState() {
-        let lock = State.pos !== null || State.susp || State.sec >= 5700;
+        let isSuspended = State.susp || State.sec >= 5700;
+        let lock = State.pos !== null || isSuspended;
+        
+        // OVERLAY DEL MERCATO QUANDO C'È UN GOAL
+        let mOverlay = document.getElementById('market-suspended-overlay');
+        if (mOverlay) mOverlay.style.display = isSuspended ? 'flex' : 'none';
+
         ['H','X','A'].forEach(k => {
             if(DOM.btns[`${k}-b`] && DOM.btns[`${k}-l`]) {
                 DOM.btns[`${k}-b`].disabled = lock; DOM.btns[`${k}-l`].disabled = lock;
@@ -1213,11 +1294,11 @@ const Trade = {
         
         const updateCoBtn = (coBtn) => {
             if(coBtn) {
-                if(State.susp || State.sec >= 5700) {
+                if(isSuspended) {
                     coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest cursor-not-allowed";
                     coBtn.innerText = App.t('susp');
                 } else {
-                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-2.5 rounded-sm text-[12px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer";
+                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-2.5 rounded-sm text-[12px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer touch-manipulation";
                     coBtn.innerText = App.t('cashout');
                 }
             }
