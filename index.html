@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#111111">
     <meta name="description" content="Simulatore professionale di Betting Exchange.">
+    <!-- Meta tag essenziali per WebViews (Telegram, WhatsApp, IG) -->
+    <meta name="format-detection" content="telephone=no">
+    <!-- Open Graph Meta Tags per un'anteprima elegante su Telegram -->
+    <meta property="og:title" content="Zero To Hero | Match Guide Simulator">
+    <meta property="og:description" content="Simulatore professionale di Betting Exchange in tempo reale. Mettiti alla prova!">
+    <meta property="og:type" content="website">
+    
     <title>Zero To Hero | Match Guide Simulator</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,6 +42,7 @@
             -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
             -webkit-tap-highlight-color: transparent; 
             text-rendering: optimizeLegibility;
+            overscroll-behavior: none; /* Previene il pull-to-refresh fastidioso su Telegram Android */
         }
 
         body { 
@@ -627,7 +635,7 @@ const I18N_DICT = {
 
 /**
  * ============================================================================
- * 🚀 DOM CACHING & DRAGGABLE WIDGET
+ * 🚀 DOM CACHING & DRAGGABLE WIDGET (SAFE FOR WEBVIEWS)
  * ============================================================================
  */
 const DOM = {
@@ -655,11 +663,14 @@ const Drag = {
         this.initialY = e.clientY - this.yOffset;
         if (e.target.closest('#position-panel')) {
             this.active = true;
-            DOM.posPanel.setPointerCapture(e.pointerId);
+            // SAFE CAPTURE: Some WebViews (like early Telegram Android versions) throw here.
+            try { DOM.posPanel.setPointerCapture(e.pointerId); } catch(err) { console.warn("Pointer capture non supportato."); }
         }
     },
     
-    end(e) { this.active = false; },
+    end(e) { 
+        this.active = false; 
+    },
     
     move(e) {
         if (this.active) {
@@ -713,7 +724,14 @@ const App = {
             if(State.lastMentorKey) Sim.mentor(State.lastMentorKey, State.lastMentorVars, true, State.mentorPriority);
         });
         
-        let saved = JSON.parse(localStorage.getItem('qa_pro_v26')); // Flush cache
+        // SAFE LOCALSTORAGE: Telegram WebView in Incognito mode throws unhandled exception on getItem
+        let saved = null;
+        try {
+            saved = JSON.parse(localStorage.getItem('qa_pro_v26'));
+        } catch (err) {
+            console.warn("LocalStorage bloccato (Privacy WebView Telegram). Procedo con dati di default.");
+        }
+        
         if(saved && saved.bal) { State.bal = saved.bal; }
         
         this.updateI18n();
@@ -1263,7 +1281,9 @@ const Trade = {
         
         this.renderState();
         this.updateHeader();
-        localStorage.setItem('qa_pro_v26', JSON.stringify({bal: State.bal}));
+        
+        // SAFE LOCALSTORAGE SAVE
+        try { localStorage.setItem('qa_pro_v26', JSON.stringify({bal: State.bal})); } catch(e) {}
     },
 
     renderState() {
