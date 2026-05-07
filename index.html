@@ -179,30 +179,30 @@
 </head>
 <body>
 
-<!-- WIDGET CASHOUT FLUTTUANTE GLOBALE -->
-<div id="position-panel" class="w-[300px] bg-white border border-gray-300 rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.7)] flex-col transition-opacity duration-200 opacity-0 pointer-events-none cursor-move select-none" style="transform: translate(-50%, -50%); display: flex; left: 50%; top: 50%;">
-    <div class="bg-gray-100 p-2.5 border-b border-gray-200 rounded-t-lg flex justify-between items-center pointer-events-none">
-        <div class="flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#888"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
-            <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest" data-i18n="pos_open">Posizione Aperta</span>
+<!-- WIDGET CASHOUT FLUTTUANTE GLOBALE RIDIMENSIONATO E MENO INVADENTE -->
+<div id="position-panel" class="w-[240px] bg-white border border-gray-300 rounded-lg shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex-col transition-opacity duration-200 opacity-0 pointer-events-none cursor-move select-none" style="transform: translate(-50%, -50%); display: flex; left: 50%; top: 50%;">
+    <div class="bg-gray-100 p-2 border-b border-gray-200 rounded-t-lg flex justify-between items-center pointer-events-none">
+        <div class="flex items-center gap-1.5">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#888"><path d="M10 9h4V6h3l-5-5-5 5h3v3zm-1 1H6V7l-5 5 5 5v-3h3v-4zm14 2l-5-5v3h-3v4h3v3l5-5zm-9 3h-4v3H7l5 5 5-5h-3v-3z"/></svg>
+            <span class="text-[8px] font-black text-gray-500 uppercase tracking-widest" data-i18n="pos_open">Posizione Aperta</span>
         </div>
-        <span id="pos-odds" class="text-[12px] font-black text-gray-800 bg-gray-200 px-2 py-0.5 rounded-sm">@ 0.00</span>
+        <span id="pos-odds" class="text-[11px] font-black text-gray-800 bg-gray-200 px-1.5 py-0.5 rounded-sm">@ 0.00</span>
     </div>
     
-    <div class="p-3.5 flex flex-col gap-3">
+    <div class="p-2.5 flex flex-col gap-2.5">
         <div class="flex justify-between items-center pb-2 border-b border-gray-100 pointer-events-none">
-            <span id="pos-label" class="text-[#111] text-[11px] font-black px-2 py-1 rounded-sm shadow-sm">BACK</span>
+            <span id="pos-label" class="text-[#111] text-[10px] font-black px-2 py-0.5 rounded-sm shadow-sm">BACK</span>
             <div class="flex flex-col items-end">
-                <span id="pos-stake" class="text-[11px] font-mono font-bold text-gray-700">Stake: €0.00</span>
-                <span id="pos-liab" class="text-[11px] font-mono font-bold text-red-500">Resp: €0.00</span>
+                <span id="pos-stake" class="text-[10px] font-mono font-bold text-gray-700">Stake: €0.00</span>
+                <span id="pos-liab" class="text-[10px] font-mono font-bold text-red-500">Resp: €0.00</span>
             </div>
         </div>
-        <div class="flex items-center justify-between pt-1">
+        <div class="flex items-center justify-between pt-0.5">
             <div class="flex flex-col leading-none pointer-events-none">
-                <span class="text-[10px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
-                <span id="pnl-val" class="text-[22px] font-black text-[#111] leading-none">€ 0.00</span>
+                <span class="text-[9px] text-gray-500 font-bold uppercase mb-0.5" data-i18n="pnl">Live PNL</span>
+                <span id="pnl-val" class="text-[18px] font-black text-[#111] leading-none">€ 0.00</span>
             </div>
-            <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-3 rounded-sm text-[12px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer" data-i18n="cashout">Cash Out</button>
+            <button onclick="Trade.cashOut()" id="btn-cashout-mob" class="bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-3 py-2 rounded-sm text-[10px] uppercase tracking-widest shadow-sm active:scale-95 transition-transform cursor-pointer" data-i18n="cashout">Cash Out</button>
         </div>
     </div>
 </div>
@@ -217,16 +217,7 @@
         <!-- HEADER TOP "ZERO TO HERO" -->
         <header class="bg-[#0f0f0f] flex justify-between items-center px-3 shrink-0 shadow-sm z-20 h-[42px] border-b border-[#222]">
             <div class="flex items-center gap-2 text-white">
-                <svg viewBox="0 0 100 100" class="w-7 h-7 shrink-0 drop-shadow-md">
-                    <circle cx="50" cy="50" r="48" fill="#000" />
-                    <circle cx="50" cy="50" r="43" fill="none" stroke="url(#silver)" stroke-width="6" />
-                    <path d="M 32 72 Q 50 40 72 28 Q 55 55 32 72 Z" fill="var(--zth-green)" />
-                    <defs>
-                        <linearGradient id="silver" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#b0b0b0" /><stop offset="30%" stop-color="#ffffff" /><stop offset="70%" stop-color="#dddddd" /><stop offset="100%" stop-color="#707070" />
-                        </linearGradient>
-                    </defs>
-                </svg>
+                <img src="logo-tondo.jpeg" alt="Zero To Hero Logo" class="w-7 h-7 shrink-0 drop-shadow-md rounded-full object-cover">
                 <div class="flex flex-col">
                     <span class="font-black text-[14px] tracking-tight leading-none text-white font-sans">ZERO TO HERO</span>
                     <span class="text-[8px] font-bold leading-none uppercase mt-[1px] text-[var(--bf-yellow)]">Academy</span>
@@ -685,7 +676,21 @@ const Drag = {
     
     reset() {
         this.xOffset = 0; this.yOffset = 0; this.initialX = 0; this.initialY = 0;
-        if(DOM.posPanel) DOM.posPanel.style.transform = `translate(-50%, -50%)`;
+        if(DOM.posPanel) {
+            const pitch = document.getElementById('pitch-container');
+            if (pitch) {
+                // Calcola dinamicamente le coordinate del centro del campo per posizionare il widget
+                const rect = pitch.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                DOM.posPanel.style.left = `${centerX}px`;
+                DOM.posPanel.style.top = `${centerY}px`;
+            } else {
+                DOM.posPanel.style.left = '50%';
+                DOM.posPanel.style.top = '50%';
+            }
+            DOM.posPanel.style.transform = `translate(-50%, -50%)`;
+        }
     }
 };
 
@@ -1199,7 +1204,7 @@ const Trade = {
         
         App.updateI18n(); 
         
-        document.getElementById('pos-label').className = `text-[#111] text-[11px] font-black px-2.5 py-1 rounded-sm shadow-sm ${type==='back'?'bg-[var(--btn-back)]':'bg-[var(--btn-lay)]'}`;
+        document.getElementById('pos-label').className = `text-[#111] text-[10px] font-black px-2 py-0.5 rounded-sm shadow-sm ${type==='back'?'bg-[var(--btn-back)]':'bg-[var(--btn-lay)]'}`;
         const formatOdd = (n) => parseFloat(n.toFixed(2)).toString();
         
         document.getElementById('pos-odds').innerText = `@ ${formatOdd(o)}`;
@@ -1245,7 +1250,7 @@ const Trade = {
                 setTimeout(() => DOM.pnlMob.style.transform = 'scale(1)', 100);
             }
             DOM.pnlMob.innerText = str; 
-            DOM.pnlMob.className = 'text-[24px] ' + cls; 
+            DOM.pnlMob.className = 'text-[18px] ' + cls; 
         }
     },
 
@@ -1310,10 +1315,10 @@ const Trade = {
         const updateCoBtn = (coBtn) => {
             if(coBtn) {
                 if(isSuspended) {
-                    coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-5 py-2.5 rounded-sm text-[11px] uppercase tracking-widest cursor-not-allowed";
+                    coBtn.disabled = true; coBtn.className = "bg-gray-300 text-gray-500 font-black px-3 py-2 rounded-sm text-[10px] uppercase tracking-widest cursor-not-allowed";
                     coBtn.innerText = App.t('susp');
                 } else {
-                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-5 py-2.5 rounded-sm text-[12px] uppercase tracking-widest shadow-md active:scale-95 transition-transform cursor-pointer touch-manipulation";
+                    coBtn.disabled = false; coBtn.className = "bg-[var(--zth-green)] hover:bg-[#2eff0a] text-[#111] font-black px-3 py-2 rounded-sm text-[10px] uppercase tracking-widest shadow-sm active:scale-95 transition-transform cursor-pointer touch-manipulation";
                     coBtn.innerText = App.t('cashout');
                 }
             }
