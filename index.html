@@ -521,7 +521,8 @@ const I18N_DICT = {
         mentor_80: "BLACK SWAN! (Rigore Mbappé). I bot in tilt. Il differenziale distrugge il <span class='t-y'>Time Decay</span>.",
         mentor_81: "CRASH DI MERCATO! 2-2 in 97s. Panic Selling sull'ARG. La X collassa da 36.00 a 1.56.",
         mentor_ah: "Fine 90'. Dissonanza: L'<span class='t-c'>Asian Handicap</span> ARG -0.25 genera Half-Loss, capitali intrappolati.",
-        mentor_gb: "Caos Golden Boot: Tripletta Mbappé. Quota a 1.01. Devastante swing di ricchezza."
+        mentor_gb: "Caos Golden Boot: Tripletta Mbappé. Quota a 1.01. Devastante swing di ricchezza.",
+        mentor_refill: "Cassa azzerata! 💸 Abbiamo ricaricato il tuo conto con 100€. Riprova e gestisci meglio il rischio!"
     },
     en: {
         avail: "Bankroll", draw: "Draw", start: "Start Simulation",
@@ -554,7 +555,8 @@ const I18N_DICT = {
         mentor_80: "BLACK SWAN! (Mbappé pen). Bots short-circuit. Energy destroys <span class='t-y'>Time Decay</span>.",
         mentor_81: "MARKET CRASH! 2-2 in 97s. Panic Selling on ARG. Draw collapses to 1.56.",
         mentor_ah: "End 90'. Dissonance: ARG -0.25 <span class='t-c'>Asian Handicap</span> gives Half-Loss, trapped capital.",
-        mentor_gb: "Golden Boot Chaos: Mbappé Hat-Trick. Odds to 1.01. Wealth transfer."
+        mentor_gb: "Golden Boot Chaos: Mbappé Hat-Trick. Odds to 1.01. Wealth transfer.",
+        mentor_refill: "Bankroll busted! 💸 The house gave you a €100 <span class='t-c'>Refill</span>. Try again with better risk management!"
     },
     es: {
         avail: "Fondo", draw: "Empate", start: "Iniciar Simulación", 
@@ -587,7 +589,8 @@ const I18N_DICT = {
         mentor_80: "¡BLACK SWAN! (Penalti Mbappé). Bots en corto. Energía anula <span class='t-y'>Time Decay</span>.",
         mentor_81: "¡CRASH DE MERCADO! 2-2 en 97s. Panic Selling en ARG. Empate colapsa a 1.56.",
         mentor_ah: "Fin 90'. Disonancia: <span class='t-c'>Asian Handicap</span> ARG -0.25 genera Half-Loss.",
-        mentor_gb: "Caos Golden Boot: Hat-Trick Mbappé. Cuota a 1.01. Transferencia de riqueza."
+        mentor_gb: "Caos Golden Boot: Hat-Trick Mbappé. Cuota a 1.01. Transferencia de riqueza.",
+        mentor_refill: "¡Fondo agotado! 💸 La casa te ha concedido un <span class='t-c'>Refill</span> de €100. Intenta otra estrategia."
     },
     pt: {
         avail: "Saldo", draw: "Empate", start: "Iniciar Simulação", 
@@ -620,7 +623,8 @@ const I18N_DICT = {
         mentor_80: "BLACK SWAN! (Penálti Mbappé). Bots em curto. Diferencial destrói <span class='t-y'>Time Decay</span>.",
         mentor_81: "CRASH DE MERCADO! 2-2 em 97s. Panic Selling na ARG. Empate colapsa a 1.56.",
         mentor_ah: "Fim 90'. Dissonância: <span class='t-c'>Asian Handicap</span> ARG -0.25 gera Half-Loss.",
-        mentor_gb: "Caos Golden Boot: Hat-Trick Mbappé. Odd a 1.01. Transferência massiva."
+        mentor_gb: "Caos Golden Boot: Hat-Trick Mbappé. Odd a 1.01. Transferência massiva.",
+        mentor_refill: "Banca quebrada! 💸 A casa deu-te um <span class='t-c'>Refill</span> de €100. Tenta uma nova estratégia."
     }
 };
 
@@ -743,6 +747,8 @@ const App = {
         Trade.setStakePct(2); // Inizia con il 2% della cassa
         Sim.updateTime();
         Sim.renderUI();
+        
+        if (State.bal < 1.00) { Trade.checkBust(); }
         
         // Avvio Immediato
         setTimeout(() => { Sim.start(); }, 500);
@@ -1175,6 +1181,18 @@ const Trade = {
         }
     },
 
+    checkBust() {
+        if (State.bal < 1.00 && !State.pos) { // Auto-refill se la cassa è troppo bassa e non ci sono trades aperti
+            State.bal = 100.00;
+            Sim.mentor('mentor_refill', {}, true, 10);
+            this.setStakePct(State.currentPct || 2);
+            this.updateHeader();
+            try { localStorage.setItem('qa_pro_v26', JSON.stringify({bal: State.bal})); } catch(e) {}
+            return true;
+        }
+        return false;
+    },
+
     trade(sel, type) {
         if(!State.active || State.susp || State.pos) return;
         
@@ -1186,7 +1204,10 @@ const Trade = {
         let l = type === 'lay' ? this._roundCents(s * (o - 1)) : s;
 
         if(State.bal < l) {
-            Sim.mentor('mentor_no_funds', { liab: l.toFixed(2) }, true, 10);
+            // Se non hai soldi a sufficienza controlla se serve un refill. Se refillato, ferma il trade corrente per far leggere l'avviso
+            if (!this.checkBust()) {
+                Sim.mentor('mentor_no_funds', { liab: l.toFixed(2) }, true, 10);
+            }
             return;
         }
         
@@ -1286,6 +1307,9 @@ const Trade = {
         
         this.renderState();
         this.updateHeader();
+        
+        // Controllo se il Cash Out ha svuotato completamente la cassa
+        this.checkBust();
         
         // SAFE LOCALSTORAGE SAVE
         try { localStorage.setItem('qa_pro_v26', JSON.stringify({bal: State.bal})); } catch(e) {}
